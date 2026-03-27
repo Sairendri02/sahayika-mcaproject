@@ -1,0 +1,674 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-24 12:22+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Add Collection"
+msgstr "ସଂଗ୍ରହ ଯୋଗ କରନ୍ତୁ"
+
+msgid "Select Member"
+msgstr "ସଦସ୍ୟ ବାଛନ୍ତୁ"
+
+msgid "Monthly Saving"
+msgstr "ମାସିକ ସଞ୍ଚୟ"
+
+msgid "EMI Paid"
+msgstr "EMI ଦେୟ"
+
+msgid "Save Collection"
+msgstr "ସଂଗ୍ରହ ସେଭ୍ କରନ୍ତୁ"
+
+msgid "Collection Records"
+msgstr "ସଂଗ୍ରହ ରେକର୍ଡ"
+
+msgid "Member"
+msgstr "ସଦସ୍ୟ"
+
+msgid "Date"
+msgstr "ତାରିଖ"
+
+msgid "Back"
+msgstr "ପଛକୁ ଯାଆନ୍ତୁ"
+
+msgid "Add Loan"
+msgstr "ଋଣ ଯୋଗ କରନ୍ତୁ"
+
+msgid "Loan Type"
+msgstr "ଋଣ ପ୍ରକାର"
+
+msgid "Group Loan"
+msgstr "ଗୋଷ୍ଠୀ ଋଣ"
+
+msgid "Personal Loan"
+msgstr "ବ୍ୟକ୍ତିଗତ ଋଣ"
+
+msgid "Loan Amount"
+msgstr "ଋଣ ରାଶି"
+
+msgid "Paid Amount"
+msgstr "ଦେୟ ରାଶି"
+
+msgid "Remaining Amount"
+msgstr "ଅବଶିଷ୍ଟ ରାଶି"
+
+msgid "Total Installment"
+msgstr "ମୋଟ କିଷ୍ତି"
+
+msgid "SI Rate"
+msgstr "ସୁଦ ହାର"
+
+msgid "Subsidy"
+msgstr "ସହାୟତା ରାଶି"
+
+msgid "EMI Date"
+msgstr "EMI ତାରିଖ"
+
+msgid "Add Member"
+msgstr "ସଦସ୍ୟ ଯୋଗ କରନ୍ତୁ"
+
+msgid "Aadhaar Number"
+msgstr "ଆଧାର ସଂଖ୍ୟା"
+
+msgid "Aadhaar Photo"
+msgstr "ଆଧାର ଫଟୋ"
+
+msgid "Member Photo"
+msgstr "ସଦସ୍ୟ ଫଟୋ"
+
+msgid "Save"
+msgstr "ସେଭ୍ କରନ୍ତୁ"
+
+msgid "Add Project"
+msgstr "ପ୍ରକଳ୍ପ ଯୋଗ କରନ୍ତୁ"
+
+msgid "Project Name"
+msgstr "ପ୍ରକଳ୍ପ ନାମ"
+
+msgid "Investment"
+msgstr "ନିବେଶ"
+
+msgid "Profit"
+msgstr "ଲାଭ"
+
+msgid "Photo"
+msgstr "ଫଟୋ"
+
+msgid "SHG Panel"
+msgstr "SHG ପ୍ୟାନେଲ୍"
+
+msgid "Dashboard"
+msgstr "ଡ୍ୟାସବୋର୍ଡ"
+
+msgid "Attendance"
+msgstr "ଉପସ୍ଥିତି"
+
+msgid "Monthly Collection"
+msgstr "ମାସିକ ସଂଗ୍ରହ"
+
+msgid "Loan Tracking"
+msgstr "ଋଣ ଟ୍ରାକିଂ"
+
+msgid "Project Management"
+msgstr "ପ୍ରକଳ୍ପ ପରିଚାଳନା"
+
+msgid "Logout"
+msgstr "ଲଗଆଉଟ୍"
+
+msgid "Welcome"
+msgstr "ସ୍ୱାଗତ"
+
+msgid "Managing SHG Group"
+msgstr "ପରିଚାଳିତ SHG ଗୋଷ୍ଠୀ"
+
+msgid "Total Members"
+msgstr "ମୋଟ ସଦସ୍ୟ"
+
+msgid "Total Savings"
+msgstr "ମୋଟ ସଞ୍ଚୟ"
+
+msgid "Remaining Loans"
+msgstr "ବକେୟ ଋଣ"
+
+msgid "Paid Loans"
+msgstr "ଦେୟ ଋଣ"
+
+msgid "Total Loan"
+msgstr "ମୋଟ ଋଣ"
+
+msgid "Active Loans"
+msgstr "ଚାଲୁଥିବା ଋଣ"
+
+msgid "Total Monthly Collection"
+msgstr "ମୋଟ ମାସିକ ସଂଗ୍ରହ"
+
+msgid "Loan Repayment Rate"
+msgstr "ଋଣ ଶୋଧ ହାର"
+
+msgid "Paid Members"
+msgstr "ଦେୟ ସଦସ୍ୟମାନେ"
+
+msgid "Pending Members"
+msgstr "ବକେୟ ସଦସ୍ୟମାନେ"
+
+msgid "EMI Paid Status"
+msgstr "EMI ଦେୟ ସ୍ଥିତି"
+
+msgid "EMI Pending"
+msgstr "EMI ବକେୟ"
+
+msgid "Group Loan Overview"
+msgstr "ଗୋଷ୍ଠୀ ଋଣ ସାରାଂଶ"
+
+msgid "Group Members"
+msgstr "ଗୋଷ୍ଠୀ ସଦସ୍ୟ"
+
+msgid "Name"
+msgstr "ନାମ"
+
+msgid "Role"
+msgstr "ଭୂମିକା"
+
+msgid "Phone"
+msgstr "ଫୋନ୍"
+
+msgid "Aadhar No"
+msgstr "ଆଧାର ସଂଖ୍ୟା"
+
+msgid "Aadhar photo"
+msgstr "ଆଧାର ଫଟୋ"
+
+msgid "Delete"
+msgstr "ହଟାନ୍ତୁ"
+
+msgid "Recent Activities"
+msgstr "ସମ୍ପ୍ରତିକ କାର୍ଯ୍ୟ"
+
+msgid "No recent activity"
+msgstr "କୌଣସି ସମ୍ପ୍ରତିକ କାର୍ଯ୍ୟ ନାହିଁ"
+
+msgid "Group Financial Health"
+msgstr "ଗୋଷ୍ଠୀର ଆର୍ଥିକ ସ୍ୱାସ୍ଥ୍ୟ"
+
+msgid "Savings"
+msgstr "ସଞ୍ଚୟ"
+
+msgid "Loans"
+msgstr "ଋଣଗୁଡିକ"
+
+msgid "Reset Password"
+msgstr "ପାସୱାର୍ଡ ପୁନଃସେଟ୍ କରନ୍ତୁ"
+
+msgid "New Password"
+msgstr "ନୂତନ ପାସୱାର୍ଡ"
+
+msgid "Hello,"
+msgstr "ନମସ୍କାର,"
+
+msgid "Type"
+msgstr "ପ୍ରକାର"
+
+msgid "Amount"
+msgstr "ରାଶି"
+
+msgid "Paid EMI"
+msgstr "ଦେୟ EMI"
+
+msgid "Remaining"
+msgstr "ଅବଶିଷ୍ଟ"
+
+msgid "No loans found"
+msgstr "କୌଣସି ଋଣ ମିଳିଲା ନାହିଁ"
+
+msgid "Phone Number"
+msgstr "ଫୋନ୍ ନମ୍ବର"
+
+msgid "SHG Group Name"
+msgstr "SHG ଗୋଷ୍ଠୀ ନାମ"
+
+msgid "Select Role"
+msgstr "ଭୂମିକା ବାଛନ୍ତୁ"
+
+msgid "Password"
+msgstr "ପାସୱାର୍ଡ"
+
+msgid "Login"
+msgstr "ଲଗଇନ୍"
+
+msgid "Forgot password?"
+msgstr "ପାସୱାର୍ଡ ଭୁଲିଗଲେ କି?"
+
+msgid "Don't have an account?"
+msgstr "ଆପଣଙ୍କର ଖାତା ନାହିଁ କି?"
+
+msgid "Register here"
+msgstr "ଏଠାରେ ନିବନ୍ଧନ କରନ୍ତୁ"
+
+msgid "Monthly SHG Meeting"
+msgstr "ମାସିକ SHG ବୈଠକ"
+
+msgid "Present"
+msgstr "ଉପସ୍ଥିତ"
+
+msgid "Absent"
+msgstr "ଅନୁପସ୍ଥିତ"
+
+msgid "Note:"
+msgstr "ଟୀକା:"
+
+msgid "Month"
+msgstr "ମାସ"
+
+msgid "Year"
+msgstr "ବର୍ଷ"
+
+msgid "View"
+msgstr "ଦେଖନ୍ତୁ"
+
+msgid "Summary Cards"
+msgstr "ସାରାଂଶ କାର୍ଡ"
+
+msgid "Total Monthly Collection: ₹"
+msgstr "ମୋଟ ମାସିକ ସଂଗ୍ରହ: ₹"
+
+msgid "Members Paid This Month"
+msgstr "ଏହି ମାସରେ ଦେୟ ସଦସ୍ୟମାନେ"
+
+msgid "Personal Loans Taken: ₹"
+msgstr "ନିଜସ୍ୱ ଋଣ ଗ୍ରହଣ: ₹"
+
+msgid "Personal Loans Cleared"
+msgstr "ନିଜସ୍ୱ ଋଣ ଶୋଧ"
+
+msgid "Group Members Table"
+msgstr "ଗୋଷ୍ଠୀ ସଦସ୍ୟ ତାଲିକା"
+
+msgid "Total Given"
+msgstr "ମୋଟ ଦିଆଯାଇଥିବା"
+
+msgid "Status"
+msgstr "ସ୍ଥିତି"
+
+msgid "EMI Amount"
+msgstr "EMI ରାଶି"
+
+msgid "EMI Status"
+msgstr "EMI ସ୍ଥିତି"
+
+msgid "Loan Taken"
+msgstr "ଗ୍ରହୀତ ଋଣ"
+
+msgid "Remaining Loan"
+msgstr "ଅବଶିଷ୍ଟ ଋଣ"
+
+msgid "Last Loan Date"
+msgstr "ଶେଷ ଋଣ ତାରିଖ"
+
+msgid "Back to Dashboard"
+msgstr "ଡ୍ୟାସବୋର୍ଡକୁ ଫେରନ୍ତୁ"
+
+msgid "Projects"
+msgstr "ପ୍ରକଳ୍ପଗୁଡିକ"
+
+msgid "Edit"
+msgstr "ସମ୍ପାଦନ କରନ୍ତୁ"
+
+msgid "Full Name"
+msgstr "ପୂର୍ଣ୍ଣ ନାମ"
+
+msgid "SHG Name"
+msgstr "SHG ନାମ"
+
+msgid "District"
+msgstr "ଜିଲ୍ଲା"
+
+msgid "Select District"
+msgstr "ଜିଲ୍ଲା ବାଛନ୍ତୁ"
+
+msgid "Village"
+msgstr "ଗାଁ"
+
+msgid "Select Village"
+msgstr "ଗାଁ ବାଛନ୍ତୁ"
+
+msgid "Profile Photo"
+msgstr "ପ୍ରୋଫାଇଲ୍ ଫଟୋ"
+
+msgid "Phone number"
+msgstr "ଫୋନ୍ ନମ୍ବର"
+
+msgid "Send OTP"
+msgstr "OTP ପଠାନ୍ତୁ"
+
+msgid "Register"
+msgstr "ନିବନ୍ଧନ କରନ୍ତୁ"
+
+msgid "Already have account?"
+msgstr "ପୂର୍ବରୁ ଖାତା ଅଛି କି?"
+
+msgid "Paid"
+msgstr "ଦେୟ"
+
+msgid "Pending"
+msgstr "ବକେୟ"
+
+
+#: .\main\views.py:31
+msgid "Enter a valid 10-digit phone number to send OTP"
+msgstr "OTP ପଠାଇବା ପାଇଁ ଏକ ସଠିକ ୧୦ ଅଙ୍କର ଫୋନ୍ ନମ୍ବର ଦିଅନ୍ତୁ"
+
+#: .\main\views.py:37
+#, python-brace-format
+msgid "OTP sent to {phone}"
+msgstr "{phone} କୁ OTP ପଠାଯାଇଛି"
+
+#: .\main\views.py:56
+msgid "All fields including OTP are required"
+msgstr "OTP ସହିତ ସମସ୍ତ ଫିଲ୍ଡ ଆବଶ୍ୟକ"
+
+#: .\main\views.py:60
+msgid "Enter a valid 10-digit phone number"
+msgstr "ସଠିକ ୧୦ ଅଙ୍କର ଫୋନ୍ ନମ୍ବର ଦିଅନ୍ତୁ"
+
+#: .\main\views.py:71
+msgid "This SHG group already exists."
+msgstr "ଏହି SHG ଗୋଷ୍ଠୀ ପୂର୍ବରୁ ଅଛି"
+
+#: .\main\views.py:75
+msgid "This SHG group does not exist. Contact the president."
+msgstr "ଏହି SHG ଗୋଷ୍ଠୀ ନାହିଁ। ସଭାପତିଙ୍କୁ ସମ୍ପର୍କ କରନ୍ତୁ"
+
+#: .\main\views.py:79
+msgid "This SHG group already has 15 members. No more members allowed."
+msgstr "ଏହି SHG ଗୋଷ୍ଠୀରେ ପୂର୍ବରୁ ୧୫ ଜଣ ସଦସ୍ୟ ଅଛନ୍ତି। ଆଉ ସଦସ୍ୟ ଯୋଗ କରିପାରିବେ ନାହିଁ"
+
+#: .\main\views.py:82
+msgid "This group already has a president"
+msgstr "ଏହି ଗୋଷ୍ଠୀରେ ପୂର୍ବରୁ ଏକ ସଭାପତି ଅଛନ୍ତି"
+
+#: .\main\views.py:88
+msgid "Invalid OTP"
+msgstr "ଭୁଲ OTP"
+
+#: .\main\views.py:110
+msgid "Registered successfully!"
+msgstr "ସଫଳତାର ସହ ନିବନ୍ଧନ ହେଲା"
+
+#: .\main\views.py:144
+msgid "User not found in this SHG group."
+msgstr "ଏହି SHG ଗୋଷ୍ଠୀରେ ଏହି ବ୍ୟବହାରକାରୀ ମିଳିଲେ ନାହିଁ"
+
+#: .\main\views.py:147 .\main\views.py:157
+msgid "Incorrect password."
+msgstr "ଭୁଲ ପାସୱାର୍ଡ"
+
+#: .\main\views.py:152
+msgid "You are not registered as President."
+msgstr "ଆପଣ ସଭାପତି ଭାବେ ନିବନ୍ଧିତ ନୁହଁନ୍ତି"
+
+#: .\main\views.py:154
+msgid "You are not registered as Member."
+msgstr "ଆପଣ ସଦସ୍ୟ ଭାବେ ନିବନ୍ଧିତ ନୁହଁନ୍ତି"
+
+#: .\main\views.py:187
+msgid "Password updated successfully"
+msgstr "ପାସୱାର୍ଡ ସଫଳତାର ସହ ଅପଡେଟ୍ ହେଲା"
+
+#: .\main\views.py:189
+msgid "User not found"
+msgstr "ଉପଯୋଗକର୍ତ୍ତା ମିଳିଲା ନାହିଁ"
+
+#: .\templates\index.html:32
+msgid "Home"
+msgstr "ମୁଖ୍ୟ ପୃଷ୍ଠା"
+
+#: .\templates\index.html:33
+msgid "About Us"
+msgstr "ଆମ ବିଷୟରେ"
+
+#: .\templates\index.html:34
+msgid "RTI"
+msgstr "ଆର୍ଟିଆଇ"
+
+#: .\templates\index.html:35
+msgid "Contact Us"
+msgstr "ଯୋଗାଯୋଗ କରନ୍ତୁ"
+
+#: .\templates\index.html:71
+msgid "Learn More"
+msgstr "ଅଧିକ ଜାଣନ୍ତୁ"
+
+#: .\templates\index.html:150
+msgid "Member Management"
+msgstr "ସଦସ୍ୟ ପରିଚାଳନା"
+
+#: .\templates\index.html:182
+msgid "Sahayika"
+msgstr "ସହାୟିକା"
+
+#: .\templates\index.html:183
+msgid "A self help group management system"
+msgstr "ଏକ ସ୍ୱୟଂ ସାହାଯ୍ୟ ଗୋଷ୍ଠୀ ପରିଚାଳନା ପ୍ରଣାଳୀ"
+
+#: .\templates\index.html:188
+msgid "How It Works"
+msgstr "ଏହା କିପରି କାମ କରେ"
+
+#: .\templates\index.html:190
+msgid ""
+"Streamline the management of your Self Help Group with these powerful "
+"features:"
+msgstr "ଏହି ଶକ୍ତିଶାଳୀ ବୈଶିଷ୍ଟ୍ୟମାନଙ୍କ ସହ ଆପଣଙ୍କ ସ୍ୱୟଂ ସାହାଯ୍ୟ ଗୋଷ୍ଠୀ ପରିଚାଳନାକୁ ସହଜ କରନ୍ତୁ"
+
+#: .\templates\index.html:197
+msgid "President Registers"
+msgstr "ସଭାପତି ନିବନ୍ଧନ"
+
+#: .\templates\index.html:204
+msgid "Members Register"
+msgstr "ସଦସ୍ୟ ନିବନ୍ଧନ"
+
+#: .\templates\index.html:211
+msgid "Track Loans & Collections"
+msgstr "ଋଣ ଓ ସଂଗ୍ରହ ଟ୍ରାକ୍ କରନ୍ତୁ"
+
+#: .\templates\index.html:218
+msgid "Members View Reports"
+msgstr "ସଦସ୍ୟମାନେ ରିପୋର୍ଟ ଦେଖନ୍ତୁ"
+
+#: .\templates\index.html:224
+msgid "Register Now"
+msgstr "ଏବେ ନିବନ୍ଧନ କରନ୍ତୁ"
+
+msgid "Monthly Payment Status"
+msgstr "ମାସିକ ଭୁଗତାନ ସ୍ଥିତି"
+
+msgid "Sahayika is a digital platform developed to simplify the management of Self Help Groups (SHGs). It replaces traditional manual record-keeping methods with a structured and efficient system where all financial and member-related data can be stored, accessed, and managed in one place."
+msgstr "ସହାୟିକା ହେଉଛି ଏକ ଡିଜିଟାଲ ପ୍ଲାଟଫର୍ମ ଯାହା ସ୍ୱୟଂ ସହାୟକ ଗୋଷ୍ଠୀ (SHG) ପରିଚାଳନାକୁ ସହଜ କରିବା ପାଇଁ ଉନ୍ନତ କରାଯାଇଛି। ଏହା ପାରମ୍ପରିକ ହସ୍ତଲିଖିତ ରେକର୍ଡ ପ୍ରଣାଳୀକୁ ପରିବର୍ତ୍ତନ କରି ଏକ ସଂଗଠିତ ଏବଂ କାର୍ଯ୍ୟକ୍ଷମ ପ୍ରଣାଳୀ ପ୍ରଦାନ କରେ।"
+
+msgid "The main purpose of this system is to improve transparency, reduce errors, and save time in handling group activities such as savings collection, loan distribution, and repayment tracking. It ensures that every transaction is properly recorded and easily accessible when needed."
+msgstr "ଏହି ପ୍ରଣାଳୀର ପ୍ରଧାନ ଉଦ୍ଦେଶ୍ୟ ହେଉଛି ପ୍ରକାଶ୍ୟତା ବଢ଼ାଇବା, ତ୍ରୁଟି କମେଇବା ଏବଂ ସଂଚୟ, ଋଣ ବଣ୍ଟନ ଓ ଫେରତ ଟ୍ରାକିଂ ପରି କାର୍ଯ୍ୟଗୁଡ଼ିକୁ ସହଜ କରିବା।"
+
+msgid "How to Use the System"
+msgstr "ସିଷ୍ଟମ୍ କିପରି ବ୍ୟବହାର କରିବେ"
+
+msgid "Users can log in to the system using their credentials. Based on their role, such as President or Member, they can perform different actions. The President can add members, record monthly collections, and manage loans, while members can view their savings, loan details, and payment status."
+msgstr "ବ୍ୟବହାରକାରୀମାନେ ନିଜ ଲଗଇନ ସୂଚନା ଦ୍ୱାରା ସିଷ୍ଟମ୍‌କୁ ପ୍ରବେଶ କରିପାରିବେ। ପଦବୀ ଅନୁଯାୟୀ ସେମାନେ ଭିନ୍ନ କାମ କରିପାରିବେ।"
+
+msgid "To view past records, users can select a specific month and year in the monthly collection and loan tracking sections. This allows easy access to historical data without confusion."
+msgstr "ପୁରୁଣା ରେକର୍ଡ ଦେଖିବା ପାଇଁ ବ୍ୟବହାରକାରୀମାନେ ମାସ ଓ ବର୍ଷ ବାଛିପାରିବେ।"
+
+msgid "Rules and Guidelines"
+msgstr "ନିୟମ ଓ ନିର୍ଦ୍ଦେଶନାମା"
+
+msgid "All entries must be recorded accurately at the time of the meeting to maintain correct financial data. Only authorized users should be allowed to add or modify records. Members should regularly check their data to ensure transparency and correctness."
+msgstr "ସମସ୍ତ ତଥ୍ୟ ସଠିକ ଭାବେ ରେକର୍ଡ କରିବା ଆବଶ୍ୟକ। କେବଳ ଅଧିକୃତ ବ୍ୟକ୍ତିମାନେ ତଥ୍ୟ ପରିବର୍ତ୍ତନ କରିପାରିବେ।"
+
+msgid "Loan repayments and savings contributions should be updated monthly. Any delay or incorrect entry may affect the overall group financial report. Proper usage of the system ensures fairness and accountability among all members."
+msgstr "ଋଣ ଫେରତ ଓ ସଂଚୟ ପ୍ରତିମାସ ଅଦ୍ୟତନ କରିବା ଆବଶ୍ୟକ।"
+
+msgid "Benefits of Digital System"
+msgstr "ଡିଜିଟାଲ ସିଷ୍ଟମର ଲାଭ"
+
+msgid "Using a digital system like Sahayika reduces dependency on paper records, minimizing the risk of data loss or damage. It also provides faster access to information, making decision-making easier for the group."
+msgstr "ଡିଜିଟାଲ ସିଷ୍ଟମ ବ୍ୟବହାର କରିଲେ କାଗଜ ଉପରେ ନିର୍ଭରଶୀଳତା କମେ।"
+
+msgid "The system improves accuracy in calculations, automatically tracks totals, and helps monitor loan repayments efficiently. It also enhances transparency, as every member can view their own financial status clearly."
+msgstr "ଏହି ସିଷ୍ଟମ ଗଣନାର ସଠିକତା ବଢ଼ାଏ ଓ ସମସ୍ତ ତଥ୍ୟ ସହଜରେ ଦେଖାଯାଏ।"
+
+msgid "Conclusion"
+msgstr "ନିଷ୍କର୍ଷ"
+
+msgid "Sahayika is a reliable and user-friendly solution for managing SHG activities digitally. By adopting this system, groups can ensure better organization, improved financial control, and long-term sustainability."
+msgstr "ସହାୟିକା ହେଉଛି SHG ପରିଚାଳନା ପାଇଁ ଏକ ବିଶ୍ୱସନୀୟ ଓ ସହଜ ସମାଧାନ।"
+
+msgid "Easily add and manage all SHG members in one place."
+msgstr "ସମସ୍ତ ସଦସ୍ୟଙ୍କୁ ସହଜରେ ପରିଚାଳନା କରନ୍ତୁ।"
+
+msgid "Track loan distribution, EMI payments, and balances."
+msgstr "ଋଣ ଓ EMI ଟ୍ରାକ କରନ୍ତୁ।"
+
+msgid "Reports & Insights"
+msgstr "ରିପୋର୍ଟ ଓ ବିଶ୍ଳେଷଣ"
+
+msgid "View monthly and yearly reports for better decisions."
+msgstr "ମାସିକ ଓ ବାର୍ଷିକ ରିପୋର୍ଟ ଦେଖନ୍ତୁ।"
+
+
+msgid "To start using the system, please create an account. After registration, you will be able to access all features of the platform."
+msgstr "ସିଷ୍ଟମ ବ୍ୟବହାର ପାଇଁ ପ୍ରଥମେ ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ।"
+
+msgid "Sahayika System"
+msgstr "ସହାୟିକା ସିଷ୍ଟମ"
+
+msgid "Sahayika is a digital platform developed to simplify the management of Self Help Groups (SHGs). It replaces traditional manual record-keeping methods with a structured and efficient system."
+msgstr "Sahayika ହେଉଛି ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀ (SHGs) ପରିଚାଳନାକୁ ସହଜ କରିବା ପାଇଁ ଉନ୍ନତ ଏକ ଡିଜିଟାଲ ପ୍ଲାଟଫର୍ମ। ଏହା ପାରମ୍ପରିକ ହାତେ ରେକର୍ଡ ରଖିବା ପ୍ରଣାଳୀକୁ ପରିବର୍ତ୍ତନ କରି ଏକ ସଂଗଠିତ ଏବଂ କାର୍ଯ୍ୟକ୍ଷମ ପ୍ରଣାଳୀ ପ୍ରଦାନ କରେ।"
+
+msgid "The platform helps in managing member details, tracking monthly savings, handling loan distribution, and monitoring repayments in a transparent and organized way."
+msgstr "ଏହି ପ୍ଲାଟଫର୍ମ ସଦସ୍ୟ ସୂଚନା ପରିଚାଳନା, ମାସିକ ସଞ୍ଚୟ ଟ୍ରାକ୍ କରିବା, ଋଣ ବଣ୍ଟନ ପରିଚାଳନା, ଏବଂ ପ୍ରତିଶୋଧ ନିରୀକ୍ଷଣକୁ ପାରଦର୍ଶୀ ଏବଂ ସଂଗଠିତ ଭାବରେ ସହାୟତା କରେ।"
+
+msgid "By using this system, SHGs can reduce errors, save time, and maintain accurate financial records, ensuring better decision-making and accountability."
+msgstr "ଏହି ପ୍ରଣାଳୀ ବ୍ୟବହାର କରି SHGs ତ୍ରୁଟି କମାଇପାରିବେ, ସମୟ ବଞ୍ଚାଇପାରିବେ, ଏବଂ ସଠିକ୍ ଅର୍ଥନୀତି ରେକର୍ଡ ରଖିପାରିବେ, ଯାହା ଭଲ ନିର୍ଣ୍ଣୟ ଏବଂ ଦାୟିତ୍ୱଶୀଳତା ନିଶ୍ଚିତ କରେ।"
+
+msgid "Our Mission"
+msgstr "ଆମର ଲକ୍ଷ୍ୟ"
+
+msgid "To provide a simple and efficient digital solution that empowers Self Help Groups to manage their financial and operational activities effectively."
+msgstr "ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କୁ ସେମାନଙ୍କର ଅର୍ଥନୀତିକ ଏବଂ ପରିଚାଳନା କାର୍ଯ୍ୟକଳାପକୁ କାର୍ଯ୍ୟକ୍ଷମ ଭାବେ ପରିଚାଳନା କରିବା ପାଇଁ ସହଜ ଏବଂ କାର୍ଯ୍ୟକ୍ଷମ ଡିଜିଟାଲ ସମାଧାନ ପ୍ରଦାନ କରିବା।"
+
+msgid "Our Vision"
+msgstr "ଆମର ଦୃଷ୍ଟିକୋଣ"
+
+msgid "To build a transparent, reliable, and user-friendly system that supports the growth and sustainability of Self Help Groups."
+msgstr "ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କର ବିକାଶ ଏବଂ ସ୍ଥାୟୀତ୍ୱକୁ ସମର୍ଥନ କରୁଥିବା ପାରଦର୍ଶୀ, ବିଶ୍ୱସନୀୟ ଏବଂ ବ୍ୟବହାରକାରୀ-ସହଜ ପ୍ରଣାଳୀ ଗଢ଼ି ତିଆରି କରିବା।"
+
+msgid "Project Information"
+msgstr "ପ୍ରକଳ୍ପ ସୂଚନା"
+
+msgid "This project, Sahayika, was developed as part of an academic initiative to address real-world challenges faced by Self Help Groups."
+msgstr "ଏହି ପ୍ରକଳ୍ପ Sahayika ଏକ ଶିକ୍ଷାମୂଳକ ପଦକ୍ଷେପର ଅଂଶ ଭାବେ ଉନ୍ନତ ହୋଇଥିଲା, ଯାହା ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କ ସମ୍ମୁଖୀନ ବାସ୍ତବ ସମସ୍ୟାଗୁଡ଼ିକୁ ସମାଧାନ କରିବାକୁ ଉଦ୍ଦିଷ୍ଟ।"
+
+msgid "Developed by:"
+msgstr "ଉନ୍ନତ କରିଛନ୍ତି:"
+
+msgid "Institution:"
+msgstr "ସଂସ୍ଥା:"
+
+msgid "Year of Development:"
+msgstr "ଉନ୍ନତି ବର୍ଷ:"
+
+msgid "The system focuses on improving transparency, efficiency, and accessibility in managing SHG activities digitally."
+msgstr "ଏହି ପ୍ରଣାଳୀ SHG କାର୍ଯ୍ୟକଳାପକୁ ଡିଜିଟାଲ ଭାବରେ ପରିଚାଳନା କରିବାରେ ପାରଦର୍ଶିତା, କାର୍ଯ୍ୟକ୍ଷମତା ଏବଂ ପହଞ୍ଚଗମ୍ୟତା ବୃଦ୍ଧି କରିବାକୁ ଗୁରୁତ୍ୱ ଦେଇଥାଏ।"
+
+msgid "Right to Information (RTI)"
+msgstr "ସୂଚନାର ଅଧିକାର (RTI)"
+
+msgid "The Right to Information (RTI) Act promotes transparency and accountability in the functioning of public authorities. It allows citizens to request information and ensures timely access to records."
+msgstr "ସୂଚନାର ଅଧିକାର (RTI) ଆଇନ ସରକାରୀ ସଂସ୍ଥାମାନଙ୍କ କାର୍ଯ୍ୟପ୍ରଣାଳୀରେ ପାରଦର୍ଶିତା ଏବଂ ଦାୟିତ୍ୱଶୀଳତାକୁ ପ୍ରୋତ୍ସାହିତ କରେ। ଏହା ନାଗରିକମାନଙ୍କୁ ସୂଚନା ଚାହିବାର ଅଧିକାର ଦେଇଥାଏ ଏବଂ ସମୟମତେ ରେକର୍ଡ ଉପଲବ୍ଧ କରାଯାଏ।"
+
+msgid "Objective"
+msgstr "ଲକ୍ଷ୍ୟ"
+
+msgid "The objective of RTI is to empower citizens, promote transparency, and reduce corruption by making information accessible."
+msgstr "RTI ର ଲକ୍ଷ୍ୟ ହେଉଛି ନାଗରିକମାନଙ୍କୁ ସଶକ୍ତ କରିବା, ପାରଦର୍ଶିତା ବଢ଼ାଇବା ଏବଂ ସୂଚନାକୁ ସହଜରେ ଉପଲବ୍ଧ କରାଇ ଦୁର୍ନୀତି କମାଇବା।"
+
+msgid "Applicability"
+msgstr "ଲାଗୁହେବା"
+
+msgid "RTI applies to government departments and organizations funded or controlled by the government. This platform follows transparency principles aligned with RTI guidelines."
+msgstr "RTI ସରକାରୀ ବିଭାଗ ଏବଂ ସରକାର ଦ୍ୱାରା ପରିଚାଳିତ କିମ୍ବା ଅର୍ଥାୟନ ହେଉଥିବା ସଂସ୍ଥାମାନଙ୍କୁ ଲାଗୁହୁଏ। ଏହି ପ୍ଲାଟଫର୍ମ RTI ନିୟମାବଳୀ ସହିତ ସମନ୍ୱିତ ପାରଦର୍ଶିତା ନୀତିକୁ ଅନୁସରଣ କରେ।"
+
+msgid "Information Available"
+msgstr "ଉପଲବ୍ଧ ସୂଚନା"
+
+msgid "Member details and records"
+msgstr "ସଦସ୍ୟ ସୂଚନା ଏବଂ ରେକର୍ଡ"
+
+msgid "Loan and repayment details"
+msgstr "ଋଣ ଏବଂ ପ୍ରତିଶୋଧ ବିବରଣୀ"
+
+msgid "Monthly savings records"
+msgstr "ମାସିକ ସଞ୍ଚୟ ରେକର୍ଡ"
+
+msgid "Financial transactions and reports"
+msgstr "ଆର୍ଥିକ ଲେନଦେନ ଏବଂ ରିପୋର୍ଟ"
+
+msgid "How to Request Information"
+msgstr "ସୂଚନା କିପରି ଚାହିବେ"
+
+msgid "Users can request information by contacting the administrator or submitting a formal request through the system."
+msgstr "ବ୍ୟବହାରକାରୀମାନେ ପ୍ରଶାସକଙ୍କ ସହିତ ସମ୍ପର୍କ କରି କିମ୍ବା ସିଷ୍ଟମ୍ ମାଧ୍ୟମରେ ଆଧିକାରିକ ଅନୁରୋଧ ଦାଖଲ କରି ସୂଚନା ଚାହିପାରିବେ।"
+
+msgid "Contact Information"
+msgstr "ସମ୍ପର୍କ ସୂଚନା"
+
+msgid "For RTI-related queries, please contact the system administrator or visit the Contact Us page."
+msgstr "RTI ସମ୍ପର୍କିତ ପ୍ରଶ୍ନ ପାଇଁ, ଦୟାକରି ସିଷ୍ଟମ୍ ପ୍ରଶାସକଙ୍କ ସହିତ ସମ୍ପର୍କ କରନ୍ତୁ କିମ୍ବା 'Contact Us' ପୃଷ୍ଠାକୁ ଯାନ୍ତୁ।"
+
+msgid "This system ensures transparency and proper record management aligned with RTI principles."
+msgstr "ଏହି ସିଷ୍ଟମ୍ RTI ନୀତି ସହିତ ସମନ୍ୱିତ ପାରଦର୍ଶିତା ଏବଂ ଠିକ୍ ରେକର୍ଡ ପରିଚାଳନାକୁ ନିଶ୍ଚିତ କରେ।"
+
+msgid "Create Account"
+msgstr "ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ"
+
+msgid "Monthly Collection Status"
+msgstr "ମାସିକ ସଂଗ୍ରହ ସ୍ଥିତି"
+
+msgid "Send Message"
+msgstr "ସନ୍ଦେଶ ପଠାନ୍ତୁ"
+
+msgid "My Complaints"
+msgstr "ମୋର ଅଭିଯୋଗ"
+
+msgid "Reply"
+msgstr "ଉତ୍ତର"
+
+msgid "Not yet"
+msgstr "ଏପର୍ଯ୍ୟନ୍ତ ନାହିଁ"
+
+msgid "Your Name"
+msgstr "ଆପଣଙ୍କ ନାମ"
+
+msgid "Email"
+msgstr " ଇମେଲ୍"
+
+msgid "Subject"
+msgstr "ବିଷୟ"
+
+msgid "Message"
+msgstr "ସନ୍ଦେଶ"
+
+

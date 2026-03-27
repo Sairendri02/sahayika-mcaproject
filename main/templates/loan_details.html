@@ -1,0 +1,157 @@
+{% load i18n%}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Group Loan Management</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+   .card {
+        background: rgb(243, 247, 252);
+        border-radius: 12px;
+        padding: 20px;
+        height: 100%;
+        overflow-wrap: break-word;
+        min-width: 280px;
+        transition:0.3s;
+    }
+
+   .card p {
+       white-space: normal;
+       width: 100%;
+        }
+
+   .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+   }
+
+   .progress {
+
+    height: 10px;
+    margin-top: 10px;
+   }
+
+   .btn.active {
+    background-color: black;
+    color: white;
+   }
+   /* Navbar background color */
+        .navbar-custom {
+            background-color: #536f8a; /* You can change to any color */
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column; /* Stack Odia above English */
+            line-height: 1;
+            color:black;
+        }
+        .brand-text span {
+            display: block;
+        }
+        .brand-text .odia {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .brand-text .english {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body> 
+    
+    <nav class="navbar navbar-expand-lg navbar-custom text-white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
+        <div class="brand-text">
+            <span class="odia">ସହାୟିକା</span>
+            <span class="english">Sahayika</span>
+        </div>
+    </a>
+    <div class="d-flex ms-auto">
+        <span class="text-white me-3">{% trans "Hello," %} {{ request.session.user_name }}</span>
+        <a href="{% url 'logout' %}" class="btn btn-light btn-sm">{% trans "Logout" %}</a>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container-fluid mt-5 px-5">
+   
+
+   
+
+    
+    <div class="mb-3">
+        <a href="{% url 'loan_details' %}?type=Group" class="btn btn-dark">{% trans "Group Loan" %}</a>
+
+        <a href="{% url 'loan_details' %}?type=Personal" class="btn btn-secondary">{% trans "Personal Loan" %}</a>
+    </div>
+
+    
+    <div class="mb-3"
+       {% if request.GET.type != "Personal" %}style="display:none;"{% endif %}>
+
+        <select onchange="location = this.value" class="form-control">
+          <option value="">{% trans "Select Member" %}</option>
+
+          {% for m in members %}
+          <option value="{% url 'loan_details' %}?type=Personal&member={{ m.fullname }}"
+          {% if request.GET.member == m.fullname %}selected{% endif %}>
+            {{ m.fullname }}
+          </option>
+          {% endfor %}
+
+        </select>
+  </div>
+
+    
+    <div class="row" id="loanContainer">
+
+        {% for loan in loans %}
+        <div class="col-12 col-lg-6 mb-4">
+        <div class="card shadow h-100">
+
+            <p><b>{% trans "Type" %}:</b> {{ loan.loan_type }}</p>
+            <p><b>{% trans "Member" %}:</b> {{ loan.member_name|default:"Group Loan" }}</p>
+
+            <div class="row">
+                <div class="col-6">
+                    <p><b>{% trans "Amount" %}:</b><br> ₹ {{ loan.loan_amount }}</p>
+                    <p><b>{% trans "Paid EMI" %}:</b><br> ₹ {{ loan.paid_amount }}</p>
+                </div>
+
+                <div class="col-6">
+                    <p><b>{% trans "Remaining" %}:</b><br> ₹ {{ loan.remaining_amount }}</p>
+                    <p><b>{% trans "EMI Date" %}:</b><br> {{ loan.emi_date }}</p>
+                </div>
+            </div>
+
+           
+            <div class="progress mt-2">
+                <div class="progress-bar bg-success"
+                     style="width: {{ loan.progress }}%">
+                    {{ loan.progress|floatformat:0 }}%
+                </div>
+            </div>
+        </div>
+        </div>
+        {% empty %}
+        <p>{% trans "No loans found" %}</p>
+        {% endfor %}
+
+    </div>
+
+
+ </body>
+</html>

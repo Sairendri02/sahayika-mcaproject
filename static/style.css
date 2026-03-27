@@ -1,0 +1,296 @@
+body{
+  background-color: rgb(242, 244, 246);
+  color: #000;
+  font-family: 'Arial', sans-serif;
+}
+
+
+
+
+/* Logo */
+
+.logo{
+height:50px;
+margin-right:10px;
+}
+
+.logo-texts{
+display: flex; 
+flex-direction: column; 
+gap:0;  
+font-weight:bold;
+font-size:25px;
+color: black;
+}
+
+.navbar.container{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+/* HERO SLIDE */
+
+.hero-slide{
+position:relative;
+height:100vh;
+overflow:hidden;
+
+}
+
+.hero-slide img{
+width:100%;
+height:100vh;
+object-fit:cover;
+}
+
+
+/* HERO TEXT */
+
+.hero-content{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+color:white;
+width:80%;
+}
+
+.hero-content h1{
+font-size:45px;
+font-weight:bold;
+margin-bottom:20px;
+}
+
+.hero-content p{
+font-size:18px;
+}
+
+.hero-title{
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+
+.hero-odia{
+    font-family: 'Noto sans Odia',sans-serif;
+    font-size: 1.5remrem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+
+.hero-buttons .btn{
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+}
+
+
+/* Fade animation */
+.fade-title {
+  opacity: 0;
+  transform: translateY(20px); /* slightly moves text up on fade */
+  animation: fadeInUp 5s ease forwards;
+}
+
+/* Add delay to Odia text for staggered effect */
+.hero-odia.fade-title {
+  opacity: 0;  
+  transform: translateY(20px); /* slightly moves text up on fade */
+  animation-delay: fadeInUp 7s  ease forwards;
+}
+
+/* Keyframes for fade in + slide up */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.odia-text {
+  padding:10px 10px;
+  font-family: 'Noto Sans Odia', sans-serif;
+  font-size: 1.5rem; /* adjust size as needed */
+  font-weight:bold;
+  margin-bottom: 10px;
+  
+}
+
+
+
+
+/* FEATURES */
+
+.features{
+padding:60px;
+background:rgb(246, 247, 248);
+}
+
+.feature-card {
+  background:rgb(213, 221, 227);
+  border-radius: 10px;
+  padding: 25px 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  color: #1d3d60;
+  margin-bottom: 15px;
+}
+
+.feature-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color:black;
+}
+
+/* Navbar height */
+.navbar {
+  height:70px; /* increase if needed */
+  align-items: center;
+}
+
+/* Logo container */
+.logo-container {
+  display: flex;
+  
+  align-items: center;
+  gap: 2px;   /* small spacing between texts */
+  margin-left: 10px; /* distance from left edge */
+  text-decoration: none;
+}
+
+
+
+/* Odia text */
+.logo-odia {
+  font-family: 'Noto Sans Odia', sans-serif;
+  font-size: 18px;
+  
+  color:black;
+  line-height: 1;
+}
+
+/* English text */
+.logo-english {
+  font-family: Arial, sans-serif; /* or your preferred English font */
+  font-size: 20px;
+  font-weight:bold ;
+  color: black;
+  line-height: 1;
+}
+
+/* Menu links */
+.navbar-links {
+  list-style: none;
+  gap: 20px;
+}
+
+.navbar-links li a {
+  color:black;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar-links li a:hover {
+  color:rgb(33, 33, 144);
+}
+
+.how-it-works{
+background:rgb(213, 221, 227);
+padding:10px 20px;
+}
+
+.steps-container{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:40px;
+flex-wrap:wrap;
+margin-top:30px;
+}
+
+.step{
+text-align:center;
+}
+
+.circle{
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:22px;
+font-weight:bold;
+margin:auto;
+margin-bottom:10px;
+background-color: #08253f;
+}
+
+.arrow{
+font-size:40px;
+color:#020508;
+}
+
+.register-btn{
+display: inline-block;
+margin-top:30px;
+background:#2f7d6b;
+color:white;
+padding:12px 30px;
+border-radius:6px;
+text-decoration:none;
+font-weight:600;
+}
+
+.register-btn:hover{
+background:rgb(50, 50, 124);
+transform: translateY(-5px);
+box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+
+.site-footer {
+  background-color: #08253f; /* Dark blue background */
+  color: white;
+  padding: 40px 20px;
+  font-size: 0.9rem;
+}
+
+.site-footer h5 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.site-footer p, .site-footer small {
+  margin: 0;
+}
+
+.site-footer a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: #ffd700; /* Optional hover effect: gold */
+  text-decoration: underline;
+}
+    

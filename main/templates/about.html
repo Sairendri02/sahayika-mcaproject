@@ -1,0 +1,176 @@
+{% load i18n%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Us</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+/* 🔥 Blurred background */
+.bg-blur {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url("{% static 'images/learn.jpg' %}") no-repeat center center;
+    background-size: cover;
+    filter: blur(8px);
+    transform: scale(1.05);
+    z-index: -1;
+}
+
+/* Content box */
+.overlay {
+    background: rgba(0,0,0,0.7);
+    padding: 40px;
+    border-radius: 12px;
+}
+
+/* Text */
+p {
+    font-weight: 700;
+    color: black;
+    font-size: 17px;
+}
+
+span {
+    color: #0a0909;
+    font-size: 15px;
+}
+
+h2, h4 {
+    color: black;
+}
+
+/* Cards */
+.card {
+    border-radius: 12px;
+}
+
+    /* Navbar background color */
+        .navbar-custom {
+            background-color: #536f8a; /* You can change to any color */
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column; /* Stack Odia above English */
+            line-height: 1;
+            color:black;
+        }
+        .brand-text span {
+            display: block;
+        }
+        .brand-text .odia {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .brand-text .english {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body> 
+    
+    <nav class="navbar navbar-expand-lg navbar-custom text-white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
+        <div class="brand-text">
+            <span class="odia">ସହାୟିକା</span>
+            <span class="english">Sahayika</span>
+        </div>
+    </a>
+    <div class="d-flex ms-auto">   
+        <a href="{% url 'home' %}" class="btn btn-light btn-sm">{% trans "Back to Home" %}</a>
+    </div>
+</div>
+</nav>
+
+<div class="bg-blur"></div>
+
+<div class="container mt-5">
+
+
+<!-- TITLE -->
+<h2 class="mb-4"><b>{% trans "About Us" %}</b></h2>
+
+        <p class="fs-6 fw-bold">
+            {% trans "Sahayika is a digital platform developed to simplify the management of Self Help Groups (SHGs). It replaces traditional manual record-keeping methods with a structured and efficient system." %}
+        </p>
+
+        <p class="fs-6 fw-bold">
+            {% trans "The platform helps in managing member details, tracking monthly savings, handling loan distribution, and monitoring repayments in a transparent and organized way." %}
+        </p>
+
+        <p class="fs-6 fw-bold">
+            {% trans "By using this system, SHGs can reduce errors, save time, and maintain accurate financial records, ensuring better decision-making and accountability." %}
+        </p>
+
+        <!-- Mission -->
+        <h4 class="mt-4"><b>{% trans "Our Mission" %}</b></h4>
+
+        <p class="fs-6 fw-bold">
+            {% trans "To provide a simple and efficient digital solution that empowers Self Help Groups to manage their financial and operational activities effectively." %}
+        </p>
+
+        <!-- Vision -->
+        <h4 class="mt-4"><b>{% trans "Our Vision" %}</b></h4>
+
+        <p class="fs-6 fw-bold">
+            {% trans "To build a transparent, reliable, and user-friendly system that supports the growth and sustainability of Self Help Groups." %}
+        </p>
+
+        <!-- Project Info -->
+        <h4 class="mt-4"><b>{% trans "Project Information" %}</b></h4>
+
+        <p class="fs-6 fw-bold">
+            {% trans "This project, Sahayika, was developed as part of an academic initiative to address real-world challenges faced by Self Help Groups." %}
+        </p>
+
+        <p class="fs-6 fw-bold">
+            {% trans "Developed by:" %} <b>Sahayinies</b>
+        </p>
+
+        <p class="fs-6 fw-bold">
+            {% trans "Institution:" %} <b>Indira Gandhi Institute of Technology,Sarang </b>
+        </p>
+
+        <p class="fs-6 fw-bold">
+            {% trans "Year of Development:" %} <b>2026</b>
+        </p>
+
+        <p class="fs-6 fw-bold">
+            {% trans "The system focuses on improving transparency, efficiency, and accessibility in managing SHG activities digitally." %}
+        </p>
+
+        <div class="text-center mt-5">
+
+       <a href="{% url 'register' %}" class="btn btn-success px-4 me-2">
+        {% trans "Register Now" %}
+       </a>
+
+      <p class="fs-6 fw-bold">
+        {% trans "To start using the system, please create an account. After registration, you will be able to access all features of the platform." %}
+      </p>
+
+    </div>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

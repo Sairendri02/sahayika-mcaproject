@@ -1,0 +1,216 @@
+{% load i18n%}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Monthly Collection - Sahayika</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .body{
+            background-color: #dfe3eb;
+
+        }
+        /* Navbar background color */
+        .navbar-custom {
+            background-color: #536f8a; /* You can change to any color */
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column; /* Stack Odia above English */
+            line-height: 1;
+            color:black;
+        }
+        .brand-text span {
+            display: block;
+        }
+        .brand-text .odia {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .brand-text .english {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom text-white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
+        <div class="brand-text">
+            <span class="odia">ସହାୟିକା</span>
+            <span class="english">Sahayika</span>
+        </div>
+    </a>
+    <div class="d-flex ms-auto">
+        <span class="text-white me-3">{% trans "Hello," %} {{ request.session.user_name }}</span>
+        <a href="{% url 'logout' %}" class="btn btn-light btn-sm">{% trans "Logout" %}</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+
+<h2 class="mb-4">{% trans "Monthly Collection" %}</h2>
+
+<form method="GET" class="row mb-4">
+
+<div class="col-md-4">
+<label>{% trans "Month" %}</label>
+
+<select name="month" class="form-control">
+
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4">
+
+<label>{% trans "Year" %}</label>
+
+<input type="number" name="year" class="form-control" value="{{selected_year}}">
+
+</div>
+
+<div class="col-md-4 d-flex align-items-end">
+
+<button class="btn btn-primary w-100">
+ {% trans "View" %}
+</button>
+
+</div>
+
+</form>
+
+<h4>{% trans "Summary Cards" %}</h4>
+
+<div class="row mb-4">
+
+<div class="col-md-3">
+<div class="card p-2 bg-primary text-white">
+{% trans "Total Monthly Collection: ₹" %}{{ total_monthly_collection }}
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-2 bg-success text-white">
+{% trans "Members Paid This Month:" %} {{ paid_members_count }}
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-2 bg-warning text-white">
+{% trans "Personal Loans Taken: ₹" %}{{ personal_loans_taken }}
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-2 bg-danger text-white">
+{% trans "Personal Loans Cleared:" %} {{ personal_loans_cleared }}
+</div>
+</div>
+
+</div>
+
+<h4>{% trans "Group Members Table" %}</h4>
+
+<table class="table table-bordered table-striped">
+
+<thead class="table-dark">
+
+<tr>
+<th>{% trans "Name" %}</th>
+<th>{% trans "Phone" %}</th>
+<th>{% trans "Total Given" %}</th>
+<th>{% trans "Status" %}</th>
+<th>{% trans "EMI Amount" %}</th>
+<th>{% trans "EMI Status" %}</th>
+<th>{% trans "Loan Taken" %}</th>
+<th>{% trans "Remaining Loan" %}</th>
+<th>{% trans "Last Loan Date" %}</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for m in member_data %}
+
+<tr>
+
+<td>{{ m.fullname }}</td>
+
+<td>{{ m.phone }}</td>
+
+<td>₹{{ m.total_given }}</td>
+
+<td>
+
+{% if m.pending_status == "Paid" %}
+
+<span class="text-success">✔</span>
+
+{% else %}
+
+<span class="text-danger">✘</span>
+
+{% endif %}
+
+</td>
+
+<td>₹{{ m.total_emi }}</td>
+
+<td>
+{% if m.total_emi > 0 %}
+<span class="badge bg-success">{% trans "Paid" %}</span>
+{% else %}
+<span class="badge bg-danger">{% trans "Pending" %}</span>
+{% endif %}
+</td>
+
+<td>₹{{ m.loan_taken }}</td>
+
+<td>₹{{ m.loan_remaining }}</td>
+
+<td>{{ m.last_loan_date|default:"-" }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+
+<a href="{% url 'dashboard' %}" class="btn btn-secondary">
+{% trans "Back to Dashboard" %}
+</a>
+
+</div>
+
+</body>
+</html>

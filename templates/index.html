@@ -1,0 +1,268 @@
+{%load i18n%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ସହାୟିକା | Sahayika</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Odia&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+
+<body>
+
+
+<nav class="navbar shadow-sm" style="background-color: #456382">
+  <div class="d-flex align-items-center w-100 px-3"> 
+
+   
+    <a class="d-flex  align-items-center logo-container" href="#">
+      <img src="{% static 'images/LOGO.png' %}" class="logo">
+      <div class="logo-texts d-flex flex-column ms-2">
+      <span class="logo-odia">ସହାୟିକା</span>
+      <span class="logo-english">Sahayika</span>
+      </div>
+    </a>
+
+    
+    <ul class="d-flex ms-auto align-items-center mb-0 navbar-links">
+      <li><a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a></li>
+      <li><a class="nav-link" href="{% url 'about' %}">{% trans "About Us" %}</a></li>
+      <li><a class="nav-link" href="{% url 'rti' %}">{% trans "RTI" %}</a></li>
+      <li><a class="nav-link" href="{% url 'contact' %}">{% trans "Contact Us" %}</a></li>
+      <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+    
+        {% get_current_language as LANGUAGE_CODE %}
+    
+        {% if LANGUAGE_CODE == "en" %}
+            <input type="hidden" name="language" value="or">
+            <button type="submit" style ="border:none;background:none;">ଓଡ଼ିଆ</button>
+        {% else %}
+            <input type="hidden" name="language" value="en">
+            <button type="submit" style ="border:none;background:none;">English</button>
+        {% endif %}
+      </form>
+    </ul>
+
+  </div>
+</nav>
+
+<div id="heroCarousel" class="carousel slide" data-bs-ride="false">
+
+<div class="carousel-inner">
+
+
+<div class="carousel-item active">
+   
+
+<div class="hero-slide">
+
+   <img src="{% static 'images/shg.jpg' %}" class="d-block w-100">
+
+<div class="hero-content">
+
+<h1 class=" hero-title fade-title">Empowering Self Help Groups with Transparent Financial Management</h1>
+<h2 class="hero-odia fade-title">“ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କୁ ପ୍ରଶସ୍ତ ଅର୍ଥନୀତି ପରିଚାଳନା ସହିତ ସଶକ୍ତ କରିବା”</h2>
+<div class="hero-buttons mt-3">
+<a href="{% url 'login' %}" class="btn btn-primary">{% trans "Login" %}</a>
+<a href="{% url 'learn_more' %}" class="btn btn-outline-light">{% trans "Learn More" %}</a>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="carousel-item">
+
+<div class="hero-slide">
+
+<img src="{% static 'images/shg2.jpg' %}">
+
+<div class="hero-content">
+
+<h1>Our Vision</h1>
+
+<p>"Our Vision is to create strong, self-reliant communities through the empowerment of women. We aim to encourage regular savings and financial discipline among Self-Help Group members, provide easy access to financial support when needed, and promote both social and economic development. By fostering cooperation, trust, and transparency, we envision a society where women are confident decision-makers in their households and communities, contributing actively to sustainable growth, improved livelihoods, and overall well-being. We also aspire to create awareness about health, education, and social responsibilities, ensuring that every member can achieve personal growth while collectively strengthening the group."</p>
+<h2 class="odia-text">“ଆମର ଦୃଷ୍ଟିକୋଣ”</h2>
+
+<p class="odia-text">“ଆମର ଦୃଷ୍ଟିକୋଣ ହେଉଛି ନାରୀମାନଙ୍କୁ ସଶକ୍ତ କରି ଦୃଢ଼, ସ୍ୱାଧୀନ ସମୁଦାୟ ଗଢିବା। ଆମେ ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀର ସଦସ୍ୟଙ୍କୁ ନିୟମିତ ସଞ୍ଚୟ ଏବଂ ଅର୍ଥନୀତି ଶୃଙ୍ଖଳାକୁ ଉତ୍ସାହିତ କରିବା, ଆବଶ୍ୟକତା ସମୟରେ ସହଜ ଅର୍ଥ ସମର୍ଥନ ପ୍ରଦାନ କରିବା, ଏବଂ ସାମାଜିକ ଓ ଆର୍ଥିକ ବିକାଶକୁ ପ୍ରୋତ୍ସାହିତ କରିବାକୁ ଲକ୍ଷ୍ୟ କରୁଛୁ। ସହଯୋଗ, ବିଶ୍ୱାସ ଏବଂ ପାରଦର୍ଶିତାକୁ ପ୍ରୋତ୍ସାହିତ କରି, ଆମେ ଏକ ସମାଜର କଳ୍ପନା କରୁଛୁ, ଯେଉଁଠାରେ ନାରୀମାନେ ସେମାନଙ୍କର ଘରେ ଏବଂ ସମୁଦାୟରେ ସୁସ୍ଥିର ନିର୍ଣ୍ଣୟକାରୀ ହୋଇ, ସୁସ୍ଥିର ବୃଦ୍ଧି, ଉନ୍ନତ ଜୀବନଶୈଳୀ ଏବଂ ସମ୍ପୂର୍ଣ୍ଣ ସୁଖ-ସମୃଦ୍ଧିରେ ସକ୍ରିୟ ଭାଗ ନେବେ। ଆମେ ସ୍ୱାସ୍ଥ୍ୟ, ଶିକ୍ଷା ଏବଂ ସାମାଜିକ ଦାୟିତ୍ୱ ବିଷୟରେ ସଚେତନତା ସୃଷ୍ଟି କରିବାକୁ ମଧ୍ୟ ଚେଷ୍ଟା କରୁଛୁ, ଯାହା ଦ୍ୱାରା ପ୍ରତ୍ୟେକ ସଦସ୍ୟ ବ୍ୟକ୍ତିଗତ ଉନ୍ନତି ହାସଲ କରି ପାରିବେ, ଏବଂ ସମୁଦାୟକୁ ଦୃଢ଼ କରିବେ।”</p>
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="carousel-item">
+
+<div class="hero-slide">
+
+<img src="{% static 'images/shg3.jpg' %}">
+
+<div class="hero-content">
+
+<h1>Our Mission</h1>
+
+<p>"Our Mission is to empower women through the formation and strengthening of Self-Help Groups, enabling them to achieve financial independence and confidence. We aim to encourage regular savings, provide access to credit and other financial support, and promote collective decision-making within the group. Through skill development, capacity building, and awareness programs, we strive to improve the social and economic well-being of each member. Additionally, we focus on promoting education, health awareness, and community participation, ensuring that every member has the opportunity to grow personally while contributing to the overall development and sustainability of the group and the wider community."</p>
+<h2 class="odia-text">“ଆମର ମିଶନ”</h2>
+<p class="odia-text">“ଆମର ମିଶନ ହେଉଛି ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀର ସୃଷ୍ଟି ଏବଂ ସମର୍ଥନ ମାଧ୍ୟମରେ ନାରୀମାନେ ସ୍ୱାର୍ଥ ସ୍ୱାଧୀନତା ଏବଂ ଆତ୍ମବିଶ୍ୱାସ ହାସଲ କରିପାରିବେ। ଆମେ ସଦସ୍ୟଙ୍କୁ ନିୟମିତ ସଞ୍ଚୟକୁ ଉତ୍ସାହିତ କରିବା, ଋଣ ଏବଂ ଅନ୍ୟାନ୍ୟ ଆର୍ଥିକ ସହାୟତା ପ୍ରଦାନ କରିବା, ଏବଂ ଗୋଷ୍ଠୀରେ ସାମୂହିକ ନିର୍ଣ୍ଣୟ ନେବାକୁ ପ୍ରୋତ୍ସାହିତ କରିବାକୁ ଲକ୍ଷ୍ୟ କରୁଛୁ। ଦକ୍ଷତା ବିକାଶ, କ୍ଷମତା ସୃଷ୍ଟି ଏବଂ ସଚେତନତା କାର୍ଯ୍ୟକ୍ରମ ମାଧ୍ୟମରେ, ଆମେ ପ୍ରତ୍ୟେକ ସଦସ୍ୟଙ୍କର ସାମାଜିକ ଏବଂ ଆର୍ଥିକ ସୁଖ-ସମୃଦ୍ଧିକୁ ସୁଦୃଢ଼ କରିବାକୁ ଚେଷ୍ଟା କରୁଛୁ। ଏହା ସହିତ, ଶିକ୍ଷା, ସ୍ୱାସ୍ଥ୍ୟ ସଚେତନତା, ଏବଂ ସମୁଦାୟରେ ସକ୍ରିୟ ଭାଗ ନେବାକୁ ଉତ୍ସାହିତ କରି, ପ୍ରତ୍ୟେକ ସଦସ୍ୟଙ୍କୁ ବ୍ୟକ୍ତିଗତ ଉନ୍ନତି ଏବଂ ସମୁଦାୟର ସାର୍ବଭୌମ ବିକାଶରେ ଅଂଶ ନେବାର ସୁଯୋଗ ମିଳିବାକୁ ନିଶ୍ଚିତ କରାଯାଏ।”</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+
+<span class="carousel-control-prev-icon"></span>
+
+</button>
+
+<button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+
+<span class="carousel-control-next-icon"></span>
+
+</button>
+
+</div>
+
+
+
+<section class="features-section py-5 ">
+  <div class="container">
+    <div class="row text-center">
+
+     
+      <div class="col-md-3 mb-4">
+        <div class="feature-card">
+          <i class="bi bi-people-fill feature-icon"></i>
+          <h5 class="feature-title">{% trans "Member Management" %}</h5>
+        </div>
+      </div>
+
+     
+      <div class="col-md-3 mb-4">
+        <div class="feature-card">
+          <i class="bi bi-cash-coin feature-icon"></i>
+          <h5 class="feature-title">{% trans "Monthly Collection" %}</h5>
+        </div>
+      </div>
+
+     
+      <div class="col-md-3 mb-4">
+        <div class="feature-card">
+          <i class="bi bi-journal-check feature-icon"></i>
+          <h5 class="feature-title">{% trans "Loan Tracking" %}</h5>
+        </div>
+      </div>
+
+     
+      <div class="col-md-3 mb-4">
+        <div class="feature-card">
+          <i class="bi bi-kanban-fill feature-icon"></i>
+          <h5 class="feature-title">{% trans "Project Management" %}</h5>
+        </div>
+      </div>
+
+    </div>
+  
+
+    <div class="text-center mt-5">
+       <h2><strong>{% trans "Sahayika" %}</strong></h2>
+          <p>{% trans "A self help group management system" %}</p>
+      </div>
+<section class="how-it-works py-5">
+  <div class="container text-center">
+
+    <h2 class="mb-3"><strong>{% trans "How It Works" %}</strong></h2>
+    <p class="text-muted mb-5">
+      {% trans "Streamline the management of your Self Help Group with these powerful features:" %}
+    </p>
+
+    <div class="steps-container">
+
+      <div class="step">
+        <div class="circle">1</div>
+        <p>{% trans "President Registers" %}</p>
+      </div>
+
+      <div class="arrow">----›</div>
+
+      <div class="step">
+        <div class="circle">2</div>
+        <p>{% trans "Members Register" %}</p>
+      </div>
+
+      <div class="arrow">----›</div>
+
+      <div class="step">
+        <div class="circle">3</div>
+        <p>{% trans "Track Loans & Collections" %}</p>
+      </div>
+
+      <div class="arrow">----›</div>
+
+      <div class="step">
+        <div class="circle">4</div>
+        <p>{% trans "Members View Reports" %}</p>
+      </div>
+
+    </div>
+
+    
+    <a href="{% url 'register' %}" class="register-btn">{% trans  "Register Now"%} </a>
+
+  </div>
+</section>
+    
+ </div>
+</section>
+
+<footer class="site-footer py-4 bg-dark text-white">
+  <div class="container">
+    <div class="row text-center text-md-left">
+
+      
+      <div class="col-md-4 mb-3">
+        <h5>Contact Us</h5>
+        <p>Phone: +91 98765 43210</p>
+        <p>Email: info@sahayika.com</p>
+      </div>
+
+      
+      <div class="col-md-4 mb-3">
+        <h5>Developer</h5>
+        <p>Website developed by: Sahayinies</p>
+      </div>
+
+     
+      <div class="col-md-4 mb-3">
+        <h5>Copyright</h5>
+        <p>&copy; 2026 Sahayika. All rights reserved.</p>
+      </div>
+
+    </div>
+
+    
+    <div class="text-center mt-3">
+      <small>Designed for Self Help Group management and community development.</small>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: hsl(240, 33%, 92%) ;
+        }
+
+        /* NAVBAR */
+        .navbar-custom {
+            background-color: #536f8a;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+            color: black;
+        }
+
+        .brand-text .odia {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .brand-text .english {
+            font-size: 1rem;
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+        }
+
+        .chat-toggle {
+         background: #3b5b9a;
+         color: white;
+         border: none;
+         border-radius: 50%;
+         width: 55px;
+         height: 55px;
+        font-size: 22px;
+       }
+
+      .chat-box {
+        width: 300px;
+        background: white;
+        border-radius: 12px;
+        padding: 10px;
+        margin-top: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      }
+
+      .chat-header {
+         display: flex;
+         justify-content: space-between;
+         font-weight: bold;
+     }
+
+      .chat-body {
+        height: 200px;
+        overflow-y: auto;
+        margin-bottom: 10px;
+     }
+
+        /* CONTACT BOX */
+        .contact-box {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.15);
+        }
+
+        .contact-title {
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #3b5b9a;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .btn-send {
+            background: #3b5b9a;
+            color: white;
+        }
+
+        .btn-send:hover {
+            background: #2c4373;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-custom text-white">
+  <div class="container-fluid">
+
+    <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
+        <div class="brand-text ms-2">
+            <span class="odia">ସହାୟିକା</span>
+            <span class="english">Sahayika</span>
+        </div>
+    </a>
+
+    <div class="d-flex ms-auto">   
+        <a href="{% url 'home' %}" class="btn btn-light btn-sm">{% trans "Back to Home" %}</a>
+  </div>
+
+  </div>
+</nav>
+
+<!-- CHATBOT -->
+<div class="chat-container">
+
+    <button class="chat-toggle" onclick="toggleChat()">💬</button>
+
+    <div id="chatBox" class="chat-box" style="display:none;">
+
+        <div class="chat-header">
+            Help / ସହାୟତା
+            <span onclick="toggleChat()">✖</span>
+        </div>
+
+        <div id="chat-body" class="chat-body"></div>
+
+        <input type="text" id="userInput" class="form-control" placeholder="Type here...">
+
+        <button type="button" id="chatSendBtn" class="btn btn-primary w-100 mt-2">Send</button>
+
+        <button onclick="startVoice()" class="btn btn-success w-100 mt-2">🎤 Speak</button>
+
+        <button onclick="notSolved()" class="btn btn-warning w-100 mt-2">Not solved?</button>
+
+    </div>
+</div>
+
+<div class="container mt-5" style="max-width:700px;">
+
+<div class="contact-box">
+
+<div class="contact-title">{% trans "Contact Us" %}</div>
+
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success text-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="info-box">
+    <p><b>{% trans "Phone" %}:</b> +91XXXXXXXXXX</p>
+    <p><b>{% trans "Email" %}:</b> support@sahayika.com</p>
+    <p><b>{% trans "Address" %}:</b> Odisha, India</p>
+</div>
+
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label>{% trans "Your Name" %}</label>
+        <input type="text" name="name" class="form-control" required>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label>{% trans "Phone Number" %}</label>
+        <input type="text" name="phone" class="form-control" required>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label>{% trans "Email" %}</label>
+    <input type="email" name="email" class="form-control">
+</div>
+
+<div class="mb-3">
+    <label>{% trans "Subject" %}</label>
+    <input type="text" name="subject" class="form-control" required>
+</div>
+
+<div class="mb-3">
+    <label>{% trans "Message" %}</label>
+    <textarea name="message" rows="4" class="form-control" required></textarea>
+</div>
+
+<button class="btn btn-send w-100">
+    {% trans "Send Message" %}
+</button>
+
+</form>
+
+<hr class="mt-5">
+
+<h4 class="text-center mb-3">{% trans "My Complaints" %}</h4>
+
+{% for c in complaints %}
+<div class="card mb-3 p-3 shadow-sm">
+
+    <b>{% trans "Subject" %}:</b> {{ c.subject }} <br>
+    <b>{% trans "Message" %}:</b> {{ c.message }} <br>
+
+    <b>{% trans "Status" %}:</b>
+    <span class="badge bg-{% if c.status == 'Resolved' %}success{% else %}warning{% endif %}">
+        {{ c.status }}
+    </span>
+    <br>
+
+    <b>{% trans "Reply" %}:</b>
+    {% if c.reply %}
+        <span class="text-success">{{ c.reply }}</span>
+    {% else %}
+        <span class="text-muted">{% trans "Not yet" %}</span>
+    {% endif %}
+
+</div>
+{% empty %}
+<p class="text-center text-muted">{% trans "No complaints yet" %}</p>
+{% endfor %}
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+// Toggle chat box
+function toggleChat() {
+    let box = document.getElementById("chatBox");
+
+    if (box.style.display === "none" || box.style.display === "") {
+        box.style.display = "block";
+    } else {
+        box.style.display = "none";
+    }
+}
+
+
+// Send message
+function sendMessage() {
+    let inputField = document.getElementById("userInput");
+    let input = inputField.value.toLowerCase().trim();
+    if (!input) return;
+
+    let chatBody = document.getElementById("chat-body");
+
+    // Show user message
+    chatBody.innerHTML += "<div><b>You:</b> " + input + "</div>";
+
+    let response = "I didn't understand <br> ମୁଁ ବୁଝିପାରିଲି ନାହିଁ";
+
+    if (input.includes("loan") || input.includes("ଲୋନ")) {
+        response = "Go to Loan section <br> ଲୋନ୍ ସେକ୍ସନ୍‌କୁ ଯାନ୍ତୁ";
+    }
+    else if (input.includes("member") || input.includes("ମେମ୍ବର")) {
+        response = "Go to Member Management <br> ମେମ୍ବର୍ ମ୍ୟାନେଜମେଣ୍ଟକୁ ଯାନ୍ତୁ";
+    }
+    else if (input.includes("login") || input.includes("ଲଗିନ")) {
+        response = "Check phone number and password <br> ଫୋନ୍ ଓ ପାସୱାର୍ଡ ଚେକ୍ କରନ୍ତୁ";
+    }
+    else if (input.includes("payment") || input.includes("ପେମେଣ୍ଟ")) {
+        response = "Check monthly collection <br> ମାସିକ ସଂଗ୍ରହ ଦେଖନ୍ତୁ";
+    }
+    else if (input.includes("register") || input.includes("ରେଜିଷ୍ଟର")) {
+        response = "Go to Register page <br> ରେଜିଷ୍ଟର୍ ପେଜ୍‌କୁ ଯାନ୍ତୁ";
+    }
+
+    // Show bot response
+    chatBody.innerHTML += "<div><b>AI:</b> " + response + "</div>";
+
+    inputField.value = "";
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// ENTER key support
+document.getElementById("userInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
+
+
+// Voice input (Odia)
+function startVoice() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "or-IN";
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        let text = event.results[0][0].transcript;
+        document.getElementById("userInput").value = text;
+        sendMessage();
+    }
+}
+
+
+// Not solved button
+function notSolved() {
+    alert("Use Contact Form / କନ୍ଟାକ୍ଟ ଫର୍ମ ବ୍ୟବହାର କରନ୍ତୁ");
+}
+</script>
+
+</body>
+</html>

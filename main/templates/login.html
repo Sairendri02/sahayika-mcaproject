@@ -1,0 +1,139 @@
+{% load i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Navbar background color */
+        .navbar-custom {
+            background-color: #536f8a; /* You can change to any color */
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column; /* Stack Odia above English */
+            line-height: 1;
+            color:black;
+        }
+        .brand-text span {
+            display: block;
+        }
+        .brand-text .odia {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .brand-text .english {
+            font-size: 1rem;
+        }
+        /* Page */
+        body {
+            background-color:hsl(240, 33%, 92%) ;
+        }
+
+        .login-box {
+            background: #ebebc5;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+            width: 400px;
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            color: #3b5b9a;
+            margin-bottom: 25px;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: #3b5b9a;
+            color: #08183a;
+        }
+
+        /* Center form */
+        .center-box {
+            height: calc(100vh - 70px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+ <nav class="navbar navbar-expand-lg navbar-custom text-white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
+        <div class="brand-text">
+            <span class="odia">ସହାୟିକା</span>
+            <span class="english">Sahayika</span>
+        </div>
+    </a>
+  </div>
+</nav>
+
+<div class="center-box">
+
+<div class="login-box">
+
+    <div class="login-title">{% trans "Welcome" %}</div>
+
+    {% if error %}
+    <div class="alert alert-danger text-center">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% trans "Phone Number" %}<br>
+        <input type="text" name="phone" value="{{phone}}" class="form-control mb-3" required>
+
+       {% trans "SHG Group Name" %}<br>
+        <input type="text" name="shgname" value="{{shgname}}" class="form-control mb-3" required>
+
+        <select name="role" class="form-select mb-3" required>
+            <option value="">{% trans "Select Role" %}</option>
+            <option value="President" {% if role == "President" %}selected{% endif %}>President</option>
+            <option value="Member" {% if role == "Member" %}selected{% endif %}>Member</option>
+        </select>
+
+        {% trans "Password" %}
+        <input type="password" name="password" class="form-control mb-3" required>
+
+        <button type="submit" class="btn btn-login mb-3">{% trans "Login" %}</button>
+
+        <div class="text-center">
+            <a href="/forgot_password/">{% trans "Forgot password?" %}</a>
+        </div>
+    </form>
+
+    <p class="text-center mt-3">
+        {% trans "Don't have an account?" %}
+        <a href="{% url 'register' %}">{% trans "Register here" %}</a>
+    </p>
+
+</div>
+
+</div>
+
+</body>
+</html>

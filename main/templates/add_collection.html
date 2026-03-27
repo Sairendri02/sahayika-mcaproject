@@ -1,0 +1,138 @@
+{% load i18n%}
+{% load static%}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Collection</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+        
+
+        
+        /* Navbar background color */
+        .navbar-custom {
+            background-color: #536f8a; /* You can change to any color */
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column; /* Stack Odia above English */
+            line-height: 1;
+            color:black;
+        }
+        .brand-text span {
+            display: block;
+        }
+        .brand-text .odia {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .brand-text .english {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(135deg,#74ebd5,#ACB6E5);">
+
+<nav class="navbar navbar-expand-lg navbar-custom text-white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
+        <div class="brand-text">
+            <span class="odia">ସହାୟିକା</span>
+            <span class="english">Sahayika</span>
+        </div>
+    </a>
+    <div class="d-flex ms-auto">
+        <span class="text-white me-3">{% trans "Hello," %} {{ request.session.user_name }}</span>
+        
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-5">
+
+<h2>{% trans "Add Collection" %}</h2>
+
+{% if role == "President" %}
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="mb-3">
+<label>{% trans "Select Member" %}</label>
+<select name="member_id" class="form-control">
+
+{% for m in members %}
+<option value="{{ m.id }}">{{ m.fullname }}</option>
+{% endfor %}
+
+</select>
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label>{% trans "Monthly Saving" %}</label>
+<input type="number" name="savings" class="form-control" placeholder="Enter saving amount">
+</div>
+
+<div class="col-md-6 mb-3">
+<label>{% trans "EMI Paid" %}</label>
+<input type="number" name="emi" class="form-control" placeholder="Enter EMI amount">
+</div>
+
+</div>
+
+<button class="btn btn-success">{%  trans "Save Collection" %}</button>
+
+</form>
+
+<hr>
+
+{% endif %}
+
+
+<h4>{% trans "Collection Records" %}</h4>
+
+<table class="table table-striped">
+
+<thead class="table-dark">
+<tr>
+<th>{% trans "Member" %}</th>
+<th>{% trans "Date" %}</th>
+<th>{% trans "Monthly Saving" %}</th>
+<th>{% trans "EMI Paid" %}</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for c in collections %}
+
+<tr>
+<td>{{ c.member_name }}</td>
+<td>{{ c.meeting_date }}</td>
+<td>₹ {{ c.savings_paid }}</td>
+<td>₹ {{ c.emi_paid }}</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+<a href="{% url 'dashboard' %}" class="btn btn-secondary">{% trans "Back" %}</a>
+</div>
+</body>
+</html>
