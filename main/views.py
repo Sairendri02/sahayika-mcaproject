@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
 from django.db.models import Sum, Q
-from .models import ContactMessage
+from .models import ContactMessage 
 from .models import Register, District , Village, Loan, Meeting, Project
 from datetime import datetime, date
 import random
@@ -751,23 +751,24 @@ def contact(request):
 
 def contact_view(request):
     phone = request.session.get("user_phone")
+
     if request.method == "POST":
         ContactMessage.objects.create(
             name=request.POST.get('name'),
             phone=request.POST.get('phone'),
             email=request.POST.get('email'),
             subject=request.POST.get('subject'),
-            message=request.POST.get('message')
+            message=request.POST.get('message'),
+            type=request.POST.get('type', 'Complaint')
         )
         messages.success(request, "Message sent successfully")
+        return redirect('contact')
 
-        complaints = ContactMessage.objects.filter(phone=phone).order_by('-created_at')
+    submissions = ContactMessage.objects.filter(phone=phone).order_by('-created_at')
 
     return render(request, "contact.html", {
-        "complaints": complaints
+        "submissions": submissions
     })
-
-   
   
 
     

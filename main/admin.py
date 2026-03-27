@@ -7,10 +7,11 @@ admin.site.register(Village)
 admin.site.register(Register)
 
 @admin.register(ContactMessage)
-class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'subject', 'status', 'created_at')
-    list_filter = ('status',)
-    search_fields = ('name', 'phone', 'subject')
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'phone', 'email', 'subject', 'type', 'status', 'reply', 'created_at')
+    list_filter = ('type', 'status')
+    search_fields = ('name', 'phone', 'email', 'subject', 'message')
+    readonly_fields = ('name', 'phone', 'email', 'subject', 'message', 'created_at')
 
 
 

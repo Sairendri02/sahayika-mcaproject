@@ -40,9 +40,10 @@
 
         .chat-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 999;
+            bottom: 30px;
+            right: 30px;
+            z-index: 10;
+            pointer-events: none;
         }
 
         .chat-toggle {
@@ -74,6 +75,7 @@
         height: 200px;
         overflow-y: auto;
         margin-bottom: 10px;
+        pointer-events: auto;
      }
 
         /* CONTACT BOX */
@@ -182,68 +184,70 @@
 
 
 <form method="POST">
-{% csrf_token %}
+    {% csrf_token %}
 
-<div class="row">
-    <div class="col-md-6 mb-3">
+    <div class="mb-3">
         <label>{% trans "Your Name" %}</label>
         <input type="text" name="name" class="form-control" required>
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="mb-3">
         <label>{% trans "Phone Number" %}</label>
         <input type="text" name="phone" class="form-control" required>
     </div>
-</div>
 
-<div class="mb-3">
-    <label>{% trans "Email" %}</label>
-    <input type="email" name="email" class="form-control">
-</div>
+    <div class="mb-3">
+        <label>{% trans "Email" %}</label>
+        <input type="email" name="email" class="form-control">
+    </div>
 
-<div class="mb-3">
-    <label>{% trans "Subject" %}</label>
-    <input type="text" name="subject" class="form-control" required>
-</div>
+    <div class="mb-3">
+        <label>{% trans "Subject" %}</label>
+        <input type="text" name="subject" class="form-control" required>
+    </div>
 
-<div class="mb-3">
-    <label>{% trans "Message" %}</label>
-    <textarea name="message" rows="4" class="form-control" required></textarea>
-</div>
+    <div class="mb-3">
+        <label>{% trans "Type" %}</label>
+        <select name="type" class="form-control" required>
+            <option value="Complaint">{% trans "Complaint" %}</option>
+            <option value="Message">{% trans "Message" %}</option>
+        </select>
+    </div>
 
-<button class="btn btn-send w-100">
-    {% trans "Send Message" %}
-</button>
+    <div class="mb-3">
+        <label>{% trans "Message" %}</label>
+        <textarea name="message" rows="4" class="form-control" required></textarea>
+    </div>
 
+    <button class="btn btn-send w-100">{% trans "Send" %}</button>
 </form>
 
-<hr class="mt-5">
 
-<h4 class="text-center mb-3">{% trans "My Complaints" %}</h4>
+    <hr class="mt-5">
 
-{% for c in complaints %}
-<div class="card mb-3 p-3 shadow-sm">
+    <!-- My Submissions Section -->
+    <h4 class="text-center mb-3">{% trans "My Submissions" %}</h4>
 
-    <b>{% trans "Subject" %}:</b> {{ c.subject }} <br>
-    <b>{% trans "Message" %}:</b> {{ c.message }} <br>
-
-    <b>{% trans "Status" %}:</b>
-    <span class="badge bg-{% if c.status == 'Resolved' %}success{% else %}warning{% endif %}">
-        {{ c.status }}
-    </span>
-    <br>
-
-    <b>{% trans "Reply" %}:</b>
-    {% if c.reply %}
-        <span class="text-success">{{ c.reply }}</span>
-    {% else %}
-        <span class="text-muted">{% trans "Not yet" %}</span>
-    {% endif %}
-
-</div>
-{% empty %}
-<p class="text-center text-muted">{% trans "No complaints yet" %}</p>
-{% endfor %}
+    {% for s in submissions %}
+    <div class="card mb-3 p-3 shadow-sm">
+        <b>Type:</b> {{ s.type }} <br>
+        <b>Subject:</b> {{ s.subject }} <br>
+        <b>Message:</b> {{ s.message }} <br>
+        <b>Status:</b> 
+        <span class="badge bg-{% if s.status == 'Resolved' %}success{% else %}warning{% endif %}">
+            {{ s.status }}
+        </span>
+        <br>
+        <b>Reply:</b> 
+        {% if s.reply %}
+            <span class="text-success">{{ s.reply }}</span>
+        {% else %}
+            <span class="text-muted">{% trans "Not yet" %}</span>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">{% trans "No submissions yet" %}</p>
+    {% endfor %}
 
 </div>
 
@@ -306,6 +310,8 @@ document.getElementById("userInput").addEventListener("keypress", function(e) {
     if (e.key === "Enter") {
         sendMessage();
     }
+
+document.getElementById("chatSendBtn").addEventListener("click", sendMessage);
 });
 
 
