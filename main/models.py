@@ -131,10 +131,10 @@ class ContactMessage(models.Model):
 
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
-    email = models.EmailField()
+    email = models.EmailField(blank=True,null=True)
     subject = models.CharField(max_length=200)
     message = models.TextField()
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='Message')
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='Complaint')
     reply = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20, default='Pending')  # Pending / Resolved
     created_at = models.DateTimeField(auto_now_add=True)

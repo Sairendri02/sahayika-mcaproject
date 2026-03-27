@@ -750,8 +750,6 @@ def contact(request):
 
 
 def contact_view(request):
-    phone = request.session.get("user_phone")
-
     if request.method == "POST":
         ContactMessage.objects.create(
             name=request.POST.get('name'),
@@ -762,9 +760,14 @@ def contact_view(request):
             type=request.POST.get('type', 'Complaint')
         )
         messages.success(request, "Message sent successfully")
-        return redirect('contact')
+        return redirect('contact')  # reload page to show submissions
 
-    submissions = ContactMessage.objects.filter(phone=phone).order_by('-created_at')
+    # Show all submissions by this phone, or all if no session
+    phone = request.session.get("user_phone")
+    if phone:
+        submissions = ContactMessage.objects.filter(phone=phone).order_by('-created_at')
+    else:
+        submissions = ContactMessage.objects.all().order_by('-created_at')
 
     return render(request, "contact.html", {
         "submissions": submissions
