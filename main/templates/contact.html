@@ -43,7 +43,7 @@
             bottom: 30px;
             right: 30px;
             z-index: 10;
-            pointer-events: none;
+            
         }
 
         .chat-toggle {
@@ -273,11 +273,11 @@ function toggleChat() {
 function sendMessage() {
     let inputField = document.getElementById("userInput");
     let input = inputField.value.toLowerCase().trim();
-    if (!input) return;
+    if (input === "") return;
 
     let chatBody = document.getElementById("chat-body");
 
-    // Show user message
+     
     chatBody.innerHTML += "<div><b>You:</b> " + input + "</div>";
 
     let response = "I didn't understand <br> ମୁଁ ବୁଝିପାରିଲି ନାହିଁ";
@@ -304,15 +304,19 @@ function sendMessage() {
     inputField.value = "";
     chatBody.scrollTop = chatBody.scrollHeight;
 }
+   window.onload = function () {
 
+
+document.getElementById("chatSendBtn").addEventListener("click", sendMessage);
 // ENTER key support
 document.getElementById("userInput").addEventListener("keypress", function(e) {
     if (e.key === "Enter") {
         sendMessage();
     }
+ });
 
-document.getElementById("chatSendBtn").addEventListener("click", sendMessage);
-});
+};
+
 
 
 // Voice input (Odia)

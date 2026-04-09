@@ -206,7 +206,7 @@ def add_collection(request):
 
         member_id = request.POST.get("member_id")
         savings = float( request.POST.get("savings",0))
-        emi = float(request.POST.get("emi",0))
+        emi = float(request.POST.get("emi_paid") or 0 )
         member = Register.objects.get(id=member_id)
 
         Meeting.objects.create(
@@ -219,8 +219,6 @@ def add_collection(request):
              )
         try:
             member = Register.objects.get(fullname=member.fullname, shgname=shg)
-            member.savings_total += savings
-            member.save()
         except Register.DoesNotExist:
             pass  # Optional: handle error if member not foun
         
@@ -243,21 +241,31 @@ def dashboard(request):
 
     members = Register.objects.filter(shgname=user_shg)
     total_members = members.count()
+  
+    now = datetime.now()
+    current_month = now.month
+    current_year = now.year
 
-    # Loans for SHG
-    loans = Loan.objects.filter(shgname=user_shg)
-    total_loans_amount = loans.aggregate(Sum('loan_amount'))['loan_amount__sum'] or 0
-    remaining_loans_amount = loans.aggregate(Sum('remaining_amount'))['remaining_amount__sum'] or 0
-    total_loans_count = loans.count()
-    paid_loans_count = loans.filter(remaining_amount=0).count()
+    
+    all_loans = Loan.objects.filter(shgname=user_shg)
+
+    
+    monthly_loans = all_loans.filter(
+        emi_date__month=current_month,
+        emi_date__year=current_year
+    )
+    
+    
+    total_loans_amount = all_loans.aggregate(Sum('loan_amount'))['loan_amount__sum'] or 0
+    remaining_loans_amount =all_loans.aggregate(Sum('remaining_amount'))['remaining_amount__sum'] or 0
+    total_loans_count = all_loans.count()
+    paid_loans_count = all_loans.filter(remaining_amount=0).count()
 
     # Savings and EMI for SHG
     total_savings = Meeting.objects.filter(shgname=user_shg).aggregate(Sum('savings_paid'))['savings_paid__sum'] or 0
     total_emi = Meeting.objects.filter(shgname=user_shg).aggregate(Sum('emi_paid'))['emi_paid__sum'] or 0
 
-    current_month = datetime.now().month
-    current_year = datetime.now().year
-
+    
     # Prepare member_data
     member_data = []
     for m in members:
@@ -265,7 +273,7 @@ def dashboard(request):
         member_total_savings = member_meetings.aggregate(Sum('savings_paid'))['savings_paid__sum'] or 0
         member_total_emi = member_meetings.aggregate(Sum('emi_paid'))['emi_paid__sum'] or 0
 
-        member_loans = loans.filter(member_name=m.fullname)
+        member_loans = all_loans.filter(member_name=m.fullname)
         loan_taken = member_loans.aggregate(Sum('loan_amount'))['loan_amount__sum'] or 0
         loan_remaining = member_loans.aggregate(Sum('remaining_amount'))['remaining_amount__sum'] or 0
 
@@ -321,7 +329,7 @@ def dashboard(request):
     loan_percent = (remaining_loans_amount / total_money * 100) if total_money else 0
 
     # Active loans
-    active_loans = loans.filter(remaining_amount__gt=0).count()
+    active_loans = all_loans.filter(remaining_amount__gt=0).count()
 
     # Total monthly collection
     total_monthly_collection = Meeting.objects.filter(
@@ -343,7 +351,7 @@ def dashboard(request):
         "members": members,
         "member_data": member_data,
         "meeting":meeting,
-        "loans": loans,
+        "loans": monthly_loans,
         "total_members": total_members,
         "total_savings": total_savings,
         "total_emi": total_emi,
@@ -665,14 +673,17 @@ def loan_details(request):
 
     now = datetime.now()
 
-    month = int(month) if month else now.month
-    year = int(year) if year else now.year
+    month = int(month) if month else None
+    year = int(year) if year else None
 
     loans = Loan.objects.filter(
-        shgname=shg,
+        shgname=shg,)
+    if month and year:
+       loans = loans.filter(
         emi_date__month=month,
         emi_date__year=year
     )
+    
    
 
     if loan_type == "Group":
@@ -683,6 +694,8 @@ def loan_details(request):
 
         if member:
             loans = loans.filter(member_name=member)
+
+            
 
     return render(request, "loan_details.html", {
         "loans": loans,
