@@ -11,6 +11,7 @@ urlpatterns = [
     path("dashboard/",views.dashboard,name="dashboard"),
     path("add_member/",views.add_member,name="add_member"),
     path("add_loan/",views.add_loan,name="add_loan"),
+    path('edit-loan/<int:loan_id>/', views.add_loan, name='edit_loan'),
     path("meeting_entry/",views.meeting_entry,name="meeting_entry"),
     path("add_collection/",views.add_collection,name="add_collection"),
     path("monthly_collection/",views.monthly_collection,name="monthly_collection"),
@@ -22,6 +23,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('rti/', views.rti, name='rti'),
     path('contact/', views.contact_view, name='contact'),
+    path('clear-loan/<int:loan_id>/', views.clear_loan, name='clear_loan'),
    
    
 ]

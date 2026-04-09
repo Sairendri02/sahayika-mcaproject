@@ -225,18 +225,18 @@ animation:move 14s linear infinite;font-weight:bold;">
 
                           <div class="card-body">
                         
-                         <label><b>{% trans "Paid Members" %}</b> ({{ paid_members_count }})</label>
+                         <label><b>{% trans "Paid Members" %}</b> ({{ savings_paid_count }})</label>
                          <div class="progress mb-3" style="height:25px;">
-                         <div class="progress-bar bg-success"style="width: {{ paid_percent }}%">
-                         {{ paid_percent|floatformat:0 }}%
+                         <div class="progress-bar bg-success"style="width: {{ savings_paid_percent }}%">
+                         {{ savings_paid_percent|floatformat:0 }}%
                          </div>
                          </div>
 
                         
-                        <label><b>{% trans "Pending Members" %}</b> ({{ pending_members_count }})</label>
+                        <label><b>{% trans "Pending Members" %}</b> ({{ savings_pending_count }})</label>
                         <div class="progress" style="height:25px;">
-                        <div class="progress-bar bg-danger"style="width: {{ pending_percent }}%">
-                        {{ pending_percent|floatformat:0 }}%
+                        <div class="progress-bar bg-danger"style="width: {{savings_pending_percent }}%">
+                        {{ savings_pending_percent|floatformat:0 }}%
                         </div>
                         </div>
                     </div>

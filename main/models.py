@@ -47,6 +47,12 @@ class Loan(models.Model):
     interest_rate = models.FloatField(default=0)  
     subsidy = models.FloatField(default=0)
 
+    @property
+    def progress(self):
+      if self.loan_amount > 0:
+          return int((self.paid_amount / self.loan_amount) * 100)
+      return 0
+
     def __str__(self):
         return self.shgname
 

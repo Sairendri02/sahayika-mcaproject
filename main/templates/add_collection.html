@@ -62,8 +62,6 @@
 
 <h2>{% trans "Add Collection" %}</h2>
 
-{% if role == "President" %}
-
 <form method="POST">
 
 {% csrf_token %}
@@ -96,43 +94,9 @@
 <button class="btn btn-success">{%  trans "Save Collection" %}</button>
 
 </form>
-
-<hr>
-
-{% endif %}
-
-
-<h4>{% trans "Collection Records" %}</h4>
-
-<table class="table table-striped">
-
-<thead class="table-dark">
-<tr>
-<th>{% trans "Member" %}</th>
-<th>{% trans "Date" %}</th>
-<th>{% trans "Monthly Saving" %}</th>
-<th>{% trans "EMI Paid" %}</th>
-</tr>
-</thead>
-
-<tbody>
-
-{% for c in collections %}
-
-<tr>
-<td>{{ c.member_name }}</td>
-<td>{{ c.meeting_date }}</td>
-<td>₹ {{ c.savings_paid }}</td>
-<td>₹ {{ c.emi_paid }}</td>
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
+<div>
 <a href="{% url 'dashboard' %}" class="btn btn-secondary">{% trans "Back" %}</a>
+</div>
 </div>
 </body>
 </html>

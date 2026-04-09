@@ -135,13 +135,38 @@
                     <p><b>{% trans "Remaining" %}:</b><br> ₹ {{ loan.remaining_amount }}</p>
                     <p><b>{% trans "EMI Date" %}:</b><br> {{ loan.emi_date }}</p>
                 </div>
+
+                <div>
+                      {% if loan.remaining_amount == 0 %}
+                           <span class="text-success">Cleared</span>
+
+                      {% elif user_role == "President" %}
+                      <form method="POST" action="{% url 'clear_loan' loan.id %}">
+                        {% csrf_token %}
+                       <button class="btn btn-success btn-sm">
+                         Mark as Cleared
+                         </button>
+                        </form>
+
+                       {% else %}
+                       <span class="text-muted">Pending</span>
+                      {% endif %}
+                </div>
+                <div>
+                    {% if user_role == "President" %}
+                      <a href="{% url 'edit_loan' loan.id %}" class="btn btn-warning btn-sm">
+                       Edit
+                      </a>
+                    {% endif %}
+
+                </div>
             </div>
 
            
             <div class="progress mt-2">
                 <div class="progress-bar bg-success"
                      style="width: {{ loan.progress }}%">
-                    {{ loan.progress|floatformat:0 }}%
+                    {{ loan.progress }}%
                 </div>
             </div>
         </div>
