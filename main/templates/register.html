@@ -98,7 +98,7 @@
 
 
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
 
 {% csrf_token %}
 {% trans "Full Name" %}<br>
@@ -143,9 +143,6 @@
 </div>
 </div>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-
     <!-- Aadhar Number -->
   <div class="row mb-3">
     <div class="mb-3">
@@ -168,7 +165,7 @@
         <img id="profile_preview" src="#" style="display:none; max-width:200px; margin-top:10px;">
     </div>
 
-</from>
+
  {% trans "Phone number" %}:
 <input type="text" name="phone" value="{{phone}}"  class="form-control mb-3" placeholder="Phone Number">
 

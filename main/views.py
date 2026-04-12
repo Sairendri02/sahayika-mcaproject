@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Min
 from .models import ContactMessage 
 from .models import Register, District , Village, Loan, Meeting, Project
 from datetime import datetime, date
@@ -15,7 +15,7 @@ def home(request):
 
 
 def register(request):
-    districts = District.objects.all()
+    districts = District.objects.all().order_by('name')
     error = ""
     success = ""
     fullname = ""
@@ -36,7 +36,7 @@ def register(request):
             # Here you can integrate SMS API to send otp to the phone
             print(f"OTP for {phone}: {otp}")  # For testing
             success = _(f"OTP sent to {phone}")
-        return render(request, "register.html", {"districts": districts, "error": error, "success": success})
+        return render(request, "register.html", {"districts":districts, "error": error, "success": success})
 
     
     if request.method == "POST" and "register" in request.POST:
@@ -111,7 +111,7 @@ def register(request):
                 success = _("Registered successfully!")
                 request.session.pop("otp", None)  # Clear OTP after success
 
-    return render(request, "register.html", {"districts": districts, "error": error, "success": success,"fullname":fullname,"shgname":shgname,"phone":phone,"role":role,"district_id":district_id,"village_id":village_id})
+    return render(request, "register.html", {"districts":districts, "error": error, "success": success,"fullname":fullname,"shgname":shgname,"phone":phone,"role":role,"district_id":district_id,"village_id":village_id})
     
 
 
