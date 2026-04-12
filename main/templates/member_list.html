@@ -1,0 +1,196 @@
+{% load i18n%}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Management</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        
+        
+        /* Navbar background color */
+        .navbar-custom {
+            background-color: #536f8a; /* You can change to any color */
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column; /* Stack Odia above English */
+            line-height: 1;
+            color:black;
+        }
+        .brand-text span {
+            display: block;
+        }
+        .brand-text .odia {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .brand-text .english {
+            font-size: 1rem;
+        }
+
+
+        .profile-card {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    background: white;
+}
+
+.profile-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #4CAF50;
+    margin-bottom: 10px;
+}
+
+.search-box {
+    max-width: 200px;
+    margin: auto;
+}
+
+    </style>
+</head>
+
+<body style="background: linear-gradient(135deg,#74ebd5,#ACB6E5);">
+<nav class="navbar navbar-expand-lg navbar-custom text-white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
+        <div class="brand-text">
+            <span class="odia">ସହାୟିକା</span>
+            <span class="english">Sahayika</span>
+        </div>
+    </a>
+    <div class="d-flex ms-auto">
+        <span class="text-white me-3">{% trans "Hello," %} {{ request.session.user_name }}</span>
+        
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4 d-flex justify-content-center ">
+<div style="width:650px;">
+
+
+
+    <!-- SEARCH BOX -->
+    <input type="text"
+           id="searchBox"
+           class="form-control"
+           placeholder="Select member"
+           readonly
+           onclick="document.getElementById('dropdown').style.display='block'">
+
+    <!-- DROPDOWN -->
+    <div id="dropdown"
+         class="card position-absolute w-50 mt-1 shadow"
+         style="z-index:999; display:none;">
+
+        {% for m in search_results %}
+            <a href="?member_id={{ m.id }}"
+               class="d-block p-2 border-bottom text-decoration-none">
+                {{ m.fullname }} - {{ m.role }}
+            </a>
+        {% endfor %}
+
+    </div>
+
+
+
+{% if selected_member %}
+
+<!-- 👤 PROFILE HEADER -->
+<div class="card shadow p-4 text-center border-0">
+
+    <div style="width:140px;height:140px;border-radius:50%;margin:auto;overflow:hidden;border:2px solid #ddd;">
+        {% if selected_member.profile_photo %}
+            <img src="{{ selected_member.profile_photo.url }}"
+                 style="width:100%;height:100%;object-fit:cover;">
+        {% endif %}
+    </div>
+
+    <h3 class="mt-3">{{ selected_member.fullname }}</h3>
+    <p class="text-muted">{{ selected_member.role }}</p>
+    <span class="badge bg-info">{{ selected_member.status }}</span>
+
+</div>
+
+<!-- 📄 DETAILS BOX -->
+<div class="card shadow-sm p-4 mt-3">
+
+    <h5 class="text-primary mb-3">Member Details</h5>
+
+    <p><b>Phone:</b> {{ selected_member.phone }}</p>
+    <p><b>Aadhaar:</b> {{ selected_member.aadhaar_number }}</p>
+    <p><b>Date of Birth:</b> {{ selected_member.dob }}</p>
+    <p><b>Age:</b> {{ selected_member.age }}</p>
+    <p><b>Joined:</b> {{ selected_member.joined_date }}</p>
+
+    {% if selected_member.left_date %}
+        <p><b>Left Date:</b> {{ selected_member.left_date }}</p>
+    {% endif %}
+
+</div>
+
+<!-- ✏️ EDIT BOX -->
+<div class="card shadow-sm p-4 mt-3">
+
+    <h5 class="text-success mb-3">Edit Member</h5>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="member_id" value="{{ selected_member.id }}">
+        <input type="hidden" name="action" value="edit">
+
+        <input class="form-control mb-2" name="fullname" value="{{ selected_member.fullname }}">
+        <input class="form-control mb-2" name="phone" value="{{ selected_member.phone }}">
+        <input type="date" class="form-control mb-2" name="dob" value="{{ selected_member.dob|date:'Y-m-d' }}">
+
+        <select name="role" class="form-control mb-2">
+            <option {% if selected_member.role == "Member" %}selected{% endif %}>Member</option>
+            <option {% if selected_member.role == "President" %}selected{% endif %}>President</option>
+        </select>
+
+        <input type="file" name="profile_photo" class="form-control mb-3">
+
+        <button class="btn btn-success w-100">Update</button>
+    </form>
+
+</div>
+
+<!-- ❌ LEAVE -->
+<div class="card shadow-sm p-3 mt-3">
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="member_id" value="{{ selected_member.id }}">
+        <input type="hidden" name="action" value="leave">
+
+        <button class="btn btn-danger w-100">Mark as Left</button>
+    </form>
+
+</div>
+
+{% endif %}
+
+</div>
+</div>
+</body>
+</html>

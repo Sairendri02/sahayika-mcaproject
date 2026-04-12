@@ -2,8 +2,9 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
 from django.db.models import Sum, Q, Min
-from .models import ContactMessage 
+from .models import ContactMessage, MonthlyRecord 
 from .models import Register, District , Village, Loan, Meeting, Project
 from datetime import datetime, date
 import random
@@ -22,6 +23,7 @@ def register(request):
     shgname = "" 
     phone = ""
     role = ""
+    dob = ""
     district_id = ""
     village_id = ""
 
@@ -46,10 +48,11 @@ def register(request):
         village_id = request.POST.get('village', '').strip()
         role = request.POST.get('role','').strip()
         phone = request.POST.get('phone','').strip()
+        dob = request.POST.get('dob','').strip()
         password = request.POST.get('password','').strip()
         otp_input = request.POST.get("otp",'').strip()
-        aadhar_number = request.POST.get('aadhar_number','').strip()
-        aadhar_photo = request.FILES.get('aadhar_photo','').strip()
+        aadhaar_number = request.POST.get('aadhaar_number','').strip()
+        aadhaar_photo = request.FILES.get('aadhaar_photo','').strip()
         profile_photo = request.FILES.get('profile_photo','').strip()
 
         
@@ -89,9 +92,9 @@ def register(request):
                 error = _("Invalid OTP")
 
 
-            elif not all([aadhar_number, aadhar_photo, profile_photo]):
+            elif not all([aadhaar_number, aadhaar_photo, profile_photo]):
                error = "All fields are required."
-            elif not re.fullmatch(r'\d{12}', aadhar_number):
+            elif not re.fullmatch(r'\d{12}', aadhaar_number):
                 error = "Invalid Aadhaar number"
           
 
@@ -103,9 +106,10 @@ def register(request):
                     village=village,
                     role=role,
                     phone=phone,
+                    dob=dob,
                     password=password,
-                    aadhar_number=aadhar_number,
-                    aadhar_photo=aadhar_photo,
+                    aadhaar_number=aadhaar_number,
+                    aadhaar_photo=aadhaar_photo,
                     profile_photo=profile_photo
                   )
                 success = _("Registered successfully!")
@@ -233,12 +237,14 @@ def add_collection(request):
         "members": members, "collections":collections, "role": role
     })
 
+
+@never_cache
 def dashboard(request):
     user_role = request.session.get("user_role")
     user_shg = request.session.get("user_shg")
     user_name = request.session.get("user_name")
 
-    members = Register.objects.filter(shgname=user_shg)
+    members = Register.objects.filter(shgname=user_shg).order_by("-id")
     total_members = members.count()
   
     now = datetime.now()
@@ -279,8 +285,8 @@ def dashboard(request):
         member_data.append({
             "fullname": m.fullname,
             "phone": m.phone,
-            "aadhar_number": m.aadhar_number,
-            "aadhar_photo": m.aadhar_photo.url if m.aadhar_photo and m.aadhar_photo.name else None,
+            "aadhaar_number": m.aadhaar_number,
+            "aadhaar_photo": m.aadhaar_photo.url if m.aadhaar_photo and m.aadhaar_photo.name else None,
             "profile_photo": m.profile_photo.url if m.profile_photo and m.profile_photo.name else None,
             "total_savings": member_total_savings,
             "total_emi": member_total_emi,
@@ -318,12 +324,16 @@ def dashboard(request):
     emi_pending_percent = (emi_pending_count / total_members * 100) if total_members else 0
 
     # Recent activities
-    recent_meetings = Meeting.objects.filter(
-       shgname=user_shg,
-       meeting_date__month=current_month,
-       meeting_date__year=current_year
-          ).order_by('-meeting_date')[:5]
-    recent_activities = [f"{m.member_name} paid ₹{m.savings_paid} savings, ₹{m.emi_paid} EMI" for m in recent_meetings]
+    recent_records = MonthlyRecord.objects.filter(
+                     shgname=user_shg,
+                     month=current_month,
+                     year=current_year
+                    ).order_by('-id')[:5]
+
+    recent_activities = [
+         f"{r.member.fullname} paid ₹{r.saving_paid} saving, ₹{r.emi_paid} EMI - {r.contribution_status}"
+           for r in recent_records
+         ]
 
     # Financial health
     total_money = total_savings + total_loans_amount
@@ -388,7 +398,8 @@ def add_member(request):
         fullname = request.POST.get("fullname", "").strip()
         phone = request.POST.get("phone", "").strip()
         aadhaar_number = request.POST.get("aadhaar_number", "").strip()
-
+        role=request.POST.get("role")
+        dob = request.POST.get("dob")
         # Simple Aadhaar validation
         if aadhaar_number and (not aadhaar_number.isdigit() or len(aadhaar_number) != 12):
             messages.error(request, "Aadhaar must be exactly 12 digits")
@@ -400,15 +411,17 @@ def add_member(request):
             phone=phone,
             aadhaar_number=aadhaar_number or None,
             shgname=request.session.get("user_shg"),
+            role=role,
+            dob =dob or None,
+            
         )
 
         # Save uploaded photos if provided
         if "aadhaar_photo" in request.FILES:
             register.aadhaar_photo = request.FILES["aadhaar_photo"]
-        if "member_photo" in request.FILES:
-            register.member_photo = request.FILES["member_photo"]
-        if "president_photo" in request.FILES:
-            register.president_photo = request.FILES["president_photo"]
+        if "profile_photo" in request.FILES:
+            register.profile_photo = request.FILES["profile_photo"]
+        
 
         register.save()
         messages.success(request, "Member added successfully")
@@ -437,9 +450,61 @@ def delete_member(request, id):
 
     return redirect("dashboard")
 
+
+def member_list(request):
+    user_shg = request.session.get("user_shg")
+    user_role = request.session.get("user_role")
+
+    if user_role != "President":
+        return redirect("dashboard")
+
+    search = request.GET.get("search", "").strip()
+    member_id = request.GET.get("member_id")
+
+    members = Register.objects.filter(shgname=user_shg)
+
+    search_results = members
+
+    # selected member logic
+    if member_id:
+        selected_member = members.filter(id=member_id).first()
+    else:
+        selected_member = members.filter(role="President").first()
+
+    if not selected_member:
+        selected_member = members.first()
+    
+    if request.method == "POST":
+        member_id = request.POST.get("member_id")
+        action = request.POST.get("action")
+
+        member = Register.objects.get(id=member_id)
+
+        if action == "edit":
+            member.fullname = request.POST.get("fullname")
+            member.phone = request.POST.get("phone")
+            member.role = request.POST.get("role")
+            member.dob = request.POST.get("dob")
+
+            if "profile_photo" in request.FILES:
+                member.profile_photo = request.FILES["profile_photo"]
+
+        elif action == "leave":
+            member.status = "Left"
+            member.left_date = date.today()
+
+        member.save()
+        return redirect(f"/members/?member_id={member.id}")
+
+    return render(request, "member_list.html", {
+        "members": members,
+        "selected_member": selected_member,
+        "search": search,
+        "search_results": search_results
+    })
 def add_loan(request, loan_id=None):
     if request.session.get("user_role") != "President":
-        return redirect("dashboard")  # Only President
+        return redirect("dashboard")  
 
     shgname = request.session.get("user_shg")
     members = Register.objects.filter(shgname__iexact=shgname.strip())

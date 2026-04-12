@@ -141,6 +141,7 @@ animation:move 14s linear infinite;font-weight:bold;">
             <hr>
             <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
             {% if request.session.user_role == "President" %}
+            <a href="{% url 'member_list' %}">{% trans "Member" %}</a>
             <a href="{% url 'add_member' %}">{% trans "Add Member" %}</a>
             <a href="{% url 'add_loan' %}">{% trans "Add Loan" %}</a>
             <a href="{% url 'add_collection' %}">{% trans "Add Collection" %}</a>
@@ -268,28 +269,7 @@ animation:move 14s linear infinite;font-weight:bold;">
                </div>
              </div>
             
-             <div class="row mt-4">
-                
-                    <div class="card p-3 shadow">
-                        <h5>{% trans "Group Loan Overview" %}</h5>
-                        <table class="table table-dark table-striped">
-                            <tr>
-                                <th>{% trans "Loan Amount" %}</th>
-                                <th>{% trans "Remaining" %}</th>
-                                <th> {% trans "EMI Date" %}</th>
-                            </tr>
-                            {% for loan in loans %}
-                            <tr>
-                                <td>{{ loan.loan_amount }}</td>
-                                <td>{{ loan.remaining_amount }}</td>
-                                <td>{{ loan.emi_date }}</td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                
-            </div>
-
+            
            
             <div class="card mt-5 shadow">
                 <div class="card-header"><h5>{% trans "Group Members" %}</h5></div>
@@ -299,8 +279,8 @@ animation:move 14s linear infinite;font-weight:bold;">
                             <th>{% trans "Name" %}</th>
                             <th>{% trans "Role" %}</th>
                             <th>{% trans "Phone" %}</th>
-                            <th>{% trans "Aadhar No" %}</th>
-                            <th>{% trans "Aadhar photo" %}</th>
+                            <th>{% trans "Aadhaar No" %}</th>
+                            <th>{% trans "Aadhaar photo" %}</th>
                             <th>{% trans "Photo" %}</th>
                             <th>{% trans "Delete" %}</th>
                         </tr>
@@ -311,9 +291,9 @@ animation:move 14s linear infinite;font-weight:bold;">
                             <td>{{ member.fullname }}</td>
                             <td>{{ member.role }}</td>
                             <td>{{ member.phone }}</td>
-                            <td>{{member.aadhar_number}}</td>
-                            <td>{% if member.aadhar_photo %}
-                               <img src="{{ member.aadhar_photo }}" alt="Aadhaar Photo" width="80">
+                            <td>{{member.aadhaar_number}}</td>
+                            <td>{% if member.aadhaar_photo %}
+                               <img src="{{ member.aadhaar_photo }}" alt="Aadhaar Photo" width="80">
                                 {% else %}
                                 <span class="text-danger">Not uploaded</span>
                                 {% endif %}

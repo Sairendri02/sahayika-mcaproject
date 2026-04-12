@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 class District(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -16,6 +17,15 @@ class Village(models.Model):
 
 
 class Register(models.Model):
+    ROLE_CHOICES = [
+        ("President", "President"),
+        ("Member", "Member"),
+    ]
+
+    STATUS_CHOICES = [
+        ("Active", "Active"),
+        ("Left", "Left"),
+    ]
     fullname = models.CharField(max_length=100)
     shgname = models.CharField(max_length=100)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True)
@@ -23,9 +33,25 @@ class Register(models.Model):
     role = models.CharField(max_length=20)
     phone = models.CharField(max_length=15)
     password = models.CharField(max_length=100)
-    aadhar_number = models.CharField(max_length=12, unique=True, null=True, blank=True)
-    aadhar_photo = models.ImageField(upload_to='aadhar_photos/', null=True, blank=True)
+    aadhaar_number = models.CharField(max_length=12, unique=True, null=True, blank=True)
+    aadhaar_photo = models.ImageField(upload_to='aadhaar_photos/', null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True,blank=True)
+    joined_date = models.DateTimeField(auto_now_add=True)
+    dob = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="Active")
+
+    joined_date = models.DateField(auto_now_add=True)
+    left_date = models.DateField(null=True, blank=True)
+
+    # ✅ AUTO AGE (DO NOT STORE IN DB)
+    @property
+    def age(self):
+        if self.dob:
+            today = date.today()
+            return today.year - self.dob.year - (
+                (today.month, today.day) < (self.dob.month, self.dob.day)
+            )
+        return None
     def __str__(self):
         return self.fullname
     
@@ -88,7 +114,7 @@ class MonthlyRecord(models.Model):
 
     @property
     def remaining_contribution(self):
-        return max(self.expected_contribution - self.paid_amount, 0)
+        return max(self.expected_contribution - self.saving_paid, 0)
 
     @property
     def contribution_status(self):

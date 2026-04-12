@@ -80,18 +80,15 @@
   </div>
 
   <div class="mb-3">
-    <label>{% trans "Member Photo" %}</label>
-    <input type="file" id="member_photo" name="member_photo" onchange="previewImage(this, 'member_preview')">
+    <label>{% trans "Profile Photo" %}</label>
+    <input type="file" id="Profile_photo" name="Profile_photo" onchange="previewImage(this, 'member_preview')">
     <img id="member_preview" style="width:100px; display:none;">
   </div>
+ <div class="mb-3">
+    <label>DOB</label>
+    <input type="date" name="dob" class="form-control mb-2">
+ </div>
 
- {% if role == "President" %}
-  <div class="mb-3">
-    <label>President Photo</label>
-    <input type="file" id="president_photo" name="president_photo" onchange="previewImage(this, 'president_preview')">
-    <img id="president_preview" style="width:100px; display:none;">
-  </div>
-{% endif %}
 <select name="role" class="form-control mb-3">
 <option value="Member">Member</option>
 <option value="President">President</option>
