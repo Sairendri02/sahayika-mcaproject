@@ -317,20 +317,6 @@ animation:move 14s linear infinite;font-weight:bold;">
                     </tbody>
                 </table>
             </div>
-
-            
-            <div class="row mt-4">
-                
-                    <div class="card p-3 shadow">
-                        <h5>{% trans "Recent Activities" %}</h5>
-                        {% for activity in recent_activities %}
-                        <p>{{ activity }}</p>
-                        {% empty %}
-                        <p>{% trans "No recent activity" %}</p>
-                        {% endfor %}
-                    </div>
-                
-            </div>
        
     
     <div class="card p-3 shadow mt-4">

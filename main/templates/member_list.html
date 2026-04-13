@@ -90,7 +90,6 @@
 
 
 
-    <!-- SEARCH BOX -->
     <input type="text"
            id="searchBox"
            class="form-control"
@@ -98,7 +97,7 @@
            readonly
            onclick="document.getElementById('dropdown').style.display='block'">
 
-    <!-- DROPDOWN -->
+    
     <div id="dropdown"
          class="card position-absolute w-50 mt-1 shadow"
          style="z-index:999; display:none;">
@@ -116,7 +115,7 @@
 
 {% if selected_member %}
 
-<!-- 👤 PROFILE HEADER -->
+
 <div class="card shadow p-4 text-center border-0">
 
     <div style="width:140px;height:140px;border-radius:50%;margin:auto;overflow:hidden;border:2px solid #ddd;">
@@ -132,27 +131,27 @@
 
 </div>
 
-<!-- 📄 DETAILS BOX -->
+
 <div class="card shadow-sm p-4 mt-3">
 
-    <h5 class="text-primary mb-3">Member Details</h5>
+    <h5 class="text-primary mb-3">{% trans "Details" %}</h5>
 
-    <p><b>Phone:</b> {{ selected_member.phone }}</p>
-    <p><b>Aadhaar:</b> {{ selected_member.aadhaar_number }}</p>
-    <p><b>Date of Birth:</b> {{ selected_member.dob }}</p>
-    <p><b>Age:</b> {{ selected_member.age }}</p>
-    <p><b>Joined:</b> {{ selected_member.joined_date }}</p>
+    <p><b>{% trans "Phone number" %}:</b> {{ selected_member.phone }}</p>
+    <p><b>{% trans "Aadhaar No" %}:</b> {{ selected_member.aadhaar_number }}</p>
+    <p><b>{% trans "Date of Birth" %}:</b> {{ selected_member.dob }}</p>
+    <p><b>{% trans "Age" %}:</b> {{ selected_member.age }}</p>
+    <p><b>{% trans "Joined" %}:</b> {{ selected_member.joined_date }}</p>
 
     {% if selected_member.left_date %}
-        <p><b>Left Date:</b> {{ selected_member.left_date }}</p>
+        <p><b>{% trans "Left Date" %}:</b> {{ selected_member.left_date }}</p>
     {% endif %}
 
 </div>
 
-<!-- ✏️ EDIT BOX -->
+
 <div class="card shadow-sm p-4 mt-3">
 
-    <h5 class="text-success mb-3">Edit Member</h5>
+    <h5 class="text-success mb-3">{% trans "Edit" %}</h5>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -170,12 +169,12 @@
 
         <input type="file" name="profile_photo" class="form-control mb-3">
 
-        <button class="btn btn-success w-100">Update</button>
+        <button class="btn btn-success w-100">{% trans "Update" %}</button>
     </form>
 
 </div>
 
-<!-- ❌ LEAVE -->
+
 <div class="card shadow-sm p-3 mt-3">
 
     <form method="POST">
@@ -183,7 +182,7 @@
         <input type="hidden" name="member_id" value="{{ selected_member.id }}">
         <input type="hidden" name="action" value="leave">
 
-        <button class="btn btn-danger w-100">Mark as Left</button>
+        <button class="btn btn-danger w-100">{% trans "Mark as Left" %}</button>
     </form>
 
 </div>

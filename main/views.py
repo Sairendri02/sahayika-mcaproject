@@ -1,9 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
-from django.db.models import Sum, Q, Min
+from django.db.models import Sum, Q
 from .models import ContactMessage, MonthlyRecord 
 from .models import Register, District , Village, Loan, Meeting, Project
 from datetime import datetime, date
@@ -220,7 +220,7 @@ def add_collection(request):
         
         member = Register.objects.get(id=member_id)
 
-        # Create meeting record
+        
         Meeting.objects.create(
             shgname=shg,
             member_name=member.fullname,
@@ -323,18 +323,6 @@ def dashboard(request):
     emi_paid_percent = (emi_paid_count / total_members * 100) if total_members else 0
     emi_pending_percent = (emi_pending_count / total_members * 100) if total_members else 0
 
-    # Recent activities
-    recent_records = MonthlyRecord.objects.filter(
-                     shgname=user_shg,
-                     month=current_month,
-                     year=current_year
-                    ).order_by('-id')[:5]
-
-    recent_activities = [
-         f"{r.member.fullname} paid ₹{r.saving_paid} saving, ₹{r.emi_paid} EMI - {r.contribution_status}"
-           for r in recent_records
-         ]
-
     # Financial health
     total_money = total_savings + total_loans_amount
     savings_percent = (total_savings / total_money * 100) if total_money else 0
@@ -379,7 +367,6 @@ def dashboard(request):
         "emi_pending_count": emi_pending_count,
         "emi_paid_percent": emi_paid_percent,
         "emi_pending_percent": emi_pending_percent,
-        "recent_activities": recent_activities,
         "savings_percent": savings_percent,
         "loan_percent": loan_percent,
         "total_monthly_collection": total_monthly_collection,
@@ -484,7 +471,8 @@ def member_list(request):
             member.fullname = request.POST.get("fullname")
             member.phone = request.POST.get("phone")
             member.role = request.POST.get("role")
-            member.dob = request.POST.get("dob")
+            dob = request.POST.get("dob")
+            member.dob  = dob if dob else None
 
             if "profile_photo" in request.FILES:
                 member.profile_photo = request.FILES["profile_photo"]
@@ -779,28 +767,61 @@ def clear_loan(request, loan_id):
 
     return redirect("loan_details")
 
-def add_project(request):
+def add_project(request, project_id=None):
     if request.session.get("user_role") != "President":
         return redirect("project_list")
 
+    shgname = request.session.get("user_shg")
+
+    # 🔥 EDIT MODE (load project)
+    project = None
+    if project_id:
+        project = get_object_or_404(Project, id=project_id, shgname=shgname)
+
+    # 🔥 HANDLE FORM SUBMIT (ADD / UPDATE)
     if request.method == "POST":
         title = request.POST.get("title")
         investment = request.POST.get("investment")
         profit = request.POST.get("profit")
         photo = request.FILES.get("photo")
 
-        Project.objects.create(
-            title=title,
-            investment=investment,
-            profit=profit,
-            photo=photo,
-            shgname=request.session.get("user_shg")
-        )
+        if request.POST.get("project_id"):   # UPDATE
+            project = get_object_or_404(Project, id=request.POST.get("project_id"), shgname=shgname)
+
+            project.title = title
+            project.investment = investment
+            project.profit = profit
+
+            if photo:
+                project.photo = photo
+
+            project.save()
+
+        else:  # CREATE
+            Project.objects.create(
+                title=title,
+                investment=investment,
+                profit=profit,
+                photo=photo,
+                shgname=shgname
+            )
 
         return redirect("project_list")
 
-    return render(request, "add_project.html")
+    return render(request, "add_project.html", {
+        "project": project
+    })
 
+
+
+def delete_project(request, id):
+    if request.session.get("user_role") != "President":
+        return redirect("project_list")
+
+    project = get_object_or_404(Project, id=id)
+    project.delete()
+
+    return redirect("project_list")
 def project_list(request):
     projects = Project.objects.filter(
         shgname=request.session.get("user_shg")

@@ -84,8 +84,8 @@
                     <p>{% trans "Profit:" %} ₹{{ p.profit }}</p>
 
                     {% if user_role == "President" %}
-                    <a href="#" class="btn btn-primary btn-sm">{% trans "Edit" %}</a>
-                    <a href="#" class="btn btn-danger btn-sm">{% trans "Delete" %}</a>
+                    <a href="{% url 'edit_project' p.id %}" class="btn btn-primary btn-sm">{% trans "Edit" %}</a>
+                    <a href="{% url 'delete_project' p.id %}" class="btn btn-danger btn-sm">{% trans "Delete" %}</a>
                     {% endif %}
 
                 </div>

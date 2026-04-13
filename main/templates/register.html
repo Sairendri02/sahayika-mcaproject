@@ -143,7 +143,7 @@
 </div>
 </div>
 
-    <!-- Aadhar Number -->
+   
   <div class="row mb-3">
     <div class="mb-3">
         <label>{% trans "Aadhaar Number" %}</label>
@@ -151,14 +151,13 @@
         <small id="aadhar_error" class="text-danger"></small>
     </div>
 </div>
-    <!-- Aadhaar Photo -->
+   
     <div class="mb-3">
         <label>{% trans "Aadhaar Photo" %}</label>
         <input type="file" name="aadhar_photo" id="aadhar_photo" class="form-control" accept="image/*" required>
         <img id="aadhar_preview" src="#" style="display:none; max-width:200px; margin-top:10px;">
     </div>
 
-    <!-- Profile Photo -->
     <div class="mb-3">
         <label>{% trans "Profile Photo" %}</label>
         <input type="file" name="profile_photo" id="profile_photo" class="form-control" accept="image/*" required>
@@ -166,7 +165,7 @@
     </div>
 
     <div class="mb-2">
-      <label>Date of Birth</label>
+      <label>{% trans "Date of Birth" %}</label>
        <input type="date" name="dob" class="form-control" required>
    </div>
 
