@@ -51,9 +51,9 @@
         </div>
     </a>
     <div class="d-flex ms-auto">
-        <span class="text-white me-3">{% trans "Hello," %} {{ request.session.user_name }}</span>
-        
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">{% trans "Back to Dashboard" %}</a>
     </div>
+    
   </div>
 </nav>
 

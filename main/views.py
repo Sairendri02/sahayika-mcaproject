@@ -166,8 +166,8 @@ def login_view(request):
                     request.session["user_shg"] = user.shgname
                     request.session["user_role"] = user.role
                     request.session["user_phone"] = user.phone
-
-                    return redirect("dashboard")  # single dashboard for both roles
+                    
+                    return redirect("dashboard")  
 
     return render(request, "login.html", {
         "error": error,
@@ -377,7 +377,7 @@ def dashboard(request):
                 
 
 def add_member(request):
-    # Only President can add members
+    
     if request.session.get("user_role") != "President":
         return redirect("dashboard")  
 
@@ -392,7 +392,7 @@ def add_member(request):
             messages.error(request, "Aadhaar must be exactly 12 digits")
             return redirect("add_member")
 
-        # Create Register instance
+      
         register = Register(
             fullname=fullname,
             phone=phone,
@@ -403,7 +403,7 @@ def add_member(request):
             
         )
 
-        # Save uploaded photos if provided
+       
         if "aadhaar_photo" in request.FILES:
             register.aadhaar_photo = request.FILES["aadhaar_photo"]
         if "profile_photo" in request.FILES:
@@ -412,9 +412,7 @@ def add_member(request):
 
         register.save()
         messages.success(request, "Member added successfully")
-        return redirect("dashboard")
 
-    # Render the page if GET
     return render(request, "add_member.html")
 
 
@@ -612,13 +610,10 @@ def meeting_entry(request):
 
         
         )
-
-        return redirect("dashboard")
-
     return render(request,"meeting_entry.html",{"members":members})
 
 def logout_view(request):
-    request.session.flush()   # clears all session data
+    request.session.flush()   
     return redirect("login")
 
 def monthly_collection(request):
