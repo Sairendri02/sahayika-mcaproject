@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <title>Monthly Collection - Sahayika</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
         .body{
             background-color: #dfe3eb;
@@ -40,6 +42,13 @@
         .brand-text .english {
             font-size: 1rem;
         }
+        .sidebar { height: 100vh; background: #0e2b48; color: white; padding-top: 20px; position: sticky;top:0; transition:0.3s; }
+        .sidebar a { color: white; display: block; padding: 10px; text-decoration: none; }
+        .sidebar a:hover { background: #0a2540; }
+        .sidebar.active{
+            left:0;
+        }
+
     </style>
 </head>
 <body>
@@ -54,11 +63,43 @@
     </a>
     <div class="d-flex ms-auto">
         <span class="text-white me-3">{% trans "Hello," %} {{ request.session.user_name }}</span>
-        <a href="{% url 'logout' %}" class="btn btn-light btn-sm">{% trans "Logout" %}</a>
     </div>
   </div>
 </nav>
+<nav class="navbar navbar-light bg-light border-bottom">
 
+<div class="container-fluid">
+<button class="btn btn-light"onclick="toggleMenu()">☰</button>
+
+</div>
+
+</nav>
+
+
+
+<div class="container-fluid">
+    <div class="row">
+
+       
+        <div id="sidebar" class="col-md-2 sidebar d-none">
+            <h4 class="text-center">{% trans "SHG Panel" %}</h4>
+            <hr>
+            <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
+            {% if request.session.user_role == "President" %}
+            <a href="{% url 'member_list' %}">{% trans "Member" %}</a>
+            <a href="{% url 'add_member' %}">{% trans "Add Member" %}</a>
+            <a href="{% url 'add_loan' %}">{% trans "Add Loan" %}</a>
+            <a href="{% url 'add_collection' %}">{% trans "Add Collection" %}</a>
+            <a href="{% url 'meeting_entry' %}">{% trans "Attendance" %}</a>
+
+            {% endif %}
+            <a href="{% url 'monthly_collection' %}">{% trans "Monthly Collection" %}</a>
+            <a href="{% url 'loan_details' %}">{% trans "Loan Tracking" %}</a>
+            <a href="{% url 'project_list' %}">{% trans "Project Management" %}</a>
+            <a href="{% url 'logout' %}" onclick="return confirmLogout()" class="logout-btn text-danger"><i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}</a>
+        </div>
+
+<div id="content" class="col-md-12 mt-4">
 <div class="container mt-4">
 
 <h2 class="mb-4">{% trans "Monthly Collection" %} - {{selected_month}}/{{selected_year}}</h2>
@@ -107,25 +148,25 @@
 
 <div class="row mb-4">
 
-<div class="col-md-3">
+<div class="col-md-3 mb-2">
 <div class="card p-2 bg-primary text-white">
 {% trans "Total Monthly Collection: ₹" %}{{ total_savings_collection }}
 </div>
 </div>
 
-<div class="col-md-3">
+<div class="col-md-3 mb-2">
 <div class="card p-2 bg-success text-white">
 {% trans "Members Paid This Month:" %} {{ paid_members_count }}
 </div>
 </div>
 
-<div class="col-md-3">
+<div class="col-md-3 mb-2">
 <div class="card p-2 bg-warning text-white">
 {% trans "Personal Loans Taken: ₹" %}{{ personal_loans_taken }}
 </div>
 </div>
 
-<div class="col-md-3">
+<div class="col-md-3 mb-2">
 <div class="card p-2 bg-danger text-white">
 {% trans "Personal Loans Cleared:" %} {{ personal_loans_cleared }}
 </div>
@@ -133,7 +174,10 @@
 
 </div>
 
-<h4>{% trans "Group Members Table" %}</h4>
+<div class="card mt-5 shadow mb-3">
+    <div class="card-header"> <h4>{% trans "Group Members Table" %}</h4></div>
+    <div class= card-body>
+        <div class= table-responsive>
 
 <table class="table table-bordered table-striped">
 
@@ -202,13 +246,35 @@
 </tbody>
 
 </table>
-
-
-<a href="{% url 'dashboard' %}" class="btn btn-secondary">
-{% trans "Back to Dashboard" %}
-</a>
+</div>
+</div>
+</div>
 
 </div>
+</div>
+</div>
+</div>
+<script>
+function toggleMenu(){
+
+var sidebar = document.getElementById("sidebar");
+var content = document.getElementById("content");
+
+sidebar.classList.toggle("d-none");
+
+if(sidebar.classList.contains("d-none")){
+content.classList.remove("col-md-10");
+content.classList.add("col-md-12");
+}else{
+content.classList.remove("col-md-12");
+content.classList.add("col-md-10");
+}
+
+}
+function confirmLogout() {
+    return confirm("Are you sure you want to logout?");
+}
+</script>
 
 </body>
 </html>

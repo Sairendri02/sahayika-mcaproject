@@ -151,7 +151,7 @@ animation:move 14s linear infinite;font-weight:bold;">
             <a href="{% url 'monthly_collection' %}">{% trans "Monthly Collection" %}</a>
             <a href="{% url 'loan_details' %}">{% trans "Loan Tracking" %}</a>
             <a href="{% url 'project_list' %}">{% trans "Project Management" %}</a>
-            <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}</a>
+            <a href="{% url 'logout' %}" onclick="return confirmLogout()" class="logout-btn text-danger"><i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}</a>
         </div>
 
      
@@ -161,61 +161,62 @@ animation:move 14s linear infinite;font-weight:bold;">
 
            
             <div class="row mt-4">
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <div class="card p-3 shadow stat-card">
                         <h5>{% trans "Total Members" %}</h5>
                         <h3>{{ total_members }}</h3>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <div class="card p-3 shadow stat-card">
                         <h5>{% trans "Total Savings" %}</h5>
                         <h3> ₹{{ total_savings }}</h3>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2" >
                     <div class="card p-3 shadow stat-card">
                         <h5>{% trans "Remaining Loans" %}</h5>
                         <h3> ₹{{ remaining_loans_amount }}</h3>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <div class="card p-3 shadow stat-card">
                         <h5>{% trans "Paid Loans" %}</h5>
                         <h3> {{ paid_loans_count }}</h3>
                     </div>
-                </div>                
+                </div>    
+            </div>            
 
               <div class="row mt-4">
 
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <div class="card p-3 shadow stat-card">
                         <h5>{% trans "Total Loan" %}</h5>
                         <h3>{{ total_loans_amount }}</h3>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                    <div class="card p-3 shadow stat-card">
                           <h5>{% trans "Active Loans" %}</h5>
                            <h3>{{ active_loans }}</h3>
                     </div>
                 </div>
 
-             <div class="col-md-3">
+             <div class="col-md-3 mb-2">
                   <div class="card p-3 shadow stat-card">
                     <h5>{% trans "Total Monthly Collection" %}</h5>
                         <h3>₹ {{ total_monthly_collection }}</h3>
                    </div>
              </div>
 
-            <div class="col-md-3">
+             <div class="col-md-3 mb-2">
                    <div class="card p-3 shadow stat-card">
                        <h5>{% trans "Loan Repayment Rate" %}</h5>
                           <h3>{{ repayment_rate|floatformat:0 }}%</h3>
                     </div>
-            </div>
+             </div>
 
-           </div>
+            
             </div>
 
             
@@ -273,49 +274,53 @@ animation:move 14s linear infinite;font-weight:bold;">
            
             <div class="card mt-5 shadow">
                 <div class="card-header"><h5>{% trans "Group Members" %}</h5></div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>{% trans "Name" %}</th>
-                            <th>{% trans "Role" %}</th>
-                            <th>{% trans "Phone" %}</th>
-                            <th>{% trans "Aadhaar No" %}</th>
-                            <th>{% trans "Aadhaar photo" %}</th>
-                            <th>{% trans "Photo" %}</th>
-                            <th>{% trans "Delete" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for member in members %}
-                        <tr>
-                            <td>{{ member.fullname }}</td>
-                            <td>{{ member.role }}</td>
-                            <td>{{ member.phone }}</td>
-                            <td>{{member.aadhaar_number}}</td>
-                            <td>{% if member.aadhaar_photo %}
-                               <img src="{{ member.aadhaar_photo }}" alt="Aadhaar Photo" width="80">
-                                {% else %}
-                                <span class="text-danger">Not uploaded</span>
-                                {% endif %}
-                            </td>
+                <div class= card-body>
+                    <div class= table-responsive>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Name" %}</th>
+                                    <th>{% trans "Role" %}</th>
+                                    <th>{% trans "Phone" %}</th>
+                                    <th>{% trans "Aadhaar No" %}</th>
+                                    <th>{% trans "Aadhaar photo" %}</th>
+                                    <th>{% trans "Photo" %}</th>
+                                    <th>{% trans "Delete" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for member in members %}
+                                <tr>
+                                    <td>{{ member.fullname }}</td>
+                                    <td>{{ member.role }}</td>
+                                    <td>{{ member.phone }}</td>
+                                    <td>{{member.aadhaar_number}}</td>
+                                    <td>{% if member.aadhaar_photo %}
+                                       <img src="{{ member.aadhaar_photo }}" alt="Aadhaar Photo" width="80">
+                                        {% else %}
+                                        <span class="text-danger">Not uploaded</span>
+                                        {% endif %}
+                                    </td>
 
-                            <td>{% if member.profile_photo %}
-                                <img src="{{ member.profile_photo }}" alt="Profile Photo" width="80">
-                                {% else %}
-                                <span class="text-danger">Not uploaded</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if user_role == "President" %}
-                                 <a href="{% url 'delete_member' member.id %}" 
-                                  class="btn btn-danger btn-sm"
-                                  onclick="return confirm('Delete this member?');"> {% trans "Delete" %}</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                    <td>{% if member.profile_photo %}
+                                        <img src="{{ member.profile_photo }}" alt="Profile Photo" width="80">
+                                        {% else %}
+                                        <span class="text-danger">Not uploaded</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if user_role == "President" %}
+                                         <a href="{% url 'delete_member' member.id %}" 
+                                          class="btn btn-danger btn-sm"
+                                          onclick="return confirm('Delete this member?');"> {% trans "Delete" %}</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
        
     
@@ -383,13 +388,10 @@ content.classList.add("col-md-10");
 }
 
 }
+function confirmLogout() {
+    return confirm("Are you sure you want to logout?");
+}
 
 </script>
-
-
-
-
-
-
 </body>
 </html>
