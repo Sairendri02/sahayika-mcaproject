@@ -13,8 +13,6 @@ urlpatterns = [
     path("add_member/",views.add_member,name="add_member"),
     path("add_loan/",views.add_loan,name="add_loan"),
     path('edit-loan/<int:loan_id>/', views.add_loan, name='edit_loan'),
-    path("meeting_entry/",views.meeting_entry,name="meeting_entry"),
-    path("add_collection/",views.add_collection,name="add_collection"),
     path("monthly_collection/",views.monthly_collection,name="monthly_collection"),
     path('delete_member/<int:id>/', views.delete_member, name='delete_member'),
     path('projects/', views.project_list, name='project_list'),
@@ -27,6 +25,7 @@ urlpatterns = [
     path('rti/', views.rti, name='rti'),
     path('contact/', views.contact_view, name='contact'),
     path('clear-loan/<int:loan_id>/', views.clear_loan, name='clear_loan'),
+    path("loan/delete/<int:loan_id>/", views.delete_loan, name="delete_loan")
    
    
 ]

@@ -114,9 +114,6 @@
             <a href="{% url 'member_list' %}">{% trans "Member" %}</a>
             <a href="{% url 'add_member' %}">{% trans "Add Member" %}</a>
             <a href="{% url 'add_loan' %}">{% trans "Add Loan" %}</a>
-            <a href="{% url 'add_collection' %}">{% trans "Add Collection" %}</a>
-            <a href="{% url 'meeting_entry' %}">{% trans "Attendance" %}</a>
-
             {% endif %}
             <a href="{% url 'monthly_collection' %}">{% trans "Monthly Collection" %}</a>
             <a href="{% url 'loan_details' %}">{% trans "Loan Tracking" %}</a>
@@ -129,7 +126,26 @@
     <div id="content" class="col-md-12 mt-4">
     <div class="container-fluid mt-5 px-5">
    
+     <form method="get">
 
+    <input type="hidden" name="type" value="{{ request.GET.type }}">
+    <input type="hidden" name="member" value="{{ request.GET.member }}">
+
+    <select name="month">
+        <option value="">Select Month</option>
+        {% for value, name in month_choices %}
+            <option value="{{ value }}"
+                {% if selected_month == value %}selected{% endif %}>
+                {{ name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <input type="number" name="year" value="{{ selected_year }}">
+
+    <button type="submit">Apply</button>
+
+</form>
    
 
     
@@ -147,8 +163,8 @@
           <option value="">{% trans "Select Member" %}</option>
 
           {% for m in members %}
-          <option value="{% url 'loan_details' %}?type=Personal&member={{ m.fullname }}"
-          {% if request.GET.member == m.fullname %}selected{% endif %}>
+          <option value="{% url 'loan_details' %}?type=Personal&member={{ m.id }}"
+          {% if request.GET.member == m.id|stringformat:"s" %}selected{% endif %}>
             {{ m.fullname }}
           </option>
           {% endfor %}
@@ -163,53 +179,65 @@
         <div class="col-12 col-lg-6 mb-4">
         <div class="card shadow h-100">
 
-            <p><b>{% trans "Type" %}:</b> {{ loan.loan_type }}</p>
-            <p><b>{% trans "Member" %}:</b> {{ loan.member_name|default:"Group Loan" }}</p>
+            {% if loan.loan_type == "Personal" %}
+             <p><strong>{% trans "Member" %}:</strong> {{ loan.member.fullname }}</p>
+            {% else %}
+             <p><strong>{% trans "Loan Type" %}:</strong> {% trans "Group Loan" %}</p>
+            {% endif %}
 
             <div class="row">
                 <div class="col-6">
-                    <p><b>{% trans "Amount" %}:</b><br> ₹ {{ loan.loan_amount }}</p>
-                    <p><b>{% trans "Paid EMI" %}:</b><br> ₹ {{ loan.paid_amount }}</p>
+                    <p><b>{% trans "Amount" %}:</b><br> ₹ {{ loan.amount }}</p>
+                    <p><b>{% trans "Amount to be paid" %}:</b><br> ₹ {{ loan.total_payable }}</p>
+                    <p><b>{% trans "Remaining" %}:</b><br> ₹ {{ loan.remaining }}</p>
                 </div>
-
                 <div class="col-6">
-                    <p><b>{% trans "Remaining" %}:</b><br> ₹ {{ loan.remaining_amount }}</p>
-                    <p><b>{% trans "EMI Date" %}:</b><br> {{ loan.emi_date }}</p>
+                    <p><b>{% trans "SI Rate" %}:</b><br>  {{ loan.interest_rate }}</p>
+                    <p><b>{% trans "Subvention Rate" %}:</b><br>  {{ loan.subvention_rate }}</p>
+                    <p><b>{% trans "Duration (year)" %}:</b><br> {{ loan.duration }}</p>
                 </div>
+                <div class="d-flex align-items-center gap-2">
 
-                <div>
-                      {% if loan.remaining_amount == 0 %}
-                           <span class="text-success">Cleared</span>
+    {% if loan.remaining == 0 %}
+        <span class="text-success fw-semibold">Cleared</span>
 
-                      {% elif user_role == "President" %}
-                      <form method="POST" action="{% url 'clear_loan' loan.id %}">
-                        {% csrf_token %}
-                       <button class="btn btn-success btn-sm">
-                         Mark as Cleared
-                         </button>
-                        </form>
+    {% else %}
 
-                       {% else %}
-                       <span class="text-muted">Pending</span>
-                      {% endif %}
-                </div>
-                <div>
-                    {% if user_role == "President" %}
-                      <a href="{% url 'edit_loan' loan.id %}" class="btn btn-warning btn-sm">
-                       Edit
-                      </a>
-                    {% endif %}
+        {% if user_role == "President" %}
+            <form method="POST" action="{% url 'clear_loan' loan.id %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-sm">
+                    Mark as Cleared
+                </button>
+            </form>
+        {% else %}
+            <span class="text-muted">Pending</span>
+        {% endif %}
 
-                </div>
+    {% endif %}
+
+    {% if user_role == "President" %}
+
+        
+        <a href="{% url 'edit_loan' loan.id %}" class="btn btn-warning btn-sm">
+            Edit
+        </a>
+
+       
+        <form method="POST" action="{% url 'delete_loan' loan.id %}" class="d-inline"
+              onsubmit="return confirm('Are you sure you want to delete this loan?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">
+                Delete
+            </button>
+        </form>
+
+    {% endif %}
+
+</div>
             </div>
 
-           
-            <div class="progress mt-2">
-                <div class="progress-bar bg-success"
-                     style="width: {{ loan.progress }}%">
-                    {{ loan.progress }}%
-                </div>
-            </div>
+        
         </div>
         </div>
         {% empty %}

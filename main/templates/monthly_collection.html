@@ -89,9 +89,6 @@
             <a href="{% url 'member_list' %}">{% trans "Member" %}</a>
             <a href="{% url 'add_member' %}">{% trans "Add Member" %}</a>
             <a href="{% url 'add_loan' %}">{% trans "Add Loan" %}</a>
-            <a href="{% url 'add_collection' %}">{% trans "Add Collection" %}</a>
-            <a href="{% url 'meeting_entry' %}">{% trans "Attendance" %}</a>
-
             {% endif %}
             <a href="{% url 'monthly_collection' %}">{% trans "Monthly Collection" %}</a>
             <a href="{% url 'loan_details' %}">{% trans "Loan Tracking" %}</a>
@@ -156,23 +153,77 @@
 
 <div class="col-md-3 mb-2">
 <div class="card p-2 bg-success text-white">
-{% trans "Members Paid This Month:" %} {{ paid_members_count }}
+{% trans "Members Paid Savings:" %} {{ saving_paid_members }}
 </div>
 </div>
 
 <div class="col-md-3 mb-2">
 <div class="card p-2 bg-warning text-white">
-{% trans "Personal Loans Taken: ₹" %}{{ personal_loans_taken }}
+{% trans "Total Group EMI: ₹" %}{{ total_group_emi }}
 </div>
 </div>
 
 <div class="col-md-3 mb-2">
 <div class="card p-2 bg-danger text-white">
-{% trans "Personal Loans Cleared:" %} {{ personal_loans_cleared }}
+{% trans "Member Paid EMI:" %} {{ group_emi_paid_members }}
 </div>
 </div>
 
 </div>
+
+{% if role == "President" %}
+<div class="card mt-4 shadow mb-3">
+    <div class="card-header">
+        <h5>{% trans "Add Monthly Collection" %}</h5>
+    </div>
+
+    <div class="card-body">
+        <form method="POST">
+    {% csrf_token %}
+
+    <div class="row">
+
+        
+        <div class="col-md-3 mb-2">
+            <label>Select Member</label>
+            <select name="member_id" class="form-control" required>
+                <option value="">Choose Member</option>
+                {% for m in members %}
+                    <option value="{{ m.id }}">{{ m.fullname }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+     
+        <div class="col-md-3 mb-2">
+            <label>Savings</label>
+            <input type="number" name="saving" class="form-control" placeholder="Enter savings">
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <label>Group EMI</label>
+            <input type="number" name="group_emi" class="form-control" placeholder="Enter group EMI">
+        </div>
+
+      
+        <div class="col-md-3 mb-2">
+            <label>Personal EMI</label>
+            <input type="number" name="personal_emi" class="form-control" placeholder="Enter personal EMI">
+        </div>
+
+    </div>
+
+   
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary px-5">
+            Add
+        </button>
+    </div>
+
+</form>
+    </div>
+</div>
+{% endif %}
 
 <div class="card mt-5 shadow mb-3">
     <div class="card-header"> <h4>{% trans "Group Members Table" %}</h4></div>
@@ -185,14 +236,13 @@
 
 <tr>
 <th>{% trans "Name" %}</th>
-<th>{% trans "Phone" %}</th>
 <th>{% trans "Total Given" %}</th>
 <th>{% trans "Status" %}</th>
-<th>{% trans "EMI Amount" %}</th>
+<th>{% trans "Group EMI" %}</th>
 <th>{% trans "EMI Status" %}</th>
-<th>{% trans "Loan Taken" %}</th>
-<th>{% trans "Remaining Loan" %}</th>
-<th>{% trans "Last Loan Date" %}</th>
+<th>{% trans "Personal EMI" %}</th>
+<th>{% trans "EMI Status" %}</th>
+
 </tr>
 
 </thead>
@@ -205,13 +255,13 @@
 
 <td>{{ m.fullname }}</td>
 
-<td>{{ m.phone }}</td>
 
-<td>₹{{ m.total_savings }}</td>
+
+<td>₹{{ m.total_saving }}</td>
 
 <td>
 
-{% if m.total_savings > 0  %}
+{% if m.total_saving > 0  %}
 
 <span class="text-success">✔</span>
 
@@ -223,22 +273,24 @@
 
 </td>
 
-<td>₹{{ m.total_emi }}</td>
+<td>₹{{ m.total_group_emi }}</td>
 
 <td>
-{% if m.total_emi > 0 %}
-<span class="badge bg-success">{% trans "Paid" %}</span>
+{% if m.total_group_emi > 0 %}
+<span class="text-success">✔</span>
 {% else %}
-<span class="badge bg-danger">{% trans "Pending" %}</span>
+<span class="text-danger">✘</span>
 {% endif %}
 </td>
 
-<td>₹{{ m.loan_taken }}</td>
-
-<td>₹{{ m.loan_remaining }}</td>
-
-<td>{{ m.last_loan_date|default:"-" }}</td>
-
+<td>₹{{ m.total_personal_emi }}</td>
+<td>
+{% if m.total_personal_emi > 0 %}
+<span class="text-success">✔</span>
+{% else %}
+<span class="text-danger">✘</span>
+{% endif %}
+</td>
 </tr>
 
 {% endfor %}

@@ -110,9 +110,6 @@
             <a href="{% url 'member_list' %}">{% trans "Member" %}</a>
             <a href="{% url 'add_member' %}">{% trans "Add Member" %}</a>
             <a href="{% url 'add_loan' %}">{% trans "Add Loan" %}</a>
-            <a href="{% url 'add_collection' %}">{% trans "Add Collection" %}</a>
-            <a href="{% url 'meeting_entry' %}">{% trans "Attendance" %}</a>
-
             {% endif %}
             <a href="{% url 'monthly_collection' %}">{% trans "Monthly Collection" %}</a>
             <a href="{% url 'loan_details' %}">{% trans "Loan Tracking" %}</a>
@@ -151,26 +148,25 @@
   </div>
 
 {% trans "Loan Amount" %}:<br>
-<input type="number" name="amount" class="form-control mb-2" ><br><br>
+<input type="number" name="amount" id="amount" class="form-control mb-2"><br>
 
 {% trans "Paid Amount" %}:<br>
-<input type="number" name="paid" class="from-control mb-2" value="0"><br><br>
+<input type="number" name="paid" id="paid" class="form-control mb-2" value="0"><br>
 
 {% trans "Remaining Amount" %}:<br>
-<input type="number" name="remaining" class="form-control mb-2" readonly><br><br>
+<input type="number" name="remaining" id="remaining" class="form-control mb-2" readonly><br>
 
-{% trans "Total Installment" %}:<br>
-<input type="number" name="total_installment" class="form-control mb-2" ><br><br>
+{% trans "Duration (Years)" %}:<br>
+<input type="number" name="duration" id="duration" class="form-control mb-2"><br>
 
-{% trans "SI Rate" %}:<br>
-<input type="number" name="interest_rate" class="form-control mb-2" ><br><br>
+{% trans "SI Rate (%)" %}:<br>
+<input type="number" name="interest_rate" id="interest_rate" class="form-control mb-2"><br>
 
-{% trans "Subsidy" %}:<br>
-<input type="number" name="subsidy" class="form-control mb-2" ><br><br>
+{% trans "Subvention Rate (%)" %}:<br>
+<input type="number" name="subvention_rate" id="subvention_rate" class="form-control mb-2"><br>
 
-{% trans "Date" %}:<br>
-<input type="date" name="emi_date" class="form-control mb-2" required><br><br>
-
+{% trans "Total Payable" %}:<br>
+<input type="number" name="total_payable" id="total_payable" class="form-control mb-2" readonly><br>
 <button class="btn btn-primary">{% trans "Add Loan" %}</button>
 
 </form>
@@ -182,23 +178,9 @@
 <script>
 function toggleMember() {
     const loanType = document.getElementById('loan_type').value;
-    document.getElementById('member_div').style.display = loanType === 'Personal' ? 'block' : 'none';
+    document.getElementById('member_div').style.display =
+        loanType === 'Personal' ? 'block' : 'none';
 }
-
-const amountInput = document.querySelector('[name="amount"]');
-const paidInput = document.querySelector('[name="paid"]');
-const remainingInput = document.querySelector('[name="remaining"]');
-
-function calculateRemaining() {
-    const amount = parseFloat(amountInput.value) || 0;
-    const paid = parseFloat(paidInput.value) || 0;
-    remainingInput.value = amount - paid;
-}
-
-amountInput.addEventListener('input', calculateRemaining);
-paidInput.addEventListener('input', calculateRemaining);
-
-Window.onload = toggleMember;
 
 function toggleMenu(){
 
@@ -215,11 +197,48 @@ content.classList.remove("col-md-12");
 content.classList.add("col-md-10");
 }
 }
-function confirmLogout() {
-    return confirm("Are you sure you want to logout?");
-}
-</script>
 
+
+const amount = document.getElementById("amount");
+const paid = document.getElementById("paid");
+const remaining = document.getElementById("remaining");
+const rate = document.getElementById("interest_rate");
+const subvention = document.getElementById("subvention_rate");
+const duration = document.getElementById("duration");
+const totalPayable = document.getElementById("total_payable");
+
+
+function calculateRemaining() {
+    const a = parseFloat(amount.value) || 0;
+    const p = parseFloat(paid.value) || 0;
+    remaining.value = a - p;
+}
+
+
+function calculateTotal() {
+    const P = parseFloat(amount.value) || 0;
+    const R = parseFloat(rate.value) || 0;
+    const S = parseFloat(subvention.value) || 0;
+    const T = parseFloat(duration.value) || 0;
+
+    const total = P + (P * (R - S) * T) / 100;
+    totalPayable.value = total.toFixed(2);
+}
+
+
+amount.addEventListener("input", () => {
+    calculateRemaining();
+    calculateTotal();
+});
+
+paid.addEventListener("input", calculateRemaining);
+rate.addEventListener("input", calculateTotal);
+subvention.addEventListener("input", calculateTotal);
+duration.addEventListener("input", calculateTotal);
+
+
+window.onload = toggleMember;
+</script>
 
 </body>
 </html>

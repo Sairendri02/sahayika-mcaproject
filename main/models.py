@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django import forms
 
 class District(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -39,11 +40,8 @@ class Register(models.Model):
     joined_date = models.DateTimeField(auto_now_add=True)
     dob = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="Active")
-
-    joined_date = models.DateField(auto_now_add=True)
     left_date = models.DateField(null=True, blank=True)
 
-    # ✅ AUTO AGE (DO NOT STORE IN DB)
     @property
     def age(self):
         if self.dob:
@@ -60,46 +58,63 @@ class Register(models.Model):
     
 
 class Loan(models.Model):
-
-    shgname = models.CharField(max_length=100,blank=True , null=True )
-    member_name = models.CharField(max_length=100, null=True, blank=True)
-    loan_amount = models.IntegerField()
-    paid_amount = models.IntegerField(default=0)
-    remaining_amount = models.IntegerField()
-    loan_type = models.CharField(max_length=20,default="Personal")
-    emi_date = models.DateField()
-    loan_date = models.DateField(auto_now_add=True)
-    total_installment = models.IntegerField(default=0)
-    interest_rate = models.FloatField(default=0)  
-    subsidy = models.FloatField(default=0)
-
-    @property
-    def progress(self):
-      if self.loan_amount > 0:
-          return int((self.paid_amount / self.loan_amount) * 100)
-      return 0
-
-    def __str__(self):
-        return self.shgname
-
-
-class Meeting(models.Model):
+    LOAN_TYPES = (
+        ('Group', 'Group'),
+        ('Personal', 'Personal'),
+    )
 
     shgname = models.CharField(max_length=100)
-    member_name = models.CharField(max_length=100)
+    loan_type = models.CharField(max_length=10, choices=LOAN_TYPES)
 
-    meeting_date = models.DateField()
+    member = models.ForeignKey(
+        'Register',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
 
-    attendance = models.BooleanField(default=False)
+    amount = models.FloatField(default=0)
+    paid = models.FloatField(default=0)
+    remaining = models.FloatField(default=0)
 
-    savings_paid = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0)
+    interest_rate = models.FloatField(default=0)
+    subvention_rate = models.FloatField(default=0)
+    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+    total_payable = models.FloatField(default=0)
 
-    emi_paid = models.IntegerField(default=0)
+    def save(self, *args, **kwargs):
+        self.total_payable = self.amount + (
+            self.amount * (self.interest_rate - self.subvention_rate) * self.duration
+        ) / 100
 
-    notes = models.TextField(blank=True)
+        self.remaining = self.total_payable - self.paid
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.member_name
+        return f"{self.loan_type} - {self.amount}"
+    
+
+class LoanForm(forms.ModelForm):
+    class Meta:
+        model = Loan
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        disabled_fields = ["duration", "si_rate", "subvention_rate"]
+
+        for field in disabled_fields:
+            self.fields[field].disabled = True
+    
+class MeetingSchedule(models.Model):
+    shgname = models.CharField(max_length=100)
+    meeting_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.shgname} - {self.meeting_date}"
 
 class MonthlyRecord(models.Model):
     shgname = models.CharField(max_length=100)
@@ -108,7 +123,8 @@ class MonthlyRecord(models.Model):
     month = models.IntegerField()  # 1-12
     expected_contribution = models.FloatField(default=100)
     saving_paid = models.FloatField(default=0)
-    emi_paid = models.FloatField(default=0)
+    group_emi = models.FloatField(default=0)   
+    personal_emi = models.FloatField(default=0) 
     personal_loan_taken = models.FloatField(default=0)
     loan_paid = models.FloatField(default=0)
 

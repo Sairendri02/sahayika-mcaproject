@@ -3,9 +3,11 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
-from django.db.models import Sum, Q
+from .models import MeetingSchedule
+from django.db.models import Sum 
 from .models import ContactMessage, MonthlyRecord 
-from .models import Register, District , Village, Loan, Meeting, Project
+from .models import Register, District , Village, Loan , Project
+from .forms import LoanForm
 from datetime import datetime, date
 import random
 import re
@@ -195,47 +197,6 @@ def forgot_password(request):
 
     return render(request,"forgot_password.html",{"message":message})
 
-def add_collection(request):
-    shg = request.session.get("user_shg")
-    role = request.session.get("user_role")
-
-    if role != "President":
-        return redirect("dashboard")  # Only president can access
-
-    members = Register.objects.filter(shgname=shg)
-
-    if request.method == "POST":
-
-        if role != "President":
-           return redirect("dashboard")
-        member_id = request.POST.get("member_id")
-        try:    
-         savings = float(request.POST.get("savings") or 0)
-        except ValueError:
-            savings = 0
-        try:
-           emi = float(request.POST.get("emi") or 0)
-        except ValueError:
-            emi = 0
-        
-        member = Register.objects.get(id=member_id)
-
-        
-        Meeting.objects.create(
-            shgname=shg,
-            member_name=member.fullname,
-            meeting_date=date.today(),
-            savings_paid=savings,
-            emi_paid=emi
-        )
-
-        return redirect("add_collection")
-    
-    collections = Meeting.objects.filter(shgname=shg).order_by('-meeting_date')
-
-    return render(request, "add_collection.html", {
-        "members": members, "collections":collections, "role": role
-    })
 
 
 @never_cache
@@ -244,137 +205,188 @@ def dashboard(request):
     user_shg = request.session.get("user_shg")
     user_name = request.session.get("user_name")
 
-    members = Register.objects.filter(shgname=user_shg).order_by("-id")
+    if request.method == "POST":
+        meeting_date = request.POST.get("meeting_date")
+
+        if meeting_date:
+            MeetingSchedule.objects.create(
+                shgname=user_shg,
+                meeting_date=meeting_date
+            )
+
+        return redirect("dashboard")
+
+    members = Register.objects.filter(
+        shgname__iexact=(user_shg or "").strip()
+    ).order_by("-id")
+
     total_members = members.count()
-  
+
+    
     now = datetime.now()
-    current_month = now.month
-    current_year = now.year
+    current_month = int(request.GET.get("month") or now.month)
+    current_year = int(request.GET.get("year") or now.year)
 
     
-    all_loans = Loan.objects.filter(shgname=user_shg)
-
-    
-    monthly_loans = all_loans.filter(
-        emi_date__month=current_month,
-        emi_date__year=current_year
+    records = MonthlyRecord.objects.filter(
+        shgname__iexact=(user_shg or "").strip(),
+        month=current_month,
+        year=current_year
     )
-    
-    
-    total_loans_amount = all_loans.aggregate(Sum('loan_amount'))['loan_amount__sum'] or 0
-    remaining_loans_amount =all_loans.aggregate(Sum('remaining_amount'))['remaining_amount__sum'] or 0
-    total_loans_count = all_loans.count()
-    paid_loans_count = all_loans.filter(remaining_amount=0).count()
 
-    # Savings and EMI for SHG
-    total_savings = Meeting.objects.filter(shgname=user_shg).aggregate(Sum('savings_paid'))['savings_paid__sum'] or 0
-    total_emi = Meeting.objects.filter(shgname=user_shg).aggregate(Sum('emi_paid'))['emi_paid__sum'] or 0
+   
+    personal_loans = Loan.objects.filter(
+        shgname__iexact=(user_shg or "").strip(),
+        loan_type="Personal",
+        created_at__month=current_month,
+        created_at__year=current_year
+    )
 
     
-    # Prepare member_data
+    yearly_group_loans = Loan.objects.filter(
+        shgname__iexact=(user_shg or "").strip(),
+        loan_type="Group",
+        created_at__month=current_month,
+        created_at__year=current_year
+    )
+
+    total_loans_amount = yearly_group_loans.aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
+
+    remaining_loans_amount = yearly_group_loans.aggregate(
+        Sum('remaining')
+    )['remaining__sum'] or 0
+
+    total_loans_count = yearly_group_loans.count()
+
+    paid_loans_count = yearly_group_loans.filter(
+        remaining=0
+    ).count()
+
+    active_loans = yearly_group_loans.filter(
+        remaining__gt=0
+    ).count()
+
+    total_saving = records.aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
+    total_group_emi = records.aggregate(Sum('group_emi'))['group_emi__sum'] or 0
+
+    total_saving_all = MonthlyRecord.objects.filter(
+        shgname__iexact=(user_shg or "").strip()
+    ).aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
+
+    
+    total_personal_loan_year = personal_loans.aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
+
     member_data = []
-    for m in members:
-        member_meetings = Meeting.objects.filter(shgname=user_shg, member_name=m.fullname, meeting_date__month= current_month, meeting_date__year=current_year)
-        member_total_savings = member_meetings.aggregate(Sum('savings_paid'))['savings_paid__sum'] or 0
-        member_total_emi = member_meetings.aggregate(Sum('emi_paid'))['emi_paid__sum'] or 0
 
-        member_loans = all_loans.filter(member_name=m.fullname)
-        loan_taken = member_loans.aggregate(Sum('loan_amount'))['loan_amount__sum'] or 0
-        loan_remaining = member_loans.aggregate(Sum('remaining_amount'))['remaining_amount__sum'] or 0
+    for m in members:
+        member_meetings = MonthlyRecord.objects.filter(
+            shgname__iexact=(user_shg or "").strip(),
+            member=m,
+            month=current_month,
+            year=current_year
+        )
+
+        member_total_saving = member_meetings.aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
+        member_total_emi = member_meetings.aggregate(Sum('group_emi'))['group_emi__sum'] or 0
+
+        
+        member_loans = Loan.objects.filter(
+            shgname__iexact=(user_shg or "").strip(),
+            member=m
+        )
+
+        loan_taken = member_loans.aggregate(Sum('amount'))['amount__sum'] or 0
+        loan_remaining = member_loans.aggregate(Sum('remaining'))['remaining__sum'] or 0
 
         member_data.append({
             "fullname": m.fullname,
             "phone": m.phone,
             "aadhaar_number": m.aadhaar_number,
-            "aadhaar_photo": m.aadhaar_photo.url if m.aadhaar_photo and m.aadhaar_photo.name else None,
-            "profile_photo": m.profile_photo.url if m.profile_photo and m.profile_photo.name else None,
-            "total_savings": member_total_savings,
-            "total_emi": member_total_emi,
+            "aadhaar_photo": m.aadhaar_photo.url if m.aadhaar_photo else None,
+            "profile_photo": m.profile_photo.url if m.profile_photo else None,
+            "total_saving": member_total_saving,
+            "total_group_emi": member_total_emi,
             "loan_taken": loan_taken,
             "loan_remaining": loan_remaining,
-            "pending_status": "Paid" if total_savings > 0 else "Pending",
+            "pending_status": "Paid" if member_total_saving > 0 else "Pending",
             "loan_status": "Cleared" if loan_remaining == 0 else "Pending",
         })
 
-    month_meetings = Meeting.objects.filter(
-        shgname=user_shg,
-        meeting_date__month=current_month,
-        meeting_date__year=current_year
-    )
+    saving_paid_members = MonthlyRecord.objects.filter(
+        shgname__iexact=(user_shg or "").strip(),
+        month=current_month,
+        year=current_year,
+        saving_paid__gt=0
+    ).values_list('member', flat=True).distinct()
 
-    # Count of paid/pending savings
-    savings_paid_members = Meeting.objects.filter(shgname=user_shg,
-        meeting_date__month=current_month,
-        meeting_date__year=current_year,savings_paid__gt=0).values_list('member_name', flat=True).distinct()
-    savings_paid_count = len(savings_paid_members)
-    savings_pending_count = total_members - savings_paid_count
-    savings_paid_percent = (savings_paid_count / total_members * 100) if total_members else 0
-    savings_pending_percent = (savings_pending_count / total_members * 100) if total_members else 0
+    saving_paid_count = len(saving_paid_members)
+    saving_pending_count = total_members - saving_paid_count
 
-    # Count of paid/pending EMI
-    emi_paid_members = Meeting.objects.filter(
-        shgname=user_shg,
-        meeting_date__month=current_month,
-        meeting_date__year=current_year,
-        emi_paid__gt=0
-    ).values_list('member_name', flat=True).distinct()
-    emi_paid_count = len(emi_paid_members)
-    emi_pending_count = total_members - emi_paid_count
-    emi_paid_percent = (emi_paid_count / total_members * 100) if total_members else 0
-    emi_pending_percent = (emi_pending_count / total_members * 100) if total_members else 0
+    saving_paid_percent = (saving_paid_count / total_members * 100) if total_members else 0
+    saving_pending_percent = (saving_pending_count / total_members * 100) if total_members else 0
 
-    # Financial health
-    total_money = total_savings + total_loans_amount
-    savings_percent = (total_savings / total_money * 100) if total_money else 0
-    loan_percent = (remaining_loans_amount / total_money * 100) if total_money else 0
+    group_emi_paid_members = MonthlyRecord.objects.filter(
+        shgname__iexact=(user_shg or "").strip(),
+        month=current_month,
+        year=current_year,
+        group_emi__gt=0
+    ).values_list('member', flat=True).distinct()
 
-    # Active loans
-    active_loans = all_loans.filter(remaining_amount__gt=0).count()
+    group_emi_paid_count = len(group_emi_paid_members)
+    group_emi_pending_count = total_members - group_emi_paid_count
 
-    # Total monthly collection
-    total_monthly_collection = Meeting.objects.filter(
-        shgname=user_shg,
-        meeting_date__month=current_month,
-        meeting_date__year=current_year
-    ).aggregate(Sum('savings_paid'))['savings_paid__sum'] or 0
+    group_emi_paid_percent = (group_emi_paid_count / total_members * 100) if total_members else 0
+    group_emi_pending_percent = (group_emi_pending_count / total_members * 100) if total_members else 0
 
-    # Repayment rate
-    repayment_rate = (paid_loans_count / total_loans_count * 100) if total_loans_count else 0
+    total_collection = total_saving + total_group_emi
+    saving_percent = (total_saving / total_collection * 100) if total_collection else 0
+    emi_percent = (total_group_emi / total_collection * 100) if total_collection else 0
 
-    meeting = Meeting.objects.filter(
-             shgname=user_shg
-             ).order_by('-id').first()
+    meeting = MeetingSchedule.objects.filter(
+        shgname__iexact=(user_shg or "").strip()
+    ).order_by("-meeting_date").first()
+
     context = {
         "user_role": user_role,
         "user_name": user_name,
         "user_shg": user_shg,
         "members": members,
         "member_data": member_data,
-        "meeting":meeting,
-        "loans": monthly_loans,
         "total_members": total_members,
-        "total_savings": total_savings,
-        "total_emi": total_emi,
+
+        "total_saving": total_saving,
+        "total_group_emi": total_group_emi,
+        "total_saving_all": total_saving_all,
+
         "total_loans_amount": total_loans_amount,
         "remaining_loans_amount": remaining_loans_amount,
         "paid_loans_count": paid_loans_count,
         "active_loans": active_loans,
-        "savings_paid_count": savings_paid_count,
-        "savings_pending_count": savings_pending_count,
-        "savings_paid_percent": savings_paid_percent,
-        "savings_pending_percent": savings_pending_percent,
-        "emi_paid_count": emi_paid_count,
-        "emi_pending_count": emi_pending_count,
-        "emi_paid_percent": emi_paid_percent,
-        "emi_pending_percent": emi_pending_percent,
-        "savings_percent": savings_percent,
-        "loan_percent": loan_percent,
-        "total_monthly_collection": total_monthly_collection,
-        "repayment_rate": repayment_rate,
+
+        "saving_paid_count": saving_paid_count,
+        "saving_pending_count": saving_pending_count,
+        "saving_paid_percent": saving_paid_percent,
+        "saving_pending_percent": saving_pending_percent,
+
+        "group_emi_paid_count": group_emi_paid_count,
+        "group_emi_pending_count": group_emi_pending_count,
+        "group_emi_paid_percent": group_emi_paid_percent,
+        "group_emi_pending_percent": group_emi_pending_percent,
+
+        "saving_percent": saving_percent,
+        "emi_percent": emi_percent,
+        "total_personal_loan_year": total_personal_loan_year,
+
+        "meeting": meeting,
+        "current_month": current_month,
+        "current_year": current_year,
     }
 
     return render(request, "dashboard.html", context)
-                
 
 def add_member(request):
     
@@ -387,7 +399,6 @@ def add_member(request):
         aadhaar_number = request.POST.get("aadhaar_number", "").strip()
         role=request.POST.get("role")
         dob = request.POST.get("dob")
-        # Simple Aadhaar validation
         if aadhaar_number and (not aadhaar_number.isdigit() or len(aadhaar_number) != 12):
             messages.error(request, "Aadhaar must be exactly 12 digits")
             return redirect("add_member")
@@ -417,14 +428,13 @@ def add_member(request):
 
 
 def delete_member(request, id):
-    # Block non-president users
+   
     if request.session.get("user_role") != "President":
         return redirect("dashboard")
 
     try:
         member = Register.objects.get(id=id)
 
-        # Extra security: only delete within same SHG
         if member.shgname != request.session.get("user_shg"):
             return redirect("dashboard")
 
@@ -450,7 +460,6 @@ def member_list(request):
 
     search_results = members
 
-    # selected member logic
     if member_id:
         selected_member = members.filter(id=member_id).first()
     else:
@@ -488,228 +497,228 @@ def member_list(request):
         "search": search,
         "search_results": search_results
     })
+
 def add_loan(request, loan_id=None):
     if request.session.get("user_role") != "President":
-        return redirect("dashboard")  
+        return redirect("dashboard")
 
     shgname = request.session.get("user_shg")
-    members = Register.objects.filter(shgname__iexact=shgname.strip())
+
+    members = Register.objects.filter(
+        shgname__iexact=(shgname or "").strip()
+    )
 
     loan = None
-    member_name = None
+    selected_member = None
 
+   
     if loan_id:
-        loan = Loan.objects.get(id=loan_id)
-        member_name = loan.member_name
+        loan = get_object_or_404(Loan, id=loan_id)
+        selected_member = loan.member
 
     if request.method == "POST":
+
         loan_type = request.POST.get("loan_type")
+
+        #
         amount = float(request.POST.get("amount") or 0)
         paid = float(request.POST.get("paid") or 0)
-        remaining = float(request.POST.get("remaining", amount - paid))
-        emi_date = request.POST.get("emi_date")
-        total_installment = int(request.POST.get("total_installment") or 0)
+        duration = float(request.POST.get("duration") or 0)
         interest_rate = float(request.POST.get("interest_rate") or 0)
-        subsidy = float(request.POST.get("subsidy") or 0)
-  
+        subvention_rate = float(request.POST.get("subvention_rate") or 0)
 
-        if loan_type == "Personal":
-           member_id = request.POST.get("member_id")
-           if not member_id:
-              messages.error(request, "Select a member")
-              return redirect("add_loan")
-
-           member = Register.objects.get(id=member_id)
-           member_name = member.fullname
-
-        else :
-            member_name = None
         
-        try:
-            amount = float(amount)
-            total_installment = int(total_installment)
-            interest_rate = float(interest_rate)
-            subsidy = float(subsidy)
-        except ValueError:
-            messages.error(request, "Invalid input values")
-            return redirect("add_loan")
+        selected_member = None
+        if loan_type == "Personal":
+            member_id = request.POST.get("member_id")
 
+            if not member_id:
+                messages.error(request, "Select a member")
+                return redirect("add_loan")
+
+            selected_member = get_object_or_404(Register, id=member_id)
+        elif loan_type == "Group":
+            selected_member = None    
+
+       
         if amount <= 0:
             messages.error(request, "Loan amount must be greater than 0")
             return redirect("add_loan")
 
-        if not emi_date:
-            messages.error(request, "EMI date is required")
-            return redirect("add_loan")
-        try:
-              emi_date = datetime.strptime(emi_date, "%Y-%m-%d").date()
-        except:
-           messages.error(request, "Invalid date format")
-           return redirect("add_loan")
+        
+        total_payable = amount + (
+            amount * (interest_rate - subvention_rate) * duration
+        ) / 100
+
+        remaining = total_payable - paid
+
         
         if loan:
-            loan.member_name = member_name
-            loan.loan_amount = amount
-            loan.paid_amount = paid
-            loan.remaining_amount = remaining
+            loan.member = selected_member
+            loan.amount = amount
+            loan.paid = paid
+            loan.remaining = remaining
             loan.loan_type = loan_type
-            loan.emi_date = emi_date
-            loan.total_installment = total_installment
+            loan.duration = duration
             loan.interest_rate = interest_rate
-            loan.subsidy = subsidy
+            loan.subvention_rate = subvention_rate
+            loan.total_payable = total_payable
+
             loan.save()
 
             messages.success(request, "Loan updated successfully")
 
-        else:
-
         
-           Loan.objects.create(
-            shgname=shgname,
-            member_name=member_name,
-            loan_amount=amount,
-            paid_amount=paid,
-            remaining_amount=remaining,
-            loan_type=loan_type,
-            emi_date=emi_date,
-            total_installment=total_installment,
-            interest_rate=interest_rate,
-            subsidy=subsidy
-        )
-        messages.success(request, "Group loan added successfully")
+        else:
+            Loan.objects.create(
+                shgname=shgname,
+                member=selected_member,
+                amount=amount,
+                paid=paid,
+                remaining=remaining,
+                loan_type=loan_type,
+                duration=duration,
+                interest_rate=interest_rate,
+                subvention_rate=subvention_rate,
+                total_payable=total_payable
+            )
+
+            messages.success(request, f"{loan_type} loan added successfully")
+
         return redirect("loan_details")
 
-    return render(request, "add_loan.html", { "members":members, "loan":loan, "member_name": member_name})
-
-def meeting_entry(request):
-
-    shgname=request.session.get("user_shg")
-
-    members=Register.objects.filter(shgname=shgname)
-
-    if request.method=="POST":
-
-        member=request.POST.get("member")
-        meeting_date_str=request.POST.get("date")
-        attendance=request.POST.get("attendance")
-        notes=request.POST.get("notes")
-
-        try:
-            meeting_date = datetime.strptime(meeting_date_str, "%Y-%m-%d").date()
-        except:
-            meeting_date = datetime.today().date()
-
-        Meeting.objects.create(
-            shgname=shgname,
-            member_name=member,
-            meeting_date=meeting_date,
-            attendance=True if attendance == "Present" else False,
-            notes=notes
-
-
-
-        
-        )
-    return render(request,"meeting_entry.html",{"members":members})
-
+    return render(request, "add_loan.html", {
+        "members": members,
+        "loan": loan,
+        "selected_member": selected_member
+    })
 def logout_view(request):
     request.session.flush()   
     return redirect("login")
 
 def monthly_collection(request):
-    shg = request.session.get("user_shg")
+    shg = (request.session.get("user_shg") or "").strip()
     role = request.session.get("user_role")
-    members = Register.objects.filter(shgname=shg)
-    selected_month = int(request.GET.get("month") or date.today().month)
-    selected_year = int(request.GET.get("year") or date.today().year)
-    meeting_date_str = request.POST.get("meeting_date")  # HTML input type="date"
-    if meeting_date_str:
-         meeting_date = datetime.strptime(meeting_date_str, "%Y-%m-%d").date()
+
+    members = Register.objects.filter(shgname__iexact=shg)
+
+   
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    today = date.today()
+
+   
+    if not month and not year:
+        selected_month = today.month
+        selected_year = today.year
     else:
-        meeting_date = date.today()
+        try:
+            selected_month = int(month) if month else None
+        except:
+            selected_month = None
+
+        try:
+            selected_year = int(year) if year else None
+        except:
+            selected_year = None
+
     
     if request.method == "POST" and role == "President":
         member_id = request.POST.get("member_id")
-        savings = float(request.POST.get("savings") or 0)
-        emi = float(request.POST.get("emi") or 0)
+
+        saving = float(request.POST.get("saving") or 0)
+        group_emi = float(request.POST.get("group_emi") or 0)
+        personal_emi = float(request.POST.get("personal_emi") or 0)
 
         if member_id:
             member = Register.objects.get(id=member_id)
-            member_name = member.fullname
-            member.savings_total += savings
-            member.save()
-        else:
-            member_name = "Group Collection"
-        
-        Meeting.objects.create(
-            shgname=shg,
-            member_name=member_name,
-            meeting_date=meeting_date,
-            savings_paid=savings,
-            emi_paid=emi
-        )
+
+            MonthlyRecord.objects.update_or_create(
+                shgname=shg,
+                member=member,
+                month=selected_month,
+                year=selected_year,
+                defaults={
+                    "saving_paid": saving,
+                    "group_emi": group_emi,
+                    "personal_emi": personal_emi,
+                }
+            )
 
         return redirect(f"/monthly_collection/?month={selected_month}&year={selected_year}")
 
+   
+    collections = MonthlyRecord.objects.filter(shgname=shg)
+
     
-    collections = Meeting.objects.filter(
-        shgname=shg,
-        meeting_date__month=selected_month,
-        meeting_date__year=selected_year
-    )
+    if selected_month and selected_year:
+        collections = collections.filter(month=selected_month, year=selected_year)
 
-    total_savings_collection = collections.aggregate(Sum('savings_paid'))['savings_paid__sum'] or 0
-    total_emi_collection = collections.aggregate(Sum('emi_paid'))['emi_paid__sum'] or 0
-    paid_members_count = collections.filter(
-        Q(savings_paid__gt=0) | Q(emi_paid__gt=0)
-    ).values('member_name').distinct().count()
+    elif selected_year:
+        collections = collections.filter(year=selected_year)
 
-    # Loans
-    personal_loans = Loan.objects.filter(shgname=shg, loan_type="Personal")
-    group_loans = Loan.objects.filter(shgname=shg, loan_type="Group")
-    personal_loans_taken = personal_loans.aggregate(Sum('loan_amount'))['loan_amount__sum'] or 0
-    personal_loans_cleared = personal_loans.filter(remaining_amount=0).count()
+    elif selected_month:
+        collections = collections.filter(month=selected_month)
 
-    # Table data
+  
+    total_savings_collection = collections.aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
+    total_group_emi = collections.aggregate(Sum('group_emi'))['group_emi__sum'] or 0
+    total_personal_emi = collections.aggregate(Sum('personal_emi'))['personal_emi__sum'] or 0
+
+  
+    saving_paid_members = collections.filter(
+        saving_paid__gt=0
+    ).values('member_id').distinct().count()
+
+    group_emi_paid_members = collections.filter(
+        group_emi__gt=0
+    ).values('member_id').distinct().count()
+
+    
     member_data = []
-    for m in members:
-        member_records = collections.filter(member_name=m.fullname)
-        total_savings = member_records.aggregate(Sum('savings_paid'))['savings_paid__sum'] or 0
-        total_emi = member_records.aggregate(Sum('emi_paid'))['emi_paid__sum'] or 0
 
-        loans = personal_loans.filter(member_name=m.fullname)
-        loan_taken = loans.aggregate(Sum('loan_amount'))['loan_amount__sum'] or 0
-        loan_remaining = loans.aggregate(Sum('remaining_amount'))['remaining_amount__sum'] or 0
+    for m in members:
+        member_records = collections.filter(member_id=m.id)
+
+        total_saving = member_records.aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
+        total_group = member_records.aggregate(Sum('group_emi'))['group_emi__sum'] or 0
+        total_personal = member_records.aggregate(Sum('personal_emi'))['personal_emi__sum'] or 0
 
         member_data.append({
             "fullname": m.fullname,
             "phone": m.phone,
-            "total_savings": total_savings,
-            "total_emi": total_emi,
-            "emi_status": "Paid" if total_emi > 0 else "Pending",
-            "loan_taken": loan_taken,
-            "loan_remaining": loan_remaining,
-            "last_loan_date": loans.order_by('-loan_date').first().loan_date if loans.exists() else None
+            "total_saving": total_saving,
+            "total_group_emi": total_group,
+            "total_personal_emi": total_personal,
+            "group_emi_status": "Paid" if total_group > 0 else "Pending",
+            "personal_emi_status": "Paid" if total_personal > 0 else "Pending",
         })
 
     context = {
         "members": members,
         "role": role,
+        "collections": collections,
+
         "total_savings_collection": total_savings_collection,
-        "total_emi_collection": total_emi_collection,
-        "paid_members_count": paid_members_count,
-        "personal_loans_taken": personal_loans_taken,
-        "personal_loans_cleared": personal_loans_cleared,
+        "total_group_emi": total_group_emi,
+        "total_personal_emi": total_personal_emi,
+
+        "saving_paid_members": saving_paid_members,
+        "group_emi_paid_members": group_emi_paid_members,
+
         "member_data": member_data,
-        "group_loans": group_loans,
-        "selected_month": selected_month,
-        "selected_year": selected_year,
+
+        
+        "selected_month": selected_month if selected_month else "",
+        "selected_year": selected_year if selected_year else "",
     }
 
     return render(request, "monthly_collection.html", context)
-# views.py
+
 def loan_details(request):
-    shg = request.session.get("user_shg")
+    shg = (request.session.get("user_shg") or "").strip()
+
     loan_type = request.GET.get("type")
     member = request.GET.get("member")
     month = request.GET.get("month")
@@ -717,38 +726,70 @@ def loan_details(request):
 
     now = datetime.now()
 
-    month = int(month) if month else None
-    year = int(year) if year else None
+    
+    if not month and not year:
+        month = now.month
+        year = now.year
+    else:
+        try:
+            month = int(month) if month else None
+        except:
+            month = None
+
+        try:
+            year = int(year) if year else None
+        except:
+            year = None
 
     loans = Loan.objects.filter(
-        shgname=shg,)
-    if month and year:
-       loans = loans.filter(
-        emi_date__month=month,
-        emi_date__year=year
+        shgname__iexact=shg
     )
-    
-   
+
 
     if loan_type == "Group":
-        loans = loans.filter(loan_type="Group")
+        loans = loans.filter(loan_type__iexact="Group")
 
     elif loan_type == "Personal":
-        loans = loans.filter(loan_type="Personal")
+        loans = loans.filter(loan_type__iexact="Personal")
 
-        if member:
-            loans = loans.filter(member_name=member)
+        if member and member.strip():
+            try:
+                loans = loans.filter(member_id=int(member))
+            except:
+                pass
 
-            
+    
+    if month and year:
+        loans = loans.filter(created_at__month=month, created_at__year=year)
+
+    elif year:
+        loans = loans.filter(created_at__year=year)
+
+    elif month:
+        loans = loans.filter(created_at__month=month)
+
+    
+    month_choices = [
+        (1, "January"), (2, "February"), (3, "March"),
+        (4, "April"), (5, "May"), (6, "June"),
+        (7, "July"), (8, "August"), (9, "September"),
+        (10, "October"), (11, "November"), (12, "December"),
+    ]
 
     return render(request, "loan_details.html", {
         "loans": loans,
-        "members": Register.objects.filter(shgname=shg),
-        "selected_month": month,
-        "selected_year": year,
+        "members": Register.objects.filter(
+            shgname__iexact=shg
+        ),
+
+        "selected_month": month if month else "",
+        "selected_year": year if year else "",
+        "selected_type": loan_type,
+        "selected_member": member,
+        "month_choices": month_choices,
+
         "user_role": request.session.get("user_role"),
     })
-
 
 def clear_loan(request, loan_id):
     if request.session.get("user_role") != "President":
@@ -762,18 +803,35 @@ def clear_loan(request, loan_id):
 
     return redirect("loan_details")
 
+def delete_loan(request, loan_id):
+    loan = get_object_or_404(Loan, id=loan_id)
+    if request.method == "POST":
+        loan.delete()
+    return redirect("loan_details")
+
+def edit_loan(request, loan_id):
+    loan = get_object_or_404(Loan, id=loan_id)
+
+    if request.method == "POST":
+        form = LoanForm(request.POST, instance=loan)
+        if form.is_valid():
+            form.save()
+            return redirect("loan_details", loan_id=loan.id)
+    else:
+        form = LoanForm(instance=loan)
+
+    return render(request, "edit_loan.html", {"form": form, "loan": loan})
+
 def add_project(request, project_id=None):
     if request.session.get("user_role") != "President":
         return redirect("project_list")
 
     shgname = request.session.get("user_shg")
 
-    # 🔥 EDIT MODE (load project)
     project = None
     if project_id:
         project = get_object_or_404(Project, id=project_id, shgname=shgname)
 
-    # 🔥 HANDLE FORM SUBMIT (ADD / UPDATE)
     if request.method == "POST":
         title = request.POST.get("title")
         investment = request.POST.get("investment")
@@ -792,7 +850,7 @@ def add_project(request, project_id=None):
 
             project.save()
 
-        else:  # CREATE
+        else: 
             Project.objects.create(
                 title=title,
                 investment=investment,
@@ -864,9 +922,8 @@ def contact_view(request):
             type=request.POST.get('type', 'Complaint')
         )
         messages.success(request, "Message sent successfully")
-        return redirect('contact')  # reload page to show submissions
-
-    # Show all submissions by this phone, or all if no session
+        return redirect('contact')  
+   
     phone = request.session.get("user_phone")
     if phone:
         submissions = ContactMessage.objects.filter(phone=phone).order_by('-created_at')

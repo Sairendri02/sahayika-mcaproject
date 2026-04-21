@@ -144,8 +144,7 @@ animation:move 14s linear infinite;font-weight:bold;">
             <a href="{% url 'member_list' %}">{% trans "Member" %}</a>
             <a href="{% url 'add_member' %}">{% trans "Add Member" %}</a>
             <a href="{% url 'add_loan' %}">{% trans "Add Loan" %}</a>
-            <a href="{% url 'add_collection' %}">{% trans "Add Collection" %}</a>
-            <a href="{% url 'meeting_entry' %}">{% trans "Attendance" %}</a>
+
 
             {% endif %}
             <a href="{% url 'monthly_collection' %}">{% trans "Monthly Collection" %}</a>
@@ -158,6 +157,34 @@ animation:move 14s linear infinite;font-weight:bold;">
         <div id="content" class=" col-md-12 p-4" >
             <h3>{% trans "Welcome" %} {{ request.session.user_role }} {{ request.session.user_name }}</h3>
             <p>{% trans "Managing SHG Group:" %} {{ request.session.user_shg }}</p>
+           
+            {% if request.session.user_role == "President" %}
+
+                <div class="card p-3 mb-3 shadow-sm">
+                       <h5>📅 Set Meeting Date</h5>
+
+                {% if message %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+
+                <form method="POST">
+                  {% csrf_token %}
+
+                 <div class="row">
+                   <div class="col-md-10">
+                      <input type="date" name="meeting_date" class="form-control" required>
+                   </div>
+
+                <div class="col-md-2">
+                   <button type="submit" class="btn btn-primary">
+                       Set Date
+                   </button>
+                 </div>
+                </div>
+               </form>
+             </div>
+
+        {% endif %}
 
            
             <div class="row mt-4">
@@ -170,7 +197,7 @@ animation:move 14s linear infinite;font-weight:bold;">
                 <div class="col-md-3 mb-2">
                     <div class="card p-3 shadow stat-card">
                         <h5>{% trans "Total Savings" %}</h5>
-                        <h3> ₹{{ total_savings }}</h3>
+                        <h3> ₹{{ total_saving_all }}</h3>
                     </div>
                 </div>
                 <div class="col-md-3 mb-2" >
@@ -191,8 +218,8 @@ animation:move 14s linear infinite;font-weight:bold;">
 
                 <div class="col-md-3 mb-2">
                     <div class="card p-3 shadow stat-card">
-                        <h5>{% trans "Total Loan" %}</h5>
-                        <h3>{{ total_loans_amount }}</h3>
+                        <h5>{% trans "Total Group Loan (year)" %}</h5>
+                        <h3>{{  total_loans_amount }}</h3>
                     </div>
                 </div>
                 <div class="col-md-3 mb-2">
@@ -204,15 +231,15 @@ animation:move 14s linear infinite;font-weight:bold;">
 
              <div class="col-md-3 mb-2">
                   <div class="card p-3 shadow stat-card">
-                    <h5>{% trans "Total Monthly Collection" %}</h5>
-                        <h3>₹ {{ total_monthly_collection }}</h3>
+                    <h5>{% trans "Current Monthly Collection" %}</h5>
+                        <h3>₹ {{ total_saving }}</h3>
                    </div>
              </div>
 
              <div class="col-md-3 mb-2">
                    <div class="card p-3 shadow stat-card">
-                       <h5>{% trans "Loan Repayment Rate" %}</h5>
-                          <h3>{{ repayment_rate|floatformat:0 }}%</h3>
+                       <h5>{% trans "Total Personal loan (year)" %}</h5>
+                          <h3>{{ total_personal_loan_year }}</h3>
                     </div>
              </div>
 
@@ -227,18 +254,18 @@ animation:move 14s linear infinite;font-weight:bold;">
 
                           <div class="card-body">
                         
-                         <label><b>{% trans "Paid Members" %}</b> ({{ savings_paid_count }})</label>
+                         <label><b>{% trans "Paid Members" %}</b> ({{ saving_paid_count }})</label>
                          <div class="progress mb-3" style="height:25px;">
-                         <div class="progress-bar bg-success"style="width: {{ savings_paid_percent }}%">
-                         {{ savings_paid_percent|floatformat:0 }}%
+                         <div class="progress-bar bg-success"style="width: {{ saving_paid_percent }}%">
+                         {{ saving_paid_percent|floatformat:0 }}%
                          </div>
                          </div>
 
                         
-                        <label><b>{% trans "Pending Members" %}</b> ({{ savings_pending_count }})</label>
+                        <label><b>{% trans "Pending Members" %}</b> ({{ saving_pending_count }})</label>
                         <div class="progress" style="height:25px;">
-                        <div class="progress-bar bg-danger"style="width: {{savings_pending_percent }}%">
-                        {{ savings_pending_percent|floatformat:0 }}%
+                        <div class="progress-bar bg-danger"style="width: {{saving_pending_percent }}%">
+                        {{ saving_pending_percent|floatformat:0 }}%
                         </div>
                         </div>
                     </div>
@@ -253,17 +280,17 @@ animation:move 14s linear infinite;font-weight:bold;">
                   <div class="card-body">
                 
 
-                    <label><b>{% trans "EMI Paid" %}</b> ({{ emi_paid_count }})</label>
+                    <label><b>{% trans "EMI Paid" %}</b> ({{ group_emi_paid_count }})</label>
                       <div class="progress mb-3" style="height:25px;">
-                       <div class="progress-bar bg-success"style="width: {{ emi_paid_percent }}%">
-                         {{ emi_paid_percent|floatformat:0 }}%
+                       <div class="progress-bar bg-success"style="width: {{  group_emi_paid_percent }}%">
+                         {{  group_emi_paid_percent|floatformat:0 }}%
                        </div>
                        </div>
 
-                  <label><b>{% trans "EMI Pending" %}</b> ({{ emi_pending_count }})</label>
+                  <label><b>{% trans "EMI Pending" %}</b> ({{ group_emi_pending_count }})</label>
                        <div class="progress" style="height:25px;">
-                       <div class="progress-bar bg-danger"style="width: {{ emi_pending_percent }}%">
-                         {{ emi_pending_percent|floatformat:0 }}%
+                       <div class="progress-bar bg-danger"style="width: {{ group_emi_pending_percent }}%">
+                         {{ group_emi_pending_percent|floatformat:0 }}%
                        </div>
                        </div>
                   </div>
@@ -330,8 +357,8 @@ animation:move 14s linear infinite;font-weight:bold;">
                   <div class="progress">
 
                     <div class="progress-bar bg-success"
-                         style="width: {{ total_savings }}%">
-                                  {% trans "Savings" %} ₹{{ total_savings }}
+                         style="width: {{ total_saving }}%">
+                                  {% trans "Savings" %} ₹{{ total_saving }}
 
                     </div>
 
