@@ -161,7 +161,7 @@ animation:move 14s linear infinite;font-weight:bold;">
             {% if request.session.user_role == "President" %}
 
                 <div class="card p-3 mb-3 shadow-sm">
-                       <h5>📅 Set Meeting Date</h5>
+                       <h5>📅 {% trans "Set Meeting Date" %}</h5>
 
                 {% if message %}
                     <div class="alert alert-success">{{ message }}</div>
@@ -177,7 +177,7 @@ animation:move 14s linear infinite;font-weight:bold;">
 
                 <div class="col-md-2">
                    <button type="submit" class="btn btn-primary">
-                       Set Date
+                       {% trans "Set Date" %}
                    </button>
                  </div>
                 </div>

@@ -185,7 +185,7 @@
 
         
         <div class="col-md-3 mb-2">
-            <label>Select Member</label>
+            <label>{% trans "Select Member" %}</label>
             <select name="member_id" class="form-control" required>
                 <option value="">Choose Member</option>
                 {% for m in members %}
@@ -196,18 +196,18 @@
 
      
         <div class="col-md-3 mb-2">
-            <label>Savings</label>
+            <label>{% trans "Savings" %}</label>
             <input type="number" name="saving" class="form-control" placeholder="Enter savings">
         </div>
 
         <div class="col-md-3 mb-2">
-            <label>Group EMI</label>
+            <label>{% trans "Group EMI" %}</label>
             <input type="number" name="group_emi" class="form-control" placeholder="Enter group EMI">
         </div>
 
       
         <div class="col-md-3 mb-2">
-            <label>Personal EMI</label>
+            <label>{% trans "Personal EMI" %}</label>
             <input type="number" name="personal_emi" class="form-control" placeholder="Enter personal EMI">
         </div>
 
@@ -216,7 +216,7 @@
    
     <div class="text-center mt-3">
         <button type="submit" class="btn btn-primary px-5">
-            Add
+            {% trans "Add" %}
         </button>
     </div>
 

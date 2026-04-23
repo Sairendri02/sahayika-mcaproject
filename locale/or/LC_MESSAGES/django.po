@@ -48,16 +48,8 @@ msgid "Contact Us"
 msgstr "ଯୋଗାଯୋଗ କରନ୍ତୁ"
 
 #: .\main\templates\about.html:210
-#, fuzzy
-#| msgid "Loan and repayment details"
-msgid "Track loans and repayments"
+ msgid "Loan and repayment details"
 msgstr "ଋଣ ଏବଂ ପ୍ରତିଶୋଧ ବିବରଣୀ"
-
-#: .\main\templates\about.html:211
-#, fuzzy
-#| msgid "Monthly Collection"
-msgid "Monitor monthly collections"
-msgstr "ମାସିକ ସଂଗ୍ରହ"
 
 
 #: .\main\templates\about.html:225 .\main\templates\learn_more.html:263
@@ -118,6 +110,7 @@ msgstr "ସଦସ୍ୟ ଯୋଗ କରନ୍ତୁ"
 msgid "Add Loan"
 msgstr "ଋଣ ଯୋଗ କରନ୍ତୁ"
 
+#: .\main\templates\about.html:211
 #: .\main\templates\add_loan.html:114 .\main\templates\add_member.html:112
 #: .\main\templates\add_project.html:109 .\main\templates\dashboard.html:150
 #: .\main\templates\loan_details.html:118
@@ -271,12 +264,6 @@ msgstr "ବକେୟ ଋଣ"
  msgid "Group Loan Overview"
 msgstr "ଗୋଷ୍ଠୀ ଋଣ ସାରାଂଶ"
 
-
-#: .\main\templates\dashboard.html:236
-#, fuzzy
-#| msgid "Monthly Collection"
-msgid "Current Monthly Collection"
-msgstr "ମାସିକ ସଂଗ୍ରହ"
 
 #: .\main\templates\dashboard.html:243
  msgid "Personal Loans Cleared"
@@ -739,9 +726,6 @@ msgstr "ଉପଲବ୍ଧ ସୂଚନା"
 msgid "Member details and records"
 msgstr "ସଦସ୍ୟ ସୂଚନା ଏବଂ ରେକର୍ଡ"
 
-#: .\main\templates\rti.html:187
-msgid "Loan and repayment details"
-msgstr "ଋଣ ଏବଂ ପ୍ରତିଶୋଧ ବିବରଣୀ"
 
 #: .\main\templates\rti.html:188
 msgid "Monthly savings records"
@@ -1208,3 +1192,18 @@ msgstr ""
 
 msgid "Our Story"
 msgstr "ଆମ କାହାଣୀ"
+
+msgid "Track loans and repayments"
+msgstr "ଋଣ ଏବଂ ଶୋଧ ପରିଶୋଧନାକୁ ଟ୍ରାକ୍ କରନ୍ତୁ"
+
+msgid "Monitor monthly collections"
+msgstr "ମାସିକ ଆଦାୟକୁ ନିରୀକ୍ଷଣ କରନ୍ତୁ"
+
+msgid "Current Monthly Collection"
+msgstr "ବର୍ତ୍ତମାନ ମାସିକ ଆଦାୟ"
+
+msgid "Set Meeting Date"
+msgstr "ବୈଠକ ତାରିଖ ନିର୍ଦ୍ଧାରଣ କରନ୍ତୁ"
+
+msgid "Set date"
+msgstr "ତାରିଖ ନିର୍ଦ୍ଧାରଣ କରନ୍ତୁ"
