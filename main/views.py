@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
@@ -19,108 +21,119 @@ def home(request):
 
 def register(request):
     districts = District.objects.all().order_by('name')
+
     error = ""
     success = ""
-    fullname = ""
-    shgname = "" 
-    phone = ""
-    role = ""
-    dob = ""
-    district_id = ""
-    village_id = ""
 
-    
-    if request.method == "POST" and "send_otp" in request.POST:
-        phone = request.POST.get("phone")
-        if not phone or not re.fullmatch(r'\d{10}', phone):
-            error = _("Enter a valid 10-digit phone number to send OTP")
-        else:
-            otp = str(random.randint(100000, 999999))
-            request.session["otp"] = otp
-            # Here you can integrate SMS API to send otp to the phone
-            print(f"OTP for {phone}: {otp}")  # For testing
-            success = _(f"OTP sent to {phone}")
-        return render(request, "register.html", {"districts":districts, "error": error, "success": success})
+    fullname = request.POST.get("fullname", "")
+    shgname = request.POST.get("shgname", "")
+    phone = request.POST.get("phone", "")
+    role = request.POST.get("role", "")
+    district_id = request.POST.get("district", "")
+    village_id = request.POST.get("village", "")
 
-    
-    if request.method == "POST" and "register" in request.POST:
-        fullname = request.POST.get('fullname', '').strip()
-        shgname = request.POST.get('shgname', '').strip()
-        district_id = request.POST.get('district', '').strip()
-        village_id = request.POST.get('village', '').strip()
-        role = request.POST.get('role','').strip()
-        phone = request.POST.get('phone','').strip()
-        dob = request.POST.get('dob','').strip()
-        password = request.POST.get('password','').strip()
-        otp_input = request.POST.get("otp",'').strip()
-        aadhaar_number = request.POST.get('aadhaar_number','').strip()
-        aadhaar_photo = request.FILES.get('aadhaar_photo','').strip()
-        profile_photo = request.FILES.get('profile_photo','').strip()
+    if request.method == "POST":
 
-        
-        if not all([fullname, shgname, district_id, village_id, role, phone, password, otp_input]):
-            error = _("All fields including OTP are required")
+        # 🔹 SEND OTP
+        if "send_otp" in request.POST:
+            phone = request.POST.get("phone", "").strip()
 
-       
-        elif not re.fullmatch(r'\d{10}', phone):
-            error = _("Enter a valid 10-digit phone number")
+            if not re.fullmatch(r'\d{10}', phone):
+                error = _("Enter valid phone number")
+            else:
+                otp = str(random.randint(1000, 9999))
+                request.session["otp"] = otp
+                print("OTP:", otp)
+                success = _("OTP sent successfully")
 
-        else:
-            district = District.objects.get(id=district_id)
-            village = Village.objects.get(id=village_id)
+        # 🔹 REGISTER
+        elif "register" in request.POST:
 
-            
-            group_members = Register.objects.filter(shgname=shgname , village=village )
+            fullname = request.POST.get('fullname', '').strip()
+            shgname = request.POST.get('shgname', '').strip()
+            district_id = request.POST.get('district', '').strip()
+            village_id = request.POST.get('village', '').strip()
+            role = request.POST.get('role','').strip()
+            phone = request.POST.get('phone','').strip()
+            dob = request.POST.get('dob','').strip()
+            password = request.POST.get('password','').strip()
+            otp_input = request.POST.get("otp",'').strip()
+            aadhaar_number = request.POST.get('aadhaar_number','').strip()
+            aadhaar_photo = request.FILES.get('aadhaar_photo')
+            profile_photo = request.FILES.get('profile_photo')
 
+            # ✅ VALIDATION
+            if not all([fullname, shgname, district_id, village_id, role, phone, password, otp_input]):
+                error = _("All fields including OTP are required")
 
-            if role == "President" and group_members.exists():
-                            error = _("This SHG group already exists.")
-
-
-            elif role == "Member" and not group_members.exists():
-                           error = _("This SHG group does not exist. Contact the president.")
-
-
-            elif group_members.count() >= 15:
-                error=_("This SHG group already has 15 members. No more members allowed.")
-            
-            elif role.lower() == "president" and Register.objects.filter(shgname=shgname, role="president").exists():
-                error = _("This group already has a president")
-
-           
-            
-            
             elif otp_input != request.session.get("otp"):
                 error = _("Invalid OTP")
 
+            elif not re.fullmatch(r'\d{10}', phone):
+                error = _("Invalid phone")
 
-            elif not all([aadhaar_number, aadhaar_photo, profile_photo]):
-               error = "All fields are required."
-            elif not re.fullmatch(r'\d{12}', aadhaar_number):
-                error = "Invalid Aadhaar number"
-          
+            elif User.objects.filter(username=phone).exists():
+                error = _("User already exists")
 
             else:
-                Register.objects.create(
-                    fullname=fullname,
-                    shgname=shgname,
-                    district=district,
-                    village=village,
-                    role=role,
-                    phone=phone,
-                    dob=dob,
-                    password=password,
-                    aadhaar_number=aadhaar_number,
-                    aadhaar_photo=aadhaar_photo,
-                    profile_photo=profile_photo
-                  )
-                success = _("Registered successfully!")
-                request.session.pop("otp", None)  # Clear OTP after success
+                district = District.objects.get(id=district_id)
+                village = Village.objects.get(id=village_id)
 
-    return render(request, "register.html", {"districts":districts, "error": error, "success": success,"fullname":fullname,"shgname":shgname,"phone":phone,"role":role,"district_id":district_id,"village_id":village_id})
-    
+                group_members = Register.objects.filter(shgname=shgname, village=village)
 
+                if role == "President" and group_members.exists():
+                    error = _("Group already exists")
 
+                elif role == "Member" and not group_members.exists():
+                    error = _("Group does not exist")
+
+                elif group_members.count() >= 15:
+                    error = _("Max 15 members")
+
+                elif role.lower() == "president" and Register.objects.filter(shgname=shgname, role="president").exists():
+                    error = _("President already exists")
+
+                elif not all([aadhaar_number, aadhaar_photo, profile_photo]):
+                    error = _("All Aadhaar fields required")
+
+                elif not re.fullmatch(r'\d{12}', aadhaar_number):
+                    error = _("Invalid Aadhaar")
+
+                else:
+                    # ✅ CREATE USER
+                    user = User.objects.create_user(
+                        username=phone,
+                        password=password
+                    )
+
+                    Register.objects.create(
+                        fullname=fullname,
+                        shgname=shgname,
+                        district=district,
+                        village=village,
+                        role=role,
+                        phone=phone,
+                        dob=dob,
+                        aadhaar_number=aadhaar_number,
+                        aadhaar_photo=aadhaar_photo,
+                        profile_photo=profile_photo,
+                        user=user
+                    )
+
+                    success = _("Registered successfully!")
+                    request.session.pop("otp", None)
+
+    return render(request, "register.html", {
+        "districts": districts,
+        "error": error,
+        "success": success,
+        "fullname": fullname,
+        "shgname": shgname,
+        "phone": phone,
+        "role": role,
+        "district_id": district_id,
+        "village_id": village_id,
+    })
 def load_villages(request):
     district_id = request.GET.get('district')
     villages = Village.objects.filter(district_id=district_id).values('id', 'name')
@@ -139,37 +152,29 @@ def login_view(request):
         role = request.POST.get("role", "").strip()
         password = request.POST.get("password", "").strip()
 
-        # Check if group exists
-        try:
-           user = Register.objects.get(
-           phone=phone,
-           shgname=shgname,
-           role__iexact=role
-                 )
-        except Register.DoesNotExist:
-           error = _("User not found in this SHG group.")
+        user = authenticate(request, username=phone, password=password)
+
+        if user is None:
+            error = "Invalid phone or password"
         else:
-           if user.password.strip() != password.strip():
-            error = _("Incorrect password.")
-           else:
-                # Check role
-                if user.role.lower() != role.lower():
-                    if role == "President":
-                        error = _("You are not registered as President.")
-                    else:
-                        error = _("You are not registered as Member.")
-                # Check password
-                elif user.password != password:
-                    error = _("Incorrect password.")
-                else:
-                    # Login success
-                    request.session["user_id"] = user.id
-                    request.session["user_name"] = user.fullname
-                    request.session["user_shg"] = user.shgname
-                    request.session["user_role"] = user.role
-                    request.session["user_phone"] = user.phone
-                    
-                    return redirect("dashboard")  
+            try:
+                reg = Register.objects.get(
+                    user=user,
+                    shgname=shgname,
+                    role__iexact=role
+                )
+            except Register.DoesNotExist:
+                error = "Invalid SHG name or role"
+            else:
+                login(request, user)
+
+                request.session["user_id"] = reg.id
+                request.session["user_name"] = reg.fullname
+                request.session["user_shg"] = reg.shgname
+                request.session["user_role"] = reg.role
+                request.session["user_phone"] = reg.phone
+
+                return redirect("dashboard")
 
     return render(request, "login.html", {
         "error": error,
@@ -178,26 +183,27 @@ def login_view(request):
         "role": role
     })
 def forgot_password(request):
-
     message = ""
 
     if request.method == "POST":
-
         phone = request.POST.get("phone")
         shgname = request.POST.get("shgname")
         new_password = request.POST.get("password")
 
         try:
-            user = Register.objects.get(phone=phone, shgname=shgname)
-            user.password = new_password
+            reg = Register.objects.get(phone=phone, shgname=shgname)
+
+            user = reg.user   
+
+            user.set_password(new_password) 
             user.save()
-            message = _("Password updated successfully")
+
+            message = "Password updated successfully"
+
         except Register.DoesNotExist:
-            message = _("User not found")
+            message = "User not found"
 
-    return render(request,"forgot_password.html",{"message":message})
-
-
+    return render(request, "forgot_password.html", {"message": message})
 
 @never_cache
 def dashboard(request):
@@ -399,45 +405,100 @@ def dashboard(request):
 
     return render(request, "dashboard.html", context)
 
+
 def add_member(request):
-    
+
     if request.session.get("user_role") != "President":
-        return redirect("dashboard")  
+        return redirect("dashboard")
+
+    president_id = request.session.get("user_id")
+    try:
+        president = Register.objects.get(id=president_id)
+    except Register.DoesNotExist:
+        messages.error(request, "Session error. Please login again.")
+        return redirect("login")
+
+    if request.method == "GET":
+        return render(request, "add_member.html")
 
     if request.method == "POST":
-        fullname = request.POST.get("fullname", "").strip()
         phone = request.POST.get("phone", "").strip()
-        aadhaar_number = request.POST.get("aadhaar_number", "").strip()
-        role=request.POST.get("role")
-        dob = request.POST.get("dob")
-        if aadhaar_number and (not aadhaar_number.isdigit() or len(aadhaar_number) != 12):
-            messages.error(request, "Aadhaar must be exactly 12 digits")
+        shgname = request.session.get("user_shg")
+        aadhaar_number = request.POST.get("aadhaar_number", "").strip() or None
+
+        # ✅ All validation checks first
+        if not phone:
+            messages.error(request, "Phone number is required.")
             return redirect("add_member")
 
-      
-        register = Register(
-            fullname=fullname,
-            phone=phone,
-            aadhaar_number=aadhaar_number or None,
-            shgname=request.session.get("user_shg"),
-            role=role,
-            dob =dob or None,
-            
-        )
+        if not shgname:
+            messages.error(request, "Session expired. Please login again.")
+            return redirect("login")
 
-       
-        if "aadhaar_photo" in request.FILES:
-            register.aadhaar_photo = request.FILES["aadhaar_photo"]
-        if "profile_photo" in request.FILES:
-            register.profile_photo = request.FILES["profile_photo"]
+        if Register.objects.filter(phone=phone, shgname=shgname).exists():
+            messages.error(request, "This phone number already exists in your SHG.")
+            return redirect("add_member")
+
+        if aadhaar_number and Register.objects.filter(aadhaar_number=aadhaar_number).exists():
+            messages.error(request, "This Aadhaar number already exists.")
+            return redirect("add_member")
+
+        if Register.objects.filter(shgname=shgname).count() >= 15:
+            messages.error(request, "Maximum 15 members allowed.")
+            return redirect("add_member")
+
+        # ✅ Handle existing orphan User (from previous failed attempt)
+        user = None
+        try:
+            existing_user = User.objects.get(username=phone)
+            # If no Register linked to this user, reuse it
+            if not Register.objects.filter(user=existing_user).exists():
+                user = existing_user
+            else:
+                messages.error(request, "This phone number is already registered.")
+                return redirect("add_member")
+        except User.DoesNotExist:
+            pass  # No existing user, will create fresh
+
+        try:
+            # Create user only if not reusing orphan
+            if user is None:
+                user = User.objects.create_user(
+                    username=phone,
+                    password=phone
+                )
+
+            register = Register(
+                fullname=request.POST.get("fullname", "").strip(),
+                phone=phone,
+                aadhaar_number=aadhaar_number,
+                dob=request.POST.get("dob") or None,
+                role=request.POST.get("role", "Member"),
+                shgname=shgname,
+                user=user,
+                district=president.district,
+                village=president.village,
+            )
+
+            if "aadhaar_photo" in request.FILES:
+                register.aadhaar_photo = request.FILES["aadhaar_photo"]
+
+            if "profile_photo" in request.FILES:
+                register.profile_photo = request.FILES["profile_photo"]
+
+            register.save()
+
+            messages.success(request, "Member added successfully!")
+            return redirect("member_list")
+
+        except Exception as e:
+            # Only delete user if we just created it
+            if user and not Register.objects.filter(user=user).exists():
+                user.delete()
+            print("ERROR adding member:", e)
+            messages.error(request, f"Failed: {str(e)}")
+            return redirect("add_member")
         
-
-        register.save()
-        messages.success(request, "Member added successfully")
-
-    return render(request, "add_member.html")
-
-
 def delete_member(request, id):
    
     if request.session.get("user_role") != "President":

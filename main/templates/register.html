@@ -210,14 +210,14 @@ color: black;
   <div class="row mb-3">
     <div class="mb-3">
         <label>{% trans "Aadhaar Number" %}</label>
-        <input type="text" name="aadhar_number" id="aadhar_number" class="form-control" maxlength="12" required>
+        <input type="text" name="aadhaar_number" id="aadhaar_number" class="form-control" maxlength="12" required>
         <small id="aadhar_error" class="text-danger"></small>
     </div>
 </div>
    
     <div class="mb-3">
         <label>{% trans "Aadhaar Photo" %}</label>
-        <input type="file" name="aadhar_photo" id="aadhar_photo" class="form-control" accept="image/*" required>
+        <input type="file" name="aadhaar_photo" id="aadhaar_photo" class="form-control" accept="image/*" required>
         <img id="aadhar_preview" src="#" style="display:none; max-width:200px; margin-top:10px;">
     </div>
 
@@ -279,8 +279,8 @@ districtSelect.addEventListener('change', function() {
     });
 });
 
-const aadharInput = document.getElementById('aadhar_number');
-    const aadharError = document.getElementById('aadhar_error');
+const aadhaarInput = document.getElementById('aadhaar_number');
+    const aadhaarError = document.getElementById('aadhaar_error');
 
     aadharInput.addEventListener('input', function() {
         const val = this.value;

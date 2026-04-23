@@ -167,9 +167,9 @@
 <script>
 
 function validateAadhaar() {
-    const aadhar = document.getElementById('aadhaar_number').value;
+    const aadhaar = document.getElementById('aadhaar_number').value;
     const status = document.getElementById('aadhaar_status');
-    if(/^\d{12}$/.test(aadhar)) {
+    if(/^\d{12}$/.test(aadhaar)) {
         status.textContent = "Valid format";
         status.style.color = "green";
     } else {

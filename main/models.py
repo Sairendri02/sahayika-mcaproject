@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import User
 
 class District(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -26,13 +27,13 @@ class Register(models.Model):
         ("Active", "Active"),
         ("Left", "Left"),
     ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     fullname = models.CharField(max_length=100)
     shgname = models.CharField(max_length=100)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True)
     village = models.ForeignKey(Village, on_delete=models.SET_NULL, null=True)
     role = models.CharField(max_length=20)
     phone = models.CharField(max_length=15)
-    password = models.CharField(max_length=100)
     aadhaar_number = models.CharField(max_length=12, unique=True, null=True, blank=True)
     aadhaar_photo = models.ImageField(upload_to='aadhaar_photos/', null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True,blank=True)
