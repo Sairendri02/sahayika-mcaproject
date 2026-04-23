@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 12:00+0530\n"
+"POT-Creation-Date: 2026-04-23 12:31+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,470 +17,370 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\main\templates\about.html:96 .\main\templates\contact.html:132
-#: .\main\templates\learn_more.html:109 .\main\templates\rti.html:97
-#, fuzzy
-#| msgid "Back to Dashboard"
-msgid "Back to Home"
-msgstr "ଡ୍ୟାସବୋର୍ଡକୁ ଫେରନ୍ତୁ"
+#: .\main\templates\about.html:7 .\main\templates\learn_more.html:7
+#: .\templates\index.html:71
+msgid "Learn More"
+msgstr "ଅଧିକ ଜାଣନ୍ତୁ"
 
-#: .\main\templates\about.html:107 .\templates\index.html:33
+#: .\main\templates\about.html:154 .\main\templates\learn_more.html:154
+#: .\main\templates\login.html:133 .\main\templates\register.html:126
+#: .\main\templates\rti.html:139 .\templates\index.html:31
+msgid "Home"
+msgstr "ମୁଖ୍ୟ ପୃଷ୍ଠା"
+
+#: .\main\templates\about.html:155 .\main\templates\about.html:179
+#: .\main\templates\learn_more.html:155 .\main\templates\login.html:134
+#: .\main\templates\register.html:127 .\main\templates\rti.html:140
+#: .\templates\index.html:32
 msgid "About Us"
 msgstr "ଆମ ବିଷୟରେ"
 
-#: .\main\templates\about.html:110
-msgid ""
-"Sahayika is a digital platform developed to simplify the management of Self "
-"Help Groups (SHGs). It replaces traditional manual record-keeping methods "
-"with a structured and efficient system."
-msgstr ""
-"Sahayika ହେଉଛି ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀ (SHGs) ପରିଚାଳନାକୁ ସହଜ କରିବା ପାଇଁ ଉନ୍ନତ ଏକ ଡିଜିଟାଲ "
-"ପ୍ଲାଟଫର୍ମ। ଏହା ପାରମ୍ପରିକ ହାତେ ରେକର୍ଡ ରଖିବା ପ୍ରଣାଳୀକୁ ପରିବର୍ତ୍ତନ କରି ଏକ ସଂଗଠିତ ଏବଂ "
-"କାର୍ଯ୍ୟକ୍ଷମ ପ୍ରଣାଳୀ ପ୍ରଦାନ କରେ।"
+#: .\main\templates\about.html:156 .\main\templates\learn_more.html:156
+#: .\main\templates\login.html:135 .\main\templates\register.html:128
+#: .\main\templates\rti.html:141 .\templates\index.html:33
+msgid "RTI"
+msgstr "ଆର୍ଟିଆଇ"
 
-#: .\main\templates\about.html:114
-msgid ""
-"The platform helps in managing member details, tracking monthly savings, "
-"handling loan distribution, and monitoring repayments in a transparent and "
-"organized way."
-msgstr ""
-"ଏହି ପ୍ଲାଟଫର୍ମ ସଦସ୍ୟ ସୂଚନା ପରିଚାଳନା, ମାସିକ ସଞ୍ଚୟ ଟ୍ରାକ୍ କରିବା, ଋଣ ବଣ୍ଟନ ପରିଚାଳନା, ଏବଂ "
-"ପ୍ରତିଶୋଧ ନିରୀକ୍ଷଣକୁ ପାରଦର୍ଶୀ ଏବଂ ସଂଗଠିତ ଭାବରେ ସହାୟତା କରେ।"
+#: .\main\templates\about.html:157 .\main\templates\learn_more.html:157
+#: .\main\templates\login.html:136 .\main\templates\register.html:129
+#: .\main\templates\rti.html:142 .\templates\index.html:34
+msgid "Contact Us"
+msgstr "ଯୋଗାଯୋଗ କରନ୍ତୁ"
 
-#: .\main\templates\about.html:118
-msgid ""
-"By using this system, SHGs can reduce errors, save time, and maintain "
-"accurate financial records, ensuring better decision-making and "
-"accountability."
-msgstr ""
-"ଏହି ପ୍ରଣାଳୀ ବ୍ୟବହାର କରି SHGs ତ୍ରୁଟି କମାଇପାରିବେ, ସମୟ ବଞ୍ଚାଇପାରିବେ, ଏବଂ ସଠିକ୍ ଅର୍ଥନୀତି ରେକର୍ଡ "
-"ରଖିପାରିବେ, ଯାହା ଭଲ ନିର୍ଣ୍ଣୟ ଏବଂ ଦାୟିତ୍ୱଶୀଳତା ନିଶ୍ଚିତ କରେ।"
+#: .\main\templates\about.html:210
+#, fuzzy
+#| msgid "Loan and repayment details"
+msgid "Track loans and repayments"
+msgstr "ଋଣ ଏବଂ ପ୍ରତିଶୋଧ ବିବରଣୀ"
 
-#: .\main\templates\about.html:122
-msgid "Our Mission"
-msgstr "ଆମର ଲକ୍ଷ୍ୟ"
+#: .\main\templates\about.html:211
+#, fuzzy
+#| msgid "Monthly Collection"
+msgid "Monitor monthly collections"
+msgstr "ମାସିକ ସଂଗ୍ରହ"
 
-#: .\main\templates\about.html:125
-msgid ""
-"To provide a simple and efficient digital solution that empowers Self Help "
-"Groups to manage their financial and operational activities effectively."
-msgstr ""
-"ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କୁ ସେମାନଙ୍କର ଅର୍ଥନୀତିକ ଏବଂ ପରିଚାଳନା କାର୍ଯ୍ୟକଳାପକୁ କାର୍ଯ୍ୟକ୍ଷମ ଭାବେ "
-"ପରିଚାଳନା କରିବା ପାଇଁ ସହଜ ଏବଂ କାର୍ଯ୍ୟକ୍ଷମ ଡିଜିଟାଲ ସମାଧାନ ପ୍ରଦାନ କରିବା।"
 
-#: .\main\templates\about.html:129
-msgid "Our Vision"
-msgstr "ଆମର ଦୃଷ୍ଟିକୋଣ"
-
-#: .\main\templates\about.html:132
-msgid ""
-"To build a transparent, reliable, and user-friendly system that supports the "
-"growth and sustainability of Self Help Groups."
-msgstr ""
-"ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କର ବିକାଶ ଏବଂ ସ୍ଥାୟୀତ୍ୱକୁ ସମର୍ଥନ କରୁଥିବା ପାରଦର୍ଶୀ, ବିଶ୍ୱସନୀୟ ଏବଂ "
-"ବ୍ୟବହାରକାରୀ-ସହଜ ପ୍ରଣାଳୀ ଗଢ଼ି ତିଆରି କରିବା।"
-
-#: .\main\templates\about.html:136
-msgid "Project Information"
-msgstr "ପ୍ରକଳ୍ପ ସୂଚନା"
-
-#: .\main\templates\about.html:139
-msgid ""
-"This project, Sahayika, was developed as part of an academic initiative to "
-"address real-world challenges faced by Self Help Groups."
-msgstr ""
-"ଏହି ପ୍ରକଳ୍ପ Sahayika ଏକ ଶିକ୍ଷାମୂଳକ ପଦକ୍ଷେପର ଅଂଶ ଭାବେ ଉନ୍ନତ ହୋଇଥିଲା, ଯାହା ସ୍ୱୟଂ ସହାୟତା "
-"ଗୋଷ୍ଠୀମାନଙ୍କ ସମ୍ମୁଖୀନ ବାସ୍ତବ ସମସ୍ୟାଗୁଡ଼ିକୁ ସମାଧାନ କରିବାକୁ ଉଦ୍ଦିଷ୍ଟ।"
-
-#: .\main\templates\about.html:143
-msgid "Developed by:"
-msgstr "ଉନ୍ନତ କରିଛନ୍ତି:"
-
-#: .\main\templates\about.html:147
-msgid "Institution:"
-msgstr "ସଂସ୍ଥା:"
-
-#: .\main\templates\about.html:151
-msgid "Year of Development:"
-msgstr "ଉନ୍ନତି ବର୍ଷ:"
-
-#: .\main\templates\about.html:155
-msgid ""
-"The system focuses on improving transparency, efficiency, and accessibility "
-"in managing SHG activities digitally."
-msgstr ""
-"ଏହି ପ୍ରଣାଳୀ SHG କାର୍ଯ୍ୟକଳାପକୁ ଡିଜିଟାଲ ଭାବରେ ପରିଚାଳନା କରିବାରେ ପାରଦର୍ଶିତା, କାର୍ଯ୍ୟକ୍ଷମତା ଏବଂ "
-"ପହଞ୍ଚଗମ୍ୟତା ବୃଦ୍ଧି କରିବାକୁ ଗୁରୁତ୍ୱ ଦେଇଥାଏ।"
-
-#: .\main\templates\about.html:161 .\main\templates\learn_more.html:201
-#: .\main\templates\rti.html:148 .\templates\index.html:225
+#: .\main\templates\about.html:225 .\main\templates\learn_more.html:263
+#: .\main\templates\rti.html:207 .\templates\index.html:224
 msgid "Register Now"
 msgstr "ଏବେ ନିବନ୍ଧନ କରନ୍ତୁ"
 
-#: .\main\templates\about.html:165 .\main\templates\learn_more.html:205
+#: .\main\templates\about.html:229 .\main\templates\learn_more.html:267
 msgid ""
 "To start using the system, please create an account. After registration, you "
 "will be able to access all features of the platform."
 msgstr "ସିଷ୍ଟମ ବ୍ୟବହାର ପାଇଁ ପ୍ରଥମେ ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ।"
 
-#: .\main\templates\add_collection.html:55 .\main\templates\add_loan.html:54
-#: .\main\templates\add_member.html:54 .\main\templates\add_project.html:56
-#: .\main\templates\loan_details.html:82
-#: .\main\templates\meeting_entry.html:57 .\main\templates\member_list.html:82
-#: .\main\templates\monthly_collection.html:56
-#: .\main\templates\project_list.html:56
-msgid "Hello,"
-msgstr "ନମସ୍କାର,"
-
-#: .\main\templates\add_collection.html:63 .\main\templates\dashboard.html:147
-msgid "Add Collection"
-msgstr "ସଂଗ୍ରହ ଯୋଗ କରନ୍ତୁ"
-
-#: .\main\templates\add_collection.html:70 .\main\templates\add_loan.html:79
-#: .\main\templates\loan_details.html:106
-msgid "Select Member"
-msgstr "ସଦସ୍ୟ ବାଛନ୍ତୁ"
-
-#: .\main\templates\add_collection.html:83
-msgid "Monthly Saving"
-msgstr "ମାସିକ ସଞ୍ଚୟ"
-
-#: .\main\templates\add_collection.html:88 .\main\templates\dashboard.html:255
-msgid "EMI Paid"
-msgstr "EMI ଦେୟ"
-
-#: .\main\templates\add_collection.html:94
-msgid "Save Collection"
-msgstr "ସଂଗ୍ରହ ସେଭ୍ କରନ୍ତୁ"
-
-#: .\main\templates\add_collection.html:98
-msgid "Back"
-msgstr "ପଛକୁ ଯାଆନ୍ତୁ"
-
-#: .\main\templates\add_loan.html:63 .\main\templates\add_loan.html:109
-#: .\main\templates\dashboard.html:146
-msgid "Add Loan"
-msgstr "ଋଣ ଯୋଗ କରନ୍ତୁ"
-
-#: .\main\templates\add_loan.html:71
-msgid "Loan Type"
-msgstr "ଋଣ ପ୍ରକାର"
-
-#: .\main\templates\add_loan.html:73 .\main\templates\loan_details.html:96
-msgid "Group Loan"
-msgstr "ଗୋଷ୍ଠୀ ଋଣ"
-
-#: .\main\templates\add_loan.html:74 .\main\templates\loan_details.html:98
-msgid "Personal Loan"
-msgstr "ବ୍ୟକ୍ତିଗତ ଋଣ"
-
-#: .\main\templates\add_loan.html:88
-msgid "Loan Amount"
-msgstr "ଋଣ ରାଶି"
-
-#: .\main\templates\add_loan.html:91
-msgid "Paid Amount"
-msgstr "ଦେୟ ରାଶି"
-
-#: .\main\templates\add_loan.html:94
-msgid "Remaining Amount"
-msgstr "ଅବଶିଷ୍ଟ ରାଶି"
-
-#: .\main\templates\add_loan.html:97
-msgid "Total Installment"
-msgstr "ମୋଟ କିଷ୍ତି"
-
-#: .\main\templates\add_loan.html:100
-msgid "SI Rate"
-msgstr "ସୁଦ ହାର"
-
-#: .\main\templates\add_loan.html:103
-msgid "Subsidy"
-msgstr "ସହାୟତା ରାଶି"
-
-#: .\main\templates\add_loan.html:106
-msgid "Date"
-msgstr "ତାରିଖ"
-
-#: .\main\templates\add_member.html:61 .\main\templates\dashboard.html:145
-msgid "Add Member"
-msgstr "ସଦସ୍ୟ ଯୋଗ କରନ୍ତୁ"
-
-#: .\main\templates\add_member.html:71 .\main\templates\register.html:149
-msgid "Aadhaar Number"
-msgstr "ଆଧାର ସଂଖ୍ୟା"
-
-#: .\main\templates\add_member.html:77 .\main\templates\register.html:156
-msgid "Aadhaar Photo"
-msgstr "ଆଧାର ଫଟୋ"
-
-#: .\main\templates\add_member.html:83 .\main\templates\register.html:162
-msgid "Profile Photo"
-msgstr "ପ୍ରୋଫାଇଲ୍ ଫଟୋ"
-
-#: .\main\templates\add_member.html:88 .\main\templates\member_list.html:141
-#: .\main\templates\register.html:168
-msgid "Date of Birth"
-msgstr " ଜନ୍ମ ତାରିଖ"
-
-#: .\main\templates\add_member.html:96 .\main\templates\add_project.html:82
-#: .\main\templates\meeting_entry.html:94
-msgid "Save"
-msgstr "ସେଭ୍ କରନ୍ତୁ"
-
-#: .\main\templates\add_project.html:65 .\main\templates\project_list.html:68
-msgid "Add Project"
-msgstr "ପ୍ରକଳ୍ପ ଯୋଗ କରନ୍ତୁ"
-
-#: .\main\templates\add_project.html:69
-msgid "Project Name"
-msgstr "ପ୍ରକଳ୍ପ ନାମ"
-
-#: .\main\templates\add_project.html:72
-msgid "Investment"
-msgstr "ନିବେଶ"
-
-#: .\main\templates\add_project.html:75
-msgid "Profit"
-msgstr "ଲାଭ"
-
-#: .\main\templates\add_project.html:78 .\main\templates\dashboard.html:284
-msgid "Photo"
-msgstr "ଫଟୋ"
-
-#: .\main\templates\contact.html:167 .\templates\index.html:35
-msgid "Contact Us"
-msgstr "ଯୋଗାଯୋଗ କରନ୍ତୁ"
-
-#: .\main\templates\contact.html:180 .\main\templates\dashboard.html:281
-#: .\main\templates\monthly_collection.html:144
-msgid "Phone"
-msgstr "ଫୋନ୍"
-
-#: .\main\templates\contact.html:181 .\main\templates\contact.html:200
-msgid "Email"
-msgstr " ଇମେଲ୍"
-
-#: .\main\templates\contact.html:182
-msgid "Address"
-msgstr "ଠିକଣା"
-
-#: .\main\templates\contact.html:190
-msgid "Your Name"
-msgstr "ଆପଣଙ୍କ ନାମ"
-
-#: .\main\templates\contact.html:195 .\main\templates\login.html:107
-msgid "Phone Number"
-msgstr "ଫୋନ୍ ନମ୍ବର"
-
-#: .\main\templates\contact.html:205
-msgid "Subject"
-msgstr "ବିଷୟ"
-
-#: .\main\templates\contact.html:210 .\main\templates\loan_details.html:125
-msgid "Type"
-msgstr "ପ୍ରକାର"
-
-#: .\main\templates\contact.html:212
-#, fuzzy
-#| msgid "My Complaints"
-msgid "Complaint"
-msgstr "ମୋର ଅଭିଯୋଗ"
-
-#: .\main\templates\contact.html:213 .\main\templates\contact.html:218
-msgid "Message"
-msgstr "ସନ୍ଦେଶ"
-
-#: .\main\templates\contact.html:222
-#, fuzzy
-#| msgid "Send OTP"
-msgid "Send"
-msgstr "OTP ପଠାନ୍ତୁ"
-
-#: .\main\templates\contact.html:229
-msgid "My Submissions"
-msgstr "ମୋର ଆବେଦନ"
-
-#: .\main\templates\contact.html:245
-msgid "Not yet"
-msgstr "ଏପର୍ଯ୍ୟନ୍ତ ନାହିଁ"
-
-#: .\main\templates\contact.html:249
-msgid "No submissions yet"
-msgstr "ଏପର୍ଯ୍ୟନ୍ତ କିଛି ଦାଖଲ ହୋଇନାହିଁ"
-
-#: .\main\templates\dashboard.html:140
+#: .\main\templates\add_loan.html:106 .\main\templates\add_member.html:104
+#: .\main\templates\add_project.html:101 .\main\templates\dashboard.html:140
+#: .\main\templates\loan_details.html:110
+#: .\main\templates\member_list.html:107
+#: .\main\templates\monthly_collection.html:85
+#: .\main\templates\project_list.html:85
 msgid "SHG Panel"
 msgstr "SHG ପ୍ୟାନେଲ୍"
 
-#: .\main\templates\dashboard.html:142
+#: .\main\templates\add_loan.html:108 .\main\templates\add_member.html:106
+#: .\main\templates\add_project.html:103 .\main\templates\dashboard.html:142
+#: .\main\templates\loan_details.html:112
+#: .\main\templates\member_list.html:109
+#: .\main\templates\monthly_collection.html:87
+#: .\main\templates\project_list.html:87
 msgid "Dashboard"
 msgstr "ଡ୍ୟାସବୋର୍ଡ"
 
-#: .\main\templates\dashboard.html:144 .\main\templates\loan_details.html:126
+#: .\main\templates\add_loan.html:110 .\main\templates\add_member.html:108
+#: .\main\templates\add_project.html:105 .\main\templates\dashboard.html:144
+#: .\main\templates\loan_details.html:114
+#: .\main\templates\loan_details.html:183
+#: .\main\templates\member_list.html:111
+#: .\main\templates\monthly_collection.html:89
+#: .\main\templates\project_list.html:89
 msgid "Member"
 msgstr "ସଦସ୍ୟ"
 
-#: .\main\templates\dashboard.html:148
-msgid "Attendance"
-msgstr "ଉପସ୍ଥିତି"
+#: .\main\templates\add_loan.html:111 .\main\templates\add_member.html:109
+#: .\main\templates\add_member.html:123 .\main\templates\add_project.html:106
+#: .\main\templates\dashboard.html:145 .\main\templates\loan_details.html:115
+#: .\main\templates\member_list.html:112
+#: .\main\templates\monthly_collection.html:90
+#: .\main\templates\project_list.html:90
+msgid "Add Member"
+msgstr "ସଦସ୍ୟ ଯୋଗ କରନ୍ତୁ"
 
-#: .\main\templates\dashboard.html:151
-#: .\main\templates\monthly_collection.html:64 .\templates\index.html:159
+#: .\main\templates\add_loan.html:112 .\main\templates\add_loan.html:125
+#: .\main\templates\add_loan.html:208 .\main\templates\add_member.html:110
+#: .\main\templates\add_project.html:107 .\main\templates\dashboard.html:146
+#: .\main\templates\loan_details.html:116
+#: .\main\templates\member_list.html:113
+#: .\main\templates\monthly_collection.html:91
+#: .\main\templates\project_list.html:91
+msgid "Add Loan"
+msgstr "ଋଣ ଯୋଗ କରନ୍ତୁ"
+
+#: .\main\templates\add_loan.html:114 .\main\templates\add_member.html:112
+#: .\main\templates\add_project.html:109 .\main\templates\dashboard.html:150
+#: .\main\templates\loan_details.html:118
+#: .\main\templates\member_list.html:115
+#: .\main\templates\monthly_collection.html:93
+#: .\main\templates\monthly_collection.html:102
+#: .\main\templates\project_list.html:93 .\templates\index.html:158
 msgid "Monthly Collection"
 msgstr "ମାସିକ ସଂଗ୍ରହ"
 
-#: .\main\templates\dashboard.html:152 .\main\templates\learn_more.html:182
-#: .\templates\index.html:167
+#: .\main\templates\add_loan.html:115 .\main\templates\add_member.html:113
+#: .\main\templates\add_project.html:110 .\main\templates\dashboard.html:151
+#: .\main\templates\learn_more.html:244 .\main\templates\loan_details.html:119
+#: .\main\templates\member_list.html:116
+#: .\main\templates\monthly_collection.html:94
+#: .\main\templates\project_list.html:94 .\templates\index.html:166
 msgid "Loan Tracking"
 msgstr "ଋଣ ଟ୍ରାକିଂ"
 
-#: .\main\templates\dashboard.html:153 .\templates\index.html:175
+#: .\main\templates\add_loan.html:116 .\main\templates\add_member.html:114
+#: .\main\templates\add_project.html:111 .\main\templates\dashboard.html:152
+#: .\main\templates\loan_details.html:120
+#: .\main\templates\member_list.html:117
+#: .\main\templates\monthly_collection.html:95
+#: .\main\templates\project_list.html:95 .\templates\index.html:174
 msgid "Project Management"
 msgstr "ପ୍ରକଳ୍ପ ପରିଚାଳନା"
 
-#: .\main\templates\dashboard.html:154 .\main\templates\loan_details.html:83
-#: .\main\templates\monthly_collection.html:57
-#: .\main\templates\project_list.html:57
+#: .\main\templates\add_loan.html:117 .\main\templates\add_member.html:115
+#: .\main\templates\add_project.html:112 .\main\templates\dashboard.html:153
+#: .\main\templates\loan_details.html:121
+#: .\main\templates\member_list.html:118
+#: .\main\templates\monthly_collection.html:96
+#: .\main\templates\project_list.html:96
 msgid "Logout"
 msgstr "ଲଗଆଉଟ୍"
 
-#: .\main\templates\dashboard.html:159 .\main\templates\login.html:96
+#: .\main\templates\add_loan.html:131 .\main\templates\loan_details.html:185
+msgid "Loan Type"
+msgstr "ଋଣ ପ୍ରକାର"
+
+#: .\main\templates\add_loan.html:136 .\main\templates\loan_details.html:153
+#: .\main\templates\loan_details.html:185
+msgid "Group Loan"
+msgstr "ଗୋଷ୍ଠୀ ଋଣ"
+
+#: .\main\templates\add_loan.html:141 .\main\templates\loan_details.html:155
+msgid "Personal Loan"
+msgstr "ବ୍ୟକ୍ତିଗତ ଋଣ"
+
+#: .\main\templates\add_loan.html:148 .\main\templates\loan_details.html:163
+msgid "Select Member"
+msgstr "ସଦସ୍ୟ ବାଛନ୍ତୁ"
+
+#: .\main\templates\add_loan.html:152
+#, fuzzy
+#| msgid "Select Member"
+msgid "-- Select Member --"
+msgstr "ସଦସ୍ୟ ବାଛନ୍ତୁ"
+
+#: .\main\templates\add_loan.html:164
+msgid "Loan Amount"
+msgstr "ଋଣ ରାଶି"
+
+#: .\main\templates\add_loan.html:169
+msgid "Paid Amount"
+msgstr "ଦେୟ ରାଶି"
+
+#: .\main\templates\add_loan.html:174
+msgid "Remaining Amount"
+msgstr "ଅବଶିଷ୍ଟ ରାଶି"
+
+
+#: .\main\templates\add_loan.html:186
+#, fuzzy, python-format
+#| msgid "SI Rate"
+msgid "SI Rate (%%)"
+msgstr "ସୁଦ ହାର"
+
+#: .\main\templates\add_loan.html:206
+#, fuzzy
+#| msgid "Update"
+msgid "Update Loan"
+msgstr "ଅଦ୍ୟତନ କରନ୍ତୁ"
+
+#: .\main\templates\add_member.html:133 .\main\templates\register.html:212
+msgid "Aadhaar Number"
+msgstr "ଆଧାର ସଂଖ୍ୟା"
+
+#: .\main\templates\add_member.html:139 .\main\templates\register.html:219
+msgid "Aadhaar Photo"
+msgstr "ଆଧାର ଫଟୋ"
+
+#: .\main\templates\add_member.html:145 .\main\templates\register.html:225
+msgid "Profile Photo"
+msgstr "ପ୍ରୋଫାଇଲ୍ ଫଟୋ"
+
+#: .\main\templates\add_member.html:150 .\main\templates\member_list.html:176
+#: .\main\templates\register.html:231
+msgid "Date of Birth"
+msgstr " ଜନ୍ମ ତାରିଖ"
+
+#: .\main\templates\add_member.html:158 .\main\templates\add_project.html:137
+msgid "Save"
+msgstr "ସେଭ୍ କରନ୍ତୁ"
+
+#: .\main\templates\add_project.html:120
+#: .\main\templates\project_list.html:107
+msgid "Add Project"
+msgstr "ପ୍ରକଳ୍ପ ଯୋଗ କରନ୍ତୁ"
+
+#: .\main\templates\add_project.html:124
+msgid "Project Name"
+msgstr "ପ୍ରକଳ୍ପ ନାମ"
+
+#: .\main\templates\add_project.html:127
+msgid "Investment"
+msgstr "ନିବେଶ"
+
+#: .\main\templates\add_project.html:130
+msgid "Profit"
+msgstr "ଲାଭ"
+
+#: .\main\templates\add_project.html:133 .\main\templates\dashboard.html:316
+msgid "Photo"
+msgstr "ଫଟୋ"
+
+#: .\main\templates\dashboard.html:158 .\main\templates\login.html:159
 msgid "Welcome"
 msgstr "ସ୍ୱାଗତ"
 
-#: .\main\templates\dashboard.html:160
+#: .\main\templates\dashboard.html:159
 #, fuzzy
 #| msgid "Managing SHG Group"
 msgid "Managing SHG Group:"
 msgstr "ପରିଚାଳିତ SHG ଗୋଷ୍ଠୀ"
 
-#: .\main\templates\dashboard.html:166
+#: .\main\templates\dashboard.html:193
 msgid "Total Members"
 msgstr "ମୋଟ ସଦସ୍ୟ"
 
-#: .\main\templates\dashboard.html:172
+#: .\main\templates\dashboard.html:199
 msgid "Total Savings"
 msgstr "ମୋଟ ସଞ୍ଚୟ"
 
-#: .\main\templates\dashboard.html:178
-msgid "Remaining Loans"
+#: .\main\templates\dashboard.html:205
+ msgid "Remaining Loans"
 msgstr "ବକେୟ ଋଣ"
 
-#: .\main\templates\dashboard.html:184
-msgid "Paid Loans"
-msgstr "ଦେୟ ଋଣ"
+#: .\main\templates\dashboard.html:221
+ msgid "Group Loan Overview"
+msgstr "ଗୋଷ୍ଠୀ ଋଣ ସାରାଂଶ"
 
-#: .\main\templates\dashboard.html:193
-msgid "Total Loan"
-msgstr "ମୋଟ ଋଣ"
 
-#: .\main\templates\dashboard.html:199
-msgid "Active Loans"
-msgstr "ଚାଲୁଥିବା ଋଣ"
+#: .\main\templates\dashboard.html:236
+#, fuzzy
+#| msgid "Monthly Collection"
+msgid "Current Monthly Collection"
+msgstr "ମାସିକ ସଂଗ୍ରହ"
 
-#: .\main\templates\dashboard.html:206
-msgid "Total Monthly Collection"
-msgstr "ମୋଟ ମାସିକ ସଂଗ୍ରହ"
+#: .\main\templates\dashboard.html:243
+ msgid "Personal Loans Cleared"
+msgstr "ନିଜସ୍ୱ ଋଣ ଶୋଧ"
 
-#: .\main\templates\dashboard.html:213
-msgid "Loan Repayment Rate"
-msgstr "ଋଣ ଶୋଧ ହାର"
-
-#: .\main\templates\dashboard.html:225
+#: .\main\templates\dashboard.html:255
 msgid "Monthly Collection Status"
 msgstr "ମାସିକ ସଂଗ୍ରହ ସ୍ଥିତି"
 
-#: .\main\templates\dashboard.html:229
+#: .\main\templates\dashboard.html:259
 msgid "Paid Members"
 msgstr "ଦେୟ ସଦସ୍ୟମାନେ"
 
-#: .\main\templates\dashboard.html:237
+#: .\main\templates\dashboard.html:267
 msgid "Pending Members"
 msgstr "ବକେୟ ସଦସ୍ୟମାନେ"
 
-#: .\main\templates\dashboard.html:250
+#: .\main\templates\dashboard.html:280
 msgid "EMI Paid Status"
 msgstr "EMI ଦେୟ ସ୍ଥିତି"
 
-#: .\main\templates\dashboard.html:262
+#: .\main\templates\dashboard.html:285
+msgid "EMI Paid"
+msgstr "EMI ଦେୟ"
+
+#: .\main\templates\dashboard.html:292
 msgid "EMI Pending"
 msgstr "EMI ବକେୟ"
 
-#: .\main\templates\dashboard.html:275
+#: .\main\templates\dashboard.html:305
 msgid "Group Members"
 msgstr "ଗୋଷ୍ଠୀ ସଦସ୍ୟ"
 
-#: .\main\templates\dashboard.html:279
-#: .\main\templates\monthly_collection.html:143
+#: .\main\templates\dashboard.html:311
+#: .\main\templates\monthly_collection.html:238
 msgid "Name"
 msgstr "ନାମ"
 
-#: .\main\templates\dashboard.html:280 .\main\templates\register.html:110
+#: .\main\templates\dashboard.html:312 .\main\templates\register.html:173
 msgid "Role"
 msgstr "ଭୂମିକା"
 
-#: .\main\templates\dashboard.html:282 .\main\templates\member_list.html:140
+#: .\main\templates\dashboard.html:313
+msgid "Phone"
+msgstr "ଫୋନ୍"
+
+#: .\main\templates\dashboard.html:314 .\main\templates\member_list.html:175
 #, fuzzy
 #| msgid "Aadhaar No"
 msgid "Aadhaar No"
 msgstr "ଆଧାର ସଂଖ୍ୟା"
 
-#: .\main\templates\dashboard.html:283
+#: .\main\templates\dashboard.html:315
 #, fuzzy
 #| msgid "Aadhaar photo"
 msgid "Aadhaar photo"
 msgstr "ଆଧାର ଫଟୋ"
 
-#: .\main\templates\dashboard.html:285 .\main\templates\dashboard.html:312
-#: .\main\templates\project_list.html:88
+#: .\main\templates\dashboard.html:317 .\main\templates\dashboard.html:344
+#: .\main\templates\loan_details.html:234
+#: .\main\templates\project_list.html:127
 msgid "Delete"
 msgstr "ହଟାନ୍ତୁ"
 
-#: .\main\templates\dashboard.html:323
+#: .\main\templates\dashboard.html:357
 msgid "Group Financial Health"
 msgstr "ଗୋଷ୍ଠୀର ଆର୍ଥିକ ସ୍ୱାସ୍ଥ୍ୟ"
 
-#: .\main\templates\dashboard.html:329
+#: .\main\templates\dashboard.html:363
 msgid "Savings"
 msgstr "ସଞ୍ଚୟ"
 
-#: .\main\templates\dashboard.html:335
+#: .\main\templates\dashboard.html:369
 msgid "Loans"
 msgstr "ଋଣଗୁଡିକ"
 
-#: .\main\templates\forgot_password.html:13
-#: .\main\templates\forgot_password.html:27
+#: .\main\templates\forgot_password.html:80
+#: .\main\templates\forgot_password.html:94
 msgid "Reset Password"
 msgstr "ପାସୱାର୍ଡ ପୁନଃସେଟ୍ କରନ୍ତୁ"
 
-#: .\main\templates\forgot_password.html:18
+#: .\main\templates\forgot_password.html:85
 #, fuzzy
 #| msgid "Phone"
 msgid "Phone:"
 msgstr "ଫୋନ୍"
 
-#: .\main\templates\forgot_password.html:21
+#: .\main\templates\forgot_password.html:88
 #, fuzzy
 #| msgid "SHG Name"
 msgid "SHG Name:"
 msgstr "SHG ନାମ"
 
-#: .\main\templates\forgot_password.html:24
+#: .\main\templates\forgot_password.html:91
 #, fuzzy
 #| msgid "New Password"
 msgid "New Password:"
 msgstr "ନୂତନ ପାସୱାର୍ଡ"
 
-#: .\main\templates\learn_more.html:7 .\templates\index.html:72
-msgid "Learn More"
-msgstr "ଅଧିକ ଜାଣନ୍ତୁ"
-
-#: .\main\templates\learn_more.html:117
+#: .\main\templates\learn_more.html:179
 msgid "Sahayika System"
 msgstr "ସହାୟିକା ସିଷ୍ଟମ"
 
-#: .\main\templates\learn_more.html:121
+#: .\main\templates\learn_more.html:183
 msgid ""
 "Sahayika is a digital platform developed to simplify the management of Self "
 "Help Groups (SHGs). It replaces traditional manual record-keeping methods "
@@ -491,7 +391,7 @@ msgstr ""
 "ପାଇଁ ଉନ୍ନତ କରାଯାଇଛି। ଏହା ପାରମ୍ପରିକ ହସ୍ତଲିଖିତ ରେକର୍ଡ ପ୍ରଣାଳୀକୁ ପରିବର୍ତ୍ତନ କରି ଏକ ସଂଗଠିତ ଏବଂ "
 "କାର୍ଯ୍ୟକ୍ଷମ ପ୍ରଣାଳୀ ପ୍ରଦାନ କରେ।"
 
-#: .\main\templates\learn_more.html:126
+#: .\main\templates\learn_more.html:188
 msgid ""
 "The main purpose of this system is to improve transparency, reduce errors, "
 "and save time in handling group activities such as savings collection, loan "
@@ -501,11 +401,11 @@ msgstr ""
 "ଏହି ପ୍ରଣାଳୀର ପ୍ରଧାନ ଉଦ୍ଦେଶ୍ୟ ହେଉଛି ପ୍ରକାଶ୍ୟତା ବଢ଼ାଇବା, ତ୍ରୁଟି କମେଇବା ଏବଂ ସଂଚୟ, ଋଣ ବଣ୍ଟନ ଓ "
 "ଫେରତ ଟ୍ରାକିଂ ପରି କାର୍ଯ୍ୟଗୁଡ଼ିକୁ ସହଜ କରିବା।"
 
-#: .\main\templates\learn_more.html:130
+#: .\main\templates\learn_more.html:192
 msgid "How to Use the System"
 msgstr "ସିଷ୍ଟମ୍ କିପରି ବ୍ୟବହାର କରିବେ"
 
-#: .\main\templates\learn_more.html:133
+#: .\main\templates\learn_more.html:195
 msgid ""
 "Users can log in to the system using their credentials. Based on their role, "
 "such as President or Member, they can perform different actions. The "
@@ -515,18 +415,18 @@ msgstr ""
 "ବ୍ୟବହାରକାରୀମାନେ ନିଜ ଲଗଇନ ସୂଚନା ଦ୍ୱାରା ସିଷ୍ଟମ୍‌କୁ ପ୍ରବେଶ କରିପାରିବେ। ପଦବୀ ଅନୁଯାୟୀ ସେମାନେ "
 "ଭିନ୍ନ କାମ କରିପାରିବେ।"
 
-#: .\main\templates\learn_more.html:137
+#: .\main\templates\learn_more.html:199
 msgid ""
 "To view past records, users can select a specific month and year in the "
 "monthly collection and loan tracking sections. This allows easy access to "
 "historical data without confusion."
 msgstr "ପୁରୁଣା ରେକର୍ଡ ଦେଖିବା ପାଇଁ ବ୍ୟବହାରକାରୀମାନେ ମାସ ଓ ବର୍ଷ ବାଛିପାରିବେ।"
 
-#: .\main\templates\learn_more.html:141
+#: .\main\templates\learn_more.html:203
 msgid "Rules and Guidelines"
 msgstr "ନିୟମ ଓ ନିର୍ଦ୍ଦେଶନାମା"
 
-#: .\main\templates\learn_more.html:144
+#: .\main\templates\learn_more.html:206
 msgid ""
 "All entries must be recorded accurately at the time of the meeting to "
 "maintain correct financial data. Only authorized users should be allowed to "
@@ -535,7 +435,7 @@ msgid ""
 msgstr ""
 "ସମସ୍ତ ତଥ୍ୟ ସଠିକ ଭାବେ ରେକର୍ଡ କରିବା ଆବଶ୍ୟକ। କେବଳ ଅଧିକୃତ ବ୍ୟକ୍ତିମାନେ ତଥ୍ୟ ପରିବର୍ତ୍ତନ କରିପାରିବେ।"
 
-#: .\main\templates\learn_more.html:148
+#: .\main\templates\learn_more.html:210
 msgid ""
 "Loan repayments and savings contributions should be updated monthly. Any "
 "delay or incorrect entry may affect the overall group financial report. "
@@ -543,312 +443,260 @@ msgid ""
 "members."
 msgstr "ଋଣ ଫେରତ ଓ ସଂଚୟ ପ୍ରତିମାସ ଅଦ୍ୟତନ କରିବା ଆବଶ୍ୟକ।"
 
-#: .\main\templates\learn_more.html:152
+#: .\main\templates\learn_more.html:214
 msgid "Benefits of Digital System"
 msgstr "ଡିଜିଟାଲ ସିଷ୍ଟମର ଲାଭ"
 
-#: .\main\templates\learn_more.html:155
+#: .\main\templates\learn_more.html:217
 msgid ""
 "Using a digital system like Sahayika reduces dependency on paper records, "
 "minimizing the risk of data loss or damage. It also provides faster access "
 "to information, making decision-making easier for the group."
 msgstr "ଡିଜିଟାଲ ସିଷ୍ଟମ ବ୍ୟବହାର କରିଲେ କାଗଜ ଉପରେ ନିର୍ଭରଶୀଳତା କମେ।"
 
-#: .\main\templates\learn_more.html:159
+#: .\main\templates\learn_more.html:221
 msgid ""
 "The system improves accuracy in calculations, automatically tracks totals, "
 "and helps monitor loan repayments efficiently. It also enhances "
 "transparency, as every member can view their own financial status clearly."
 msgstr "ଏହି ସିଷ୍ଟମ ଗଣନାର ସଠିକତା ବଢ଼ାଏ ଓ ସମସ୍ତ ତଥ୍ୟ ସହଜରେ ଦେଖାଯାଏ।"
 
-#: .\main\templates\learn_more.html:163
+#: .\main\templates\learn_more.html:225
 msgid "Conclusion"
 msgstr "ନିଷ୍କର୍ଷ"
 
-#: .\main\templates\learn_more.html:166
+#: .\main\templates\learn_more.html:228
 msgid ""
 "Sahayika is a reliable and user-friendly solution for managing SHG "
 "activities digitally. By adopting this system, groups can ensure better "
 "organization, improved financial control, and long-term sustainability."
 msgstr "ସହାୟିକା ହେଉଛି SHG ପରିଚାଳନା ପାଇଁ ଏକ ବିଶ୍ୱସନୀୟ ଓ ସହଜ ସମାଧାନ।"
 
-#: .\main\templates\learn_more.html:174 .\templates\index.html:151
+#: .\main\templates\learn_more.html:236 .\templates\index.html:150
 msgid "Member Management"
 msgstr "ସଦସ୍ୟ ପରିଚାଳନା"
 
-#: .\main\templates\learn_more.html:175
+#: .\main\templates\learn_more.html:237
 msgid "Easily add and manage all SHG members in one place."
 msgstr "ସମସ୍ତ ସଦସ୍ୟଙ୍କୁ ସହଜରେ ପରିଚାଳନା କରନ୍ତୁ।"
 
-#: .\main\templates\learn_more.html:183
+#: .\main\templates\learn_more.html:245
 msgid "Track loan distribution, EMI payments, and balances."
 msgstr "ଋଣ ଓ EMI ଟ୍ରାକ କରନ୍ତୁ।"
 
-#: .\main\templates\learn_more.html:190
+#: .\main\templates\learn_more.html:252
 msgid "Reports & Insights"
 msgstr "ରିପୋର୍ଟ ଓ ବିଶ୍ଳେଷଣ"
 
-#: .\main\templates\learn_more.html:191
+#: .\main\templates\learn_more.html:253
 msgid "View monthly and yearly reports for better decisions."
 msgstr "ମାସିକ ଓ ବାର୍ଷିକ ରିପୋର୍ଟ ଦେଖନ୍ତୁ।"
 
-#: .\main\templates\loan_details.html:130
+#: .\main\templates\loan_details.html:90
+#: .\main\templates\monthly_collection.html:65
+#: .\main\templates\project_list.html:65
+msgid "Hello,"
+msgstr "ନମସ୍କାର,"
+
+#: .\main\templates\loan_details.html:190
 msgid "Amount"
 msgstr "ରାଶି"
 
-#: .\main\templates\loan_details.html:131
-msgid "Paid EMI"
-msgstr "ଦେୟ EMI"
 
-#: .\main\templates\loan_details.html:135
+#: .\main\templates\loan_details.html:192
 msgid "Remaining"
 msgstr "ଅବଶିଷ୍ଟ"
 
-#: .\main\templates\loan_details.html:136
-msgid "EMI Date"
-msgstr "EMI ତାରିଖ"
+#: .\main\templates\loan_details.html:195
+msgid "SI Rate"
+msgstr "ସୁଦ ହାର"
 
-#: .\main\templates\loan_details.html:175
-msgid "No loans found"
-msgstr "କୌଣସି ଋଣ ମିଳିଲା ନାହିଁ"
 
-#: .\main\templates\login.html:110
-msgid "SHG Group Name"
-msgstr "SHG ଗୋଷ୍ଠୀ ନାମ"
-
-#: .\main\templates\login.html:114
-msgid "Select Role"
-msgstr "ଭୂମିକା ବାଛନ୍ତୁ"
-
-#: .\main\templates\login.html:119
-msgid "Password"
-msgstr "ପାସୱାର୍ଡ"
-
-#: .\main\templates\login.html:122 .\main\templates\register.html:189
-#: .\templates\index.html:71
-msgid "Login"
-msgstr "ଲଗଇନ୍"
-
-#: .\main\templates\login.html:125
-msgid "Forgot password?"
-msgstr "ପାସୱାର୍ଡ ଭୁଲିଗଲେ କି?"
-
-#: .\main\templates\login.html:130
-msgid "Don't have an account?"
-msgstr "ଆପଣଙ୍କର ଖାତା ନାହିଁ କି?"
-
-#: .\main\templates\login.html:131
-msgid "Register here"
-msgstr "ଏଠାରେ ନିବନ୍ଧନ କରନ୍ତୁ"
-
-#: .\main\templates\meeting_entry.html:66
-msgid "Monthly SHG Meeting"
-msgstr "ମାସିକ SHG ବୈଠକ"
-
-#: .\main\templates\meeting_entry.html:71
+#: .\main\templates\loan_details.html:202
 #, fuzzy
-#| msgid "Member"
-msgid "Member:"
-msgstr "ସଦସ୍ୟ"
+#| msgid "Personal Loans Cleared"
+msgid "Loan Cleared"
+msgstr "ନିଜସ୍ୱ ଋଣ ଶୋଧ"
 
-#: .\main\templates\meeting_entry.html:80
+#: .\main\templates\loan_details.html:210
 #, fuzzy
-#| msgid "Date"
-msgid "Date:"
-msgstr "ତାରିଖ"
+#| msgid "Mark as Left"
+msgid "Mark as Cleared"
+msgstr "ସଦସ୍ୟ ଛାଡ଼ିଛନ୍ତି"
 
-#: .\main\templates\meeting_entry.html:83
-#, fuzzy
-#| msgid "Attendance"
-msgid "Attendance:"
-msgstr "ଉପସ୍ଥିତି"
-
-#: .\main\templates\meeting_entry.html:86
-msgid "Present"
-msgstr "ଉପସ୍ଥିତ"
-
-#: .\main\templates\meeting_entry.html:87
-msgid "Absent"
-msgstr "ଅନୁପସ୍ଥିତ"
-
-#: .\main\templates\meeting_entry.html:91
-msgid "Note:"
-msgstr "ଟୀକା:"
-
-#: .\main\templates\member_list.html:137
-msgid "Details"
-msgstr " ବିବରଣୀ"
-
-#: .\main\templates\member_list.html:139 .\main\templates\register.html:173
-msgid "Phone number"
-msgstr "ଫୋନ୍ ନମ୍ବର"
-
-#: .\main\templates\member_list.html:142
-msgid "Age"
-msgstr "ବୟସ"
-
-#: .\main\templates\member_list.html:143
-msgid "Joined"
-msgstr "ଯୋଗଦାନ"
-
-#: .\main\templates\member_list.html:146
-msgid "Left Date"
-msgstr "ପ୍ରସ୍ଥାନ ତାରିଖ"
-
-
-#: .\main\templates\member_list.html:154 .\main\templates\project_list.html:87
+#: .\main\templates\loan_details.html:223
+#: .\main\templates\member_list.html:189
+#: .\main\templates\project_list.html:126
 msgid "Edit"
 msgstr "ସମ୍ପାଦନ କରନ୍ତୁ"
 
+#: .\main\templates\loan_details.html:247
+msgid "No loans found"
+msgstr "କୌଣସି ଋଣ ମିଳିଲା ନାହିଁ"
+
+#: .\main\templates\login.html:170
+msgid "Phone Number"
+msgstr "ଫୋନ୍ ନମ୍ବର"
+
+#: .\main\templates\login.html:173
+msgid "SHG Group Name"
+msgstr "SHG ଗୋଷ୍ଠୀ ନାମ"
+
+#: .\main\templates\login.html:177
+msgid "Select Role"
+msgstr "ଭୂମିକା ବାଛନ୍ତୁ"
+
+#: .\main\templates\login.html:182
+msgid "Password"
+msgstr "ପାସୱାର୍ଡ"
+
+#: .\main\templates\login.html:185 .\main\templates\register.html:252
+#: .\templates\index.html:70
+msgid "Login"
+msgstr "ଲଗଇନ୍"
+
+#: .\main\templates\login.html:188
+msgid "Forgot password?"
+msgstr "ପାସୱାର୍ଡ ଭୁଲିଗଲେ କି?"
+
+#: .\main\templates\login.html:193
+msgid "Don't have an account?"
+msgstr "ଆପଣଙ୍କର ଖାତା ନାହିଁ କି?"
+
+#: .\main\templates\login.html:194
+msgid "Register here"
+msgstr "ଏଠାରେ ନିବନ୍ଧନ କରନ୍ତୁ"
+
 #: .\main\templates\member_list.html:172
+msgid "Details"
+msgstr " ବିବରଣୀ"
+
+#: .\main\templates\member_list.html:174 .\main\templates\register.html:236
+msgid "Phone number"
+msgstr "ଫୋନ୍ ନମ୍ବର"
+
+#: .\main\templates\member_list.html:177
+msgid "Age"
+msgstr "ବୟସ"
+
+#: .\main\templates\member_list.html:178
+msgid "Joined"
+msgstr "ଯୋଗଦାନ"
+
+#: .\main\templates\member_list.html:181
+msgid "Left Date"
+msgstr "ପ୍ରସ୍ଥାନ ତାରିଖ"
+
+#: .\main\templates\member_list.html:207
 msgid "Update"
 msgstr "ଅଦ୍ୟତନ କରନ୍ତୁ"
 
-#: .\main\templates\member_list.html:185
+#: .\main\templates\member_list.html:220
 msgid "Mark as Left"
 msgstr "ସଦସ୍ୟ ଛାଡ଼ିଛନ୍ତି"
 
-#: .\main\templates\monthly_collection.html:69
+#: .\main\templates\monthly_collection.html:107
 msgid "Month"
 msgstr "ମାସ"
 
-#: .\main\templates\monthly_collection.html:90
+#: .\main\templates\monthly_collection.html:128
 msgid "Year"
 msgstr "ବର୍ଷ"
 
-#: .\main\templates\monthly_collection.html:99
+#: .\main\templates\monthly_collection.html:137
 msgid "View"
 msgstr "ଦେଖନ୍ତୁ"
 
-#: .\main\templates\monthly_collection.html:106
+#: .\main\templates\monthly_collection.html:144
 msgid "Summary Cards"
 msgstr "ସାରାଂଶ କାର୍ଡ"
 
-#: .\main\templates\monthly_collection.html:112
+#: .\main\templates\monthly_collection.html:150
 msgid "Total Monthly Collection: ₹"
 msgstr "ମୋଟ ମାସିକ ସଂଗ୍ରହ: ₹"
 
-#: .\main\templates\monthly_collection.html:118
-#, fuzzy
-#| msgid "Members Paid This Month"
-msgid "Members Paid This Month:"
+#: .\main\templates\monthly_collection.html:156
+ msgid "Members Paid This Month"
 msgstr "ଏହି ମାସରେ ଦେୟ ସଦସ୍ୟମାନେ"
 
-#: .\main\templates\monthly_collection.html:124
-msgid "Personal Loans Taken: ₹"
-msgstr "ନିଜସ୍ୱ ଋଣ ଗ୍ରହଣ: ₹"
-
-#: .\main\templates\monthly_collection.html:130
-#, fuzzy
-#| msgid "Personal Loans Cleared"
-msgid "Personal Loans Cleared:"
-msgstr "ନିଜସ୍ୱ ଋଣ ଶୋଧ"
-
-#: .\main\templates\monthly_collection.html:136
+#: .\main\templates\monthly_collection.html:229
 msgid "Group Members Table"
 msgstr "ଗୋଷ୍ଠୀ ସଦସ୍ୟ ତାଲିକା"
 
-#: .\main\templates\monthly_collection.html:145
+#: .\main\templates\monthly_collection.html:239
 msgid "Total Given"
 msgstr "ମୋଟ ଦିଆଯାଇଥିବା"
 
-#: .\main\templates\monthly_collection.html:146
+#: .\main\templates\monthly_collection.html:240
 msgid "Status"
 msgstr "ସ୍ଥିତି"
 
-#: .\main\templates\monthly_collection.html:147
-msgid "EMI Amount"
-msgstr "EMI ରାଶି"
-
-#: .\main\templates\monthly_collection.html:148
+#: .\main\templates\monthly_collection.html:242
+#: .\main\templates\monthly_collection.html:244
 msgid "EMI Status"
 msgstr "EMI ସ୍ଥିତି"
 
-#: .\main\templates\monthly_collection.html:149
-msgid "Loan Taken"
-msgstr "ଗ୍ରହୀତ ଋଣ"
-
-#: .\main\templates\monthly_collection.html:150
-msgid "Remaining Loan"
-msgstr "ଅବଶିଷ୍ଟ ଋଣ"
-
-#: .\main\templates\monthly_collection.html:151
-msgid "Last Loan Date"
-msgstr "ଶେଷ ଋଣ ତାରିଖ"
-
-#: .\main\templates\monthly_collection.html:186
-msgid "Paid"
-msgstr "ଦେୟ"
-
-#: .\main\templates\monthly_collection.html:188
-msgid "Pending"
-msgstr "ବକେୟ"
-
-#: .\main\templates\monthly_collection.html:208
-msgid "Back to Dashboard"
-msgstr "ଡ୍ୟାସବୋର୍ଡକୁ ଫେରନ୍ତୁ"
-
-#: .\main\templates\project_list.html:63
+#: .\main\templates\project_list.html:102
 msgid "Projects"
 msgstr "ପ୍ରକଳ୍ପଗୁଡିକ"
 
-#: .\main\templates\project_list.html:83
+#: .\main\templates\project_list.html:122
 #, fuzzy
 #| msgid "Investment"
 msgid "Investment:"
 msgstr "ନିବେଶ"
 
-#: .\main\templates\project_list.html:84
+#: .\main\templates\project_list.html:123
 #, fuzzy
 #| msgid "Profit"
 msgid "Profit:"
 msgstr "ଲାଭ"
 
-#: .\main\templates\register.html:86
+#: .\main\templates\register.html:149
 msgid "Create Account"
 msgstr "ଖାତା ସୃଷ୍ଟି କରନ୍ତୁ"
 
-#: .\main\templates\register.html:104
+#: .\main\templates\register.html:167
 msgid "Full Name"
 msgstr "ପୂର୍ଣ୍ଣ ନାମ"
 
-#: .\main\templates\register.html:106
+#: .\main\templates\register.html:169
 msgid "SHG Name"
 msgstr "SHG ନାମ"
 
-#: .\main\templates\register.html:123
+#: .\main\templates\register.html:186
 msgid "District"
 msgstr "ଜିଲ୍ଲା"
 
-#: .\main\templates\register.html:126
+#: .\main\templates\register.html:189
 msgid "Select District"
 msgstr "ଜିଲ୍ଲା ବାଛନ୍ତୁ"
 
-#: .\main\templates\register.html:137
+#: .\main\templates\register.html:200
 msgid "Village"
 msgstr "ଗାଁ"
 
-#: .\main\templates\register.html:140
+#: .\main\templates\register.html:203
 msgid "Select Village"
 msgstr "ଗାଁ ବାଛନ୍ତୁ"
 
-#: .\main\templates\register.html:177
+#: .\main\templates\register.html:240
 msgid "Send OTP"
 msgstr "OTP ପଠାନ୍ତୁ"
 
-#: .\main\templates\register.html:186
+#: .\main\templates\register.html:249
 msgid "Register"
 msgstr "ନିବନ୍ଧନ କରନ୍ତୁ"
 
-#: .\main\templates\register.html:189
+#: .\main\templates\register.html:252
 msgid "Already have account?"
 msgstr "ପୂର୍ବରୁ ଖାତା ଅଛି କି?"
 
-#: .\main\templates\rti.html:105
+#: .\main\templates\rti.html:164
 msgid "Right to Information (RTI)"
 msgstr "ସୂଚନାର ଅଧିକାର (RTI)"
 
-#: .\main\templates\rti.html:109
+#: .\main\templates\rti.html:168
 msgid ""
 "The Right to Information (RTI) Act promotes transparency and accountability "
 "in the functioning of public authorities. It allows citizens to request "
@@ -858,11 +706,11 @@ msgstr ""
 "ଦାୟିତ୍ୱଶୀଳତାକୁ ପ୍ରୋତ୍ସାହିତ କରେ। ଏହା ନାଗରିକମାନଙ୍କୁ ସୂଚନା ଚାହିବାର ଅଧିକାର ଦେଇଥାଏ ଏବଂ ସମୟମତେ "
 "ରେକର୍ଡ ଉପଲବ୍ଧ କରାଯାଏ।"
 
-#: .\main\templates\rti.html:113
+#: .\main\templates\rti.html:172
 msgid "Objective"
 msgstr "ଲକ୍ଷ୍ୟ"
 
-#: .\main\templates\rti.html:115
+#: .\main\templates\rti.html:174
 msgid ""
 "The objective of RTI is to empower citizens, promote transparency, and "
 "reduce corruption by making information accessible."
@@ -870,11 +718,11 @@ msgstr ""
 "RTI ର ଲକ୍ଷ୍ୟ ହେଉଛି ନାଗରିକମାନଙ୍କୁ ସଶକ୍ତ କରିବା, ପାରଦର୍ଶିତା ବଢ଼ାଇବା ଏବଂ ସୂଚନାକୁ ସହଜରେ ଉପଲବ୍ଧ "
 "କରାଇ ଦୁର୍ନୀତି କମାଇବା।"
 
-#: .\main\templates\rti.html:119
+#: .\main\templates\rti.html:178
 msgid "Applicability"
 msgstr "ଲାଗୁହେବା"
 
-#: .\main\templates\rti.html:121
+#: .\main\templates\rti.html:180
 msgid ""
 "RTI applies to government departments and organizations funded or controlled "
 "by the government. This platform follows transparency principles aligned "
@@ -883,31 +731,31 @@ msgstr ""
 "RTI ସରକାରୀ ବିଭାଗ ଏବଂ ସରକାର ଦ୍ୱାରା ପରିଚାଳିତ କିମ୍ବା ଅର୍ଥାୟନ ହେଉଥିବା ସଂସ୍ଥାମାନଙ୍କୁ ଲାଗୁହୁଏ। "
 "ଏହି ପ୍ଲାଟଫର୍ମ RTI ନିୟମାବଳୀ ସହିତ ସମନ୍ୱିତ ପାରଦର୍ଶିତା ନୀତିକୁ ଅନୁସରଣ କରେ।"
 
-#: .\main\templates\rti.html:125
+#: .\main\templates\rti.html:184
 msgid "Information Available"
 msgstr "ଉପଲବ୍ଧ ସୂଚନା"
 
-#: .\main\templates\rti.html:127
+#: .\main\templates\rti.html:186
 msgid "Member details and records"
 msgstr "ସଦସ୍ୟ ସୂଚନା ଏବଂ ରେକର୍ଡ"
 
-#: .\main\templates\rti.html:128
+#: .\main\templates\rti.html:187
 msgid "Loan and repayment details"
 msgstr "ଋଣ ଏବଂ ପ୍ରତିଶୋଧ ବିବରଣୀ"
 
-#: .\main\templates\rti.html:129
+#: .\main\templates\rti.html:188
 msgid "Monthly savings records"
 msgstr "ମାସିକ ସଞ୍ଚୟ ରେକର୍ଡ"
 
-#: .\main\templates\rti.html:130
+#: .\main\templates\rti.html:189
 msgid "Financial transactions and reports"
 msgstr "ଆର୍ଥିକ ଲେନଦେନ ଏବଂ ରିପୋର୍ଟ"
 
-#: .\main\templates\rti.html:134
+#: .\main\templates\rti.html:193
 msgid "How to Request Information"
 msgstr "ସୂଚନା କିପରି ଚାହିବେ"
 
-#: .\main\templates\rti.html:136
+#: .\main\templates\rti.html:195
 msgid ""
 "Users can request information by contacting the administrator or submitting "
 "a formal request through the system."
@@ -915,11 +763,11 @@ msgstr ""
 "ବ୍ୟବହାରକାରୀମାନେ ପ୍ରଶାସକଙ୍କ ସହିତ ସମ୍ପର୍କ କରି କିମ୍ବା ସିଷ୍ଟମ୍ ମାଧ୍ୟମରେ ଆଧିକାରିକ ଅନୁରୋଧ ଦାଖଲ କରି "
 "ସୂଚନା ଚାହିପାରିବେ।"
 
-#: .\main\templates\rti.html:140
+#: .\main\templates\rti.html:199
 msgid "Contact Information"
 msgstr "ସମ୍ପର୍କ ସୂଚନା"
 
-#: .\main\templates\rti.html:142
+#: .\main\templates\rti.html:201
 msgid ""
 "For RTI-related queries, please contact the system administrator or visit "
 "the Contact Us page."
@@ -927,127 +775,320 @@ msgstr ""
 "RTI ସମ୍ପର୍କିତ ପ୍ରଶ୍ନ ପାଇଁ, ଦୟାକରି ସିଷ୍ଟମ୍ ପ୍ରଶାସକଙ୍କ ସହିତ ସମ୍ପର୍କ କରନ୍ତୁ କିମ୍ବା 'Contact Us' "
 "ପୃଷ୍ଠାକୁ ଯାନ୍ତୁ।"
 
-#: .\main\templates\rti.html:152
+#: .\main\templates\rti.html:211
 msgid ""
 "This system ensures transparency and proper record management aligned with "
 "RTI principles."
 msgstr "ଏହି ସିଷ୍ଟମ୍ RTI ନୀତି ସହିତ ସମନ୍ୱିତ ପାରଦର୍ଶିତା ଏବଂ ଠିକ୍ ରେକର୍ଡ ପରିଚାଳନାକୁ ନିଶ୍ଚିତ କରେ।"
 
-#: .\main\views.py:34
+#: .\main\views.py:36
 msgid "Enter a valid 10-digit phone number to send OTP"
 msgstr "OTP ପଠାଇବା ପାଇଁ ଏକ ସଠିକ ୧୦ ଅଙ୍କର ଫୋନ୍ ନମ୍ବର ଦିଅନ୍ତୁ"
 
-#: .\main\views.py:40
+#: .\main\views.py:42
 #, python-brace-format
 msgid "OTP sent to {phone}"
 msgstr "{phone} କୁ OTP ପଠାଯାଇଛି"
 
-#: .\main\views.py:60
+#: .\main\views.py:62
 msgid "All fields including OTP are required"
 msgstr "OTP ସହିତ ସମସ୍ତ ଫିଲ୍ଡ ଆବଶ୍ୟକ"
 
-#: .\main\views.py:64
+#: .\main\views.py:66
 msgid "Enter a valid 10-digit phone number"
 msgstr "ସଠିକ ୧୦ ଅଙ୍କର ଫୋନ୍ ନମ୍ବର ଦିଅନ୍ତୁ"
 
-#: .\main\views.py:75
+#: .\main\views.py:77
 msgid "This SHG group already exists."
 msgstr "ଏହି SHG ଗୋଷ୍ଠୀ ପୂର୍ବରୁ ଅଛି"
 
-#: .\main\views.py:79
+#: .\main\views.py:81
 msgid "This SHG group does not exist. Contact the president."
 msgstr "ଏହି SHG ଗୋଷ୍ଠୀ ନାହିଁ। ସଭାପତିଙ୍କୁ ସମ୍ପର୍କ କରନ୍ତୁ"
 
-#: .\main\views.py:83
+#: .\main\views.py:85
 msgid "This SHG group already has 15 members. No more members allowed."
 msgstr "ଏହି SHG ଗୋଷ୍ଠୀରେ ପୂର୍ବରୁ ୧୫ ଜଣ ସଦସ୍ୟ ଅଛନ୍ତି। ଆଉ ସଦସ୍ୟ ଯୋଗ କରିପାରିବେ ନାହିଁ"
 
-#: .\main\views.py:86
+#: .\main\views.py:88
 msgid "This group already has a president"
 msgstr "ଏହି ଗୋଷ୍ଠୀରେ ପୂର୍ବରୁ ଏକ ସଭାପତି ଅଛନ୍ତି"
 
-#: .\main\views.py:92
+#: .\main\views.py:94
 msgid "Invalid OTP"
 msgstr "ଭୁଲ OTP"
 
-#: .\main\views.py:115
+#: .\main\views.py:117
 msgid "Registered successfully!"
 msgstr "ସଫଳତାର ସହ ନିବନ୍ଧନ ହେଲା"
 
-#: .\main\views.py:148
+#: .\main\views.py:150
 msgid "User not found in this SHG group."
 msgstr "ଏହି SHG ଗୋଷ୍ଠୀରେ ଏହି ବ୍ୟବହାରକାରୀ ମିଳିଲେ ନାହିଁ"
 
-#: .\main\views.py:151 .\main\views.py:161
+#: .\main\views.py:153 .\main\views.py:163
 msgid "Incorrect password."
 msgstr "ଭୁଲ ପାସୱାର୍ଡ"
 
-#: .\main\views.py:156
+#: .\main\views.py:158
 msgid "You are not registered as President."
 msgstr "ଆପଣ ସଭାପତି ଭାବେ ନିବନ୍ଧିତ ନୁହଁନ୍ତି"
 
-#: .\main\views.py:158
+#: .\main\views.py:160
 msgid "You are not registered as Member."
 msgstr "ଆପଣ ସଦସ୍ୟ ଭାବେ ନିବନ୍ଧିତ ନୁହଁନ୍ତି"
 
-#: .\main\views.py:192
+#: .\main\views.py:194
 msgid "Password updated successfully"
 msgstr "ପାସୱାର୍ଡ ସଫଳତାର ସହ ଅପଡେଟ୍ ହେଲା"
 
-#: .\main\views.py:194
+#: .\main\views.py:196
 msgid "User not found"
 msgstr "ଉପଯୋଗକର୍ତ୍ତା ମିଳିଲା ନାହିଁ"
 
-#: .\templates\index.html:32
-msgid "Home"
-msgstr "ମୁଖ୍ୟ ପୃଷ୍ଠା"
-
-#: .\templates\index.html:34
-msgid "RTI"
-msgstr "ଆର୍ଟିଆଇ"
-
-#: .\templates\index.html:183
+#: .\templates\index.html:182
 msgid "Sahayika"
 msgstr "ସହାୟିକା"
 
-#: .\templates\index.html:184
+#: .\templates\index.html:183
 msgid "A self help group management system"
 msgstr "ଏକ ସ୍ୱୟଂ ସାହାଯ୍ୟ ଗୋଷ୍ଠୀ ପରିଚାଳନା ପ୍ରଣାଳୀ"
 
-#: .\templates\index.html:189
+#: .\templates\index.html:188
 msgid "How It Works"
 msgstr "ଏହା କିପରି କାମ କରେ"
 
-#: .\templates\index.html:191
+#: .\templates\index.html:190
 msgid ""
 "Streamline the management of your Self Help Group with these powerful "
 "features:"
 msgstr "ଏହି ଶକ୍ତିଶାଳୀ ବୈଶିଷ୍ଟ୍ୟମାନଙ୍କ ସହ ଆପଣଙ୍କ ସ୍ୱୟଂ ସାହାଯ୍ୟ ଗୋଷ୍ଠୀ ପରିଚାଳନାକୁ ସହଜ କରନ୍ତୁ"
 
-#: .\templates\index.html:198
+#: .\templates\index.html:197
 msgid "President Registers"
 msgstr "ସଭାପତି ନିବନ୍ଧନ"
 
-#: .\templates\index.html:205
+#: .\templates\index.html:204
 msgid "Members Register"
 msgstr "ସଦସ୍ୟ ନିବନ୍ଧନ"
 
-#: .\templates\index.html:212
+#: .\templates\index.html:211
 msgid "Track Loans & Collections"
 msgstr "ଋଣ ଓ ସଂଗ୍ରହ ଟ୍ରାକ୍ କରନ୍ତୁ"
 
-#: .\templates\index.html:219
+#: .\templates\index.html:218
 msgid "Members View Reports"
 msgstr "ସଦସ୍ୟମାନେ ରିପୋର୍ଟ ଦେଖନ୍ତୁ"
+
+#, fuzzy
+#~| msgid "Back to Dashboard"
+#~ msgid "Back to Home"
+#~ msgstr "ଡ୍ୟାସବୋର୍ଡକୁ ଫେରନ୍ତୁ"
+
+#~ msgid ""
+#~ "Sahayika is a digital platform developed to simplify the management of "
+#~ "Self Help Groups (SHGs). It replaces traditional manual record-keeping "
+#~ "methods with a structured and efficient system."
+#~ msgstr ""
+#~ "Sahayika ହେଉଛି ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀ (SHGs) ପରିଚାଳନାକୁ ସହଜ କରିବା ପାଇଁ ଉନ୍ନତ ଏକ "
+#~ "ଡିଜିଟାଲ ପ୍ଲାଟଫର୍ମ। ଏହା ପାରମ୍ପରିକ ହାତେ ରେକର୍ଡ ରଖିବା ପ୍ରଣାଳୀକୁ ପରିବର୍ତ୍ତନ କରି ଏକ ସଂଗଠିତ "
+#~ "ଏବଂ କାର୍ଯ୍ୟକ୍ଷମ ପ୍ରଣାଳୀ ପ୍ରଦାନ କରେ।"
+
+#~ msgid ""
+#~ "The platform helps in managing member details, tracking monthly savings, "
+#~ "handling loan distribution, and monitoring repayments in a transparent "
+#~ "and organized way."
+#~ msgstr ""
+#~ "ଏହି ପ୍ଲାଟଫର୍ମ ସଦସ୍ୟ ସୂଚନା ପରିଚାଳନା, ମାସିକ ସଞ୍ଚୟ ଟ୍ରାକ୍ କରିବା, ଋଣ ବଣ୍ଟନ ପରିଚାଳନା, ଏବଂ "
+#~ "ପ୍ରତିଶୋଧ ନିରୀକ୍ଷଣକୁ ପାରଦର୍ଶୀ ଏବଂ ସଂଗଠିତ ଭାବରେ ସହାୟତା କରେ।"
+
+#~ msgid ""
+#~ "By using this system, SHGs can reduce errors, save time, and maintain "
+#~ "accurate financial records, ensuring better decision-making and "
+#~ "accountability."
+#~ msgstr ""
+#~ "ଏହି ପ୍ରଣାଳୀ ବ୍ୟବହାର କରି SHGs ତ୍ରୁଟି କମାଇପାରିବେ, ସମୟ ବଞ୍ଚାଇପାରିବେ, ଏବଂ ସଠିକ୍ ଅର୍ଥନୀତି "
+#~ "ରେକର୍ଡ ରଖିପାରିବେ, ଯାହା ଭଲ ନିର୍ଣ୍ଣୟ ଏବଂ ଦାୟିତ୍ୱଶୀଳତା ନିଶ୍ଚିତ କରେ।"
+
+#~ msgid "Our Mission"
+#~ msgstr "ଆମର ଲକ୍ଷ୍ୟ"
+
+#~ msgid ""
+#~ "To provide a simple and efficient digital solution that empowers Self "
+#~ "Help Groups to manage their financial and operational activities "
+#~ "effectively."
+#~ msgstr ""
+#~ "ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କୁ ସେମାନଙ୍କର ଅର୍ଥନୀତିକ ଏବଂ ପରିଚାଳନା କାର୍ଯ୍ୟକଳାପକୁ କାର୍ଯ୍ୟକ୍ଷମ "
+#~ "ଭାବେ ପରିଚାଳନା କରିବା ପାଇଁ ସହଜ ଏବଂ କାର୍ଯ୍ୟକ୍ଷମ ଡିଜିଟାଲ ସମାଧାନ ପ୍ରଦାନ କରିବା।"
+
+#~ msgid "Our Vision"
+#~ msgstr "ଆମର ଦୃଷ୍ଟିକୋଣ"
+
+#~ msgid ""
+#~ "To build a transparent, reliable, and user-friendly system that supports "
+#~ "the growth and sustainability of Self Help Groups."
+#~ msgstr ""
+#~ "ସ୍ୱୟଂ ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କର ବିକାଶ ଏବଂ ସ୍ଥାୟୀତ୍ୱକୁ ସମର୍ଥନ କରୁଥିବା ପାରଦର୍ଶୀ, ବିଶ୍ୱସନୀୟ "
+#~ "ଏବଂ ବ୍ୟବହାରକାରୀ-ସହଜ ପ୍ରଣାଳୀ ଗଢ଼ି ତିଆରି କରିବା।"
+
+#~ msgid "Project Information"
+#~ msgstr "ପ୍ରକଳ୍ପ ସୂଚନା"
+
+#~ msgid ""
+#~ "This project, Sahayika, was developed as part of an academic initiative "
+#~ "to address real-world challenges faced by Self Help Groups."
+#~ msgstr ""
+#~ "ଏହି ପ୍ରକଳ୍ପ Sahayika ଏକ ଶିକ୍ଷାମୂଳକ ପଦକ୍ଷେପର ଅଂଶ ଭାବେ ଉନ୍ନତ ହୋଇଥିଲା, ଯାହା ସ୍ୱୟଂ "
+#~ "ସହାୟତା ଗୋଷ୍ଠୀମାନଙ୍କ ସମ୍ମୁଖୀନ ବାସ୍ତବ ସମସ୍ୟାଗୁଡ଼ିକୁ ସମାଧାନ କରିବାକୁ ଉଦ୍ଦିଷ୍ଟ।"
+
+#~ msgid "Developed by:"
+#~ msgstr "ଉନ୍ନତ କରିଛନ୍ତି:"
+
+#~ msgid "Institution:"
+#~ msgstr "ସଂସ୍ଥା:"
+
+#~ msgid "Year of Development:"
+#~ msgstr "ଉନ୍ନତି ବର୍ଷ:"
+
+#~ msgid ""
+#~ "The system focuses on improving transparency, efficiency, and "
+#~ "accessibility in managing SHG activities digitally."
+#~ msgstr ""
+#~ "ଏହି ପ୍ରଣାଳୀ SHG କାର୍ଯ୍ୟକଳାପକୁ ଡିଜିଟାଲ ଭାବରେ ପରିଚାଳନା କରିବାରେ ପାରଦର୍ଶିତା, କାର୍ଯ୍ୟକ୍ଷମତା "
+#~ "ଏବଂ ପହଞ୍ଚଗମ୍ୟତା ବୃଦ୍ଧି କରିବାକୁ ଗୁରୁତ୍ୱ ଦେଇଥାଏ।"
+
+#~ msgid "Add Collection"
+#~ msgstr "ସଂଗ୍ରହ ଯୋଗ କରନ୍ତୁ"
+
+#~ msgid "Monthly Saving"
+#~ msgstr "ମାସିକ ସଞ୍ଚୟ"
+
+#~ msgid "Save Collection"
+#~ msgstr "ସଂଗ୍ରହ ସେଭ୍ କରନ୍ତୁ"
+
+#~ msgid "Back"
+#~ msgstr "ପଛକୁ ଯାଆନ୍ତୁ"
+
+#~ msgid "Total Installment"
+#~ msgstr "ମୋଟ କିଷ୍ତି"
+
+#~ msgid "Subsidy"
+#~ msgstr "ସହାୟତା ରାଶି"
+
+#~ msgid "Date"
+#~ msgstr "ତାରିଖ"
+
+#~ msgid "Email"
+#~ msgstr " ଇମେଲ୍"
+
+#~ msgid "Address"
+#~ msgstr "ଠିକଣା"
+
+#~ msgid "Your Name"
+#~ msgstr "ଆପଣଙ୍କ ନାମ"
+
+#~ msgid "Subject"
+#~ msgstr "ବିଷୟ"
+
+#~ msgid "Type"
+#~ msgstr "ପ୍ରକାର"
+
+
+
+#~ msgid "Message"
+#~ msgstr "ସନ୍ଦେଶ"
+
+#, fuzzy
+#~| msgid "Send OTP"
+#~ msgid "Send"
+#~ msgstr "OTP ପଠାନ୍ତୁ"
+
+
+
+#~ msgid "Not yet"
+#~ msgstr "ଏପର୍ଯ୍ୟନ୍ତ ନାହିଁ"
+
+
+#~ msgid "Attendance"
+#~ msgstr "ଉପସ୍ଥିତି"
+
+#~ msgid "Paid Loans"
+#~ msgstr "ଦେୟ ଋଣ"
+
+#~ msgid "Total Loan"
+#~ msgstr "ମୋଟ ଋଣ"
+
+#~ msgid "Active Loans"
+#~ msgstr "ଚାଲୁଥିବା ଋଣ"
+
+#~ msgid "Total Monthly Collection"
+#~ msgstr "ମୋଟ ମାସିକ ସଂଗ୍ରହ"
+
+#~ msgid "Loan Repayment Rate"
+#~ msgstr "ଋଣ ଶୋଧ ହାର"
+
+#~ msgid "Paid EMI"
+#~ msgstr "ଦେୟ EMI"
+
+#~ msgid "EMI Date"
+#~ msgstr "EMI ତାରିଖ"
+
+#~ msgid "Monthly SHG Meeting"
+#~ msgstr "ମାସିକ SHG ବୈଠକ"
+
+#, fuzzy
+#~| msgid "Member"
+#~ msgid "Member:"
+#~ msgstr "ସଦସ୍ୟ"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgid "Date:"
+#~ msgstr "ତାରିଖ"
+
+#, fuzzy
+#~| msgid "Attendance"
+#~ msgid "Attendance:"
+#~ msgstr "ଉପସ୍ଥିତି"
+
+#~ msgid "Present"
+#~ msgstr "ଉପସ୍ଥିତ"
+
+#~ msgid "Absent"
+#~ msgstr "ଅନୁପସ୍ଥିତ"
+
+#~ msgid "Note:"
+#~ msgstr "ଟୀକା:"
+
+#~ msgid "Personal Loans Taken: ₹"
+#~ msgstr "ନିଜସ୍ୱ ଋଣ ଗ୍ରହଣ: ₹"
+
+#~ msgid "EMI Amount"
+#~ msgstr "EMI ରାଶି"
+
+#~ msgid "Loan Taken"
+#~ msgstr "ଗ୍ରହୀତ ଋଣ"
+
+#~ msgid "Remaining Loan"
+#~ msgstr "ଅବଶିଷ୍ଟ ଋଣ"
+
+#~ msgid "Last Loan Date"
+#~ msgstr "ଶେଷ ଋଣ ତାରିଖ"
+
+#~ msgid "Paid"
+#~ msgstr "ଦେୟ"
+
+#~ msgid "Pending"
+#~ msgstr "ବକେୟ"
+
+#~ msgid "Back to Dashboard"
+#~ msgstr "ଡ୍ୟାସବୋର୍ଡକୁ ଫେରନ୍ତୁ"
 
 #~ msgid "Collection Records"
 #~ msgstr "ସଂଗ୍ରହ ରେକର୍ଡ"
 
 #~ msgid "Member Photo"
 #~ msgstr "ସଦସ୍ୟ ଫଟୋ"
-
-#~ msgid "Group Loan Overview"
-#~ msgstr "ଗୋଷ୍ଠୀ ଋଣ ସାରାଂଶ"
 
 #~ msgid "Recent Activities"
 #~ msgstr "ସମ୍ପ୍ରତିକ କାର୍ଯ୍ୟ"
@@ -1063,3 +1104,107 @@ msgstr "ସଦସ୍ୟମାନେ ରିପୋର୍ଟ ଦେଖନ୍ତୁ"
 
 #~ msgid "Reply"
 #~ msgstr "ଉତ୍ତର"
+
+msgid "Group EMI"
+msgstr "ଗୋଷ୍ଠୀ EMI"
+
+msgid "Personal EMI"
+msgstr "ବ୍ୟକ୍ତିଗତ EMI"
+
+msgid "Add Monthly Collection"
+msgstr "ମାସିକ ଆଦାୟ ଯୋଗ କରନ୍ତୁ"
+
+msgid "Member Paid Group EMI:"
+msgstr "ସଦସ୍ୟମାନେ ଦେଇଥିବା ଗୋଷ୍ଠୀ EMI:"
+
+msgid "Total Group EMI: ₹"
+msgstr "ମୋଟ ଗୋଷ୍ଠୀ EMI: ₹"
+
+msgid "Members Paid Savings:"
+msgstr "ସଦସ୍ୟମାନେ ଦେଇଥିବା ସଞ୍ଚୟ:"
+
+msgid "Duration (year)"
+msgstr "ଅବଧି (ବର୍ଷ)"
+
+msgid "Subvention Rate"
+msgstr "ସବଭେନସନ ହାର"
+
+msgid "Amount to be paid"
+msgstr "ଦେବାକୁ ପଡିବା ରାଶି"
+
+msgid "Total Personal loan (year)"
+msgstr "ମୋଟ ବ୍ୟକ୍ତିଗତ ଋଣ (ବର୍ଷ)"
+
+msgid "Active Loans (Group + Personal)"
+msgstr "ସକ୍ରିୟ ଋଣ (ଗୋଷ୍ଠୀ + ବ୍ୟକ୍ତିଗତ)"
+
+msgid "Total Group Loan (year)"
+msgstr "ମୋଟ ଗୋଷ୍ଠୀ ଋଣ (ବର୍ଷ)"
+
+msgid "Paid Loans(Group + Personal)"
+msgstr "ଦେଇସରା ଋଣ (ଗୋଷ୍ଠୀ + ବ୍ୟକ୍ତିଗତ)"
+
+msgid "Remaining Loans(Group + Personal)"
+msgstr "ଅବଶିଷ୍ଟ ଋଣ (ଗୋଷ୍ଠୀ + ବ୍ୟକ୍ତିଗତ)"
+
+msgid "Total Payable"
+msgstr "ମୋଟ ଦେବାକୁ ପଡିବ"
+
+msgid "Subvention Rate (%%)"
+msgstr "ସବଭେନସନ ହାର (%%)"
+
+msgid "Empowering SHGs through technology"
+msgstr "ପ୍ରଯୁକ୍ତି ମାଧ୍ୟମରେ SHG ମାନଙ୍କୁ ସଶକ୍ତ କରୁଛି"
+
+msgid "Get meeting updates instantly"
+msgstr "ତୁରନ୍ତ ବୈଠକ ସୂଚନା ପାଆନ୍ତୁ"
+
+msgid "Manage group projects"
+msgstr "ଗୋଷ୍ଠୀ ପ୍ରକଳ୍ପ ପରିଚାଳନା କରନ୍ତୁ"
+
+msgid "Easily manage member details"
+msgstr "ସଦସ୍ୟ ବିବରଣୀ ସହଜରେ ପରିଚାଳନା କରନ୍ତୁ"
+
+msgid "What You Can Do"
+msgstr "ଆପଣ କଣ କରିପାରିବେ"
+
+msgid ""
+"With Sahayika, SHGs can improve financial discipline, reduce errors, and "
+"make better decisions. It helps members stay informed and connected."
+msgstr ""
+"ସହାୟିକା ଦ୍ୱାରା SHG ମାନେ ଆର୍ଥିକ ଶୃଙ୍ଖଳା ବୃଦ୍ଧି କରିପାରିବେ, ତ୍ରୁଟି କମେଇପାରିବେ "
+"ଏବଂ ଭଲ ସିଦ୍ଧାନ୍ତ ନେଇପାରିବେ। ଏହା ସଦସ୍ୟମାନଙ୍କୁ ସୂଚିତ ଏବଂ ସଂଯୁକ୍ତ ରଖେ।"
+
+msgid "Our Impact"
+msgstr "ଆମ ପ୍ରଭାବ"
+
+msgid ""
+"We noticed that many SHGs struggle with record keeping, loan tracking, and "
+"transparency. Our goal is to make these processes simple, accurate, and "
+"accessible for everyone."
+msgstr ""
+"ଆମେ ଦେଖିଛୁ ଯେ ଅନେକ SHG ରେକର୍ଡ ରଖିବା, ଋଣ ଟ୍ରାକିଂ ଏବଂ ପାରଦର୍ଶିତାରେ "
+"ସମସ୍ୟା ଭୋଗୁଛନ୍ତି। ଆମର ଲକ୍ଷ୍ୟ ହେଉଛି ଏହି ପ୍ରକ୍ରିୟାଗୁଡିକୁ ସହଜ, ସଠିକ୍ ଏବଂ "
+"ସବୁଠାରୁ ପହଞ୍ଚଯୋଗ୍ୟ କରିବା।"
+
+msgid "Why We Built This"
+msgstr "ଆମେ ଏହା କାହିଁକି ତିଆରି କଲୁ"
+
+msgid ""
+"Managing SHG activities manually can be time-consuming and confusing. "
+"Sahayika was created to solve this problem by bringing all SHG operations "
+"into one easy-to-use digital platform."
+msgstr ""
+"SHG କାର୍ଯ୍ୟକଳାପକୁ ହାତେହାତେ ପରିଚାଳନା କରିବା ସମୟ ସାପେକ୍ଷ ଏବଂ ଜଟିଳ ହୋଇପାରେ। "
+"ସହାୟିକା ଏହି ସମସ୍ୟାର ସମାଧାନ ପାଇଁ ତିଆରି ହୋଇଛି, ଯାହା ସମସ୍ତ SHG କାର୍ଯ୍ୟକୁ "
+"ଏକ ସହଜ ଡିଜିଟାଲ ପ୍ଲାଟଫର୍ମରେ ଆଣେ।"
+
+msgid ""
+"Sahayika is a smart digital solution designed to simplify and strengthen the "
+"working of Self Help Groups (SHGs)."
+msgstr ""
+"ସହାୟିକା ହେଉଛି ଏକ ସ୍ମାର୍ଟ ଡିଜିଟାଲ ସମାଧାନ, ଯାହା ସ୍ୱୟଂସାହାଯ୍ୟ ଗୋଷ୍ଠୀ (SHG) "
+"ମାନଙ୍କର କାର୍ଯ୍ୟପ୍ରଣାଳୀକୁ ସହଜ ଏବଂ ଶକ୍ତିଶାଳୀ କରିବା ପାଇଁ ଡିଜାଇନ୍ କରାଯାଇଛି।"
+
+msgid "Our Story"
+msgstr "ଆମ କାହାଣୀ"

@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 from .models import MeetingSchedule
 from django.db.models import Sum 
-from .models import ContactMessage, MonthlyRecord 
+from .models import  MonthlyRecord 
 from .models import Register, District , Village, Loan , Project
 from .forms import LoanForm
 from datetime import datetime, date
@@ -72,11 +72,11 @@ def register(request):
             
             group_members = Register.objects.filter(shgname=shgname , village=village )
 
-# If president tries to create a group that already exists
+
             if role == "President" and group_members.exists():
                             error = _("This SHG group already exists.")
 
-# If member tries to join a group that doesn't exist
+
             elif role == "Member" and not group_members.exists():
                            error = _("This SHG group does not exist. Contact the president.")
 
@@ -205,17 +205,24 @@ def dashboard(request):
     user_shg = request.session.get("user_shg")
     user_name = request.session.get("user_name")
 
-    if request.method == "POST":
-        meeting_date = request.POST.get("meeting_date")
+    meeting = MeetingSchedule.objects.filter(
+    shgname__iexact=(user_shg or "").strip()
+    ).order_by("-id").first()
 
-        if meeting_date:
-            MeetingSchedule.objects.create(
+    if request.method == "POST":
+      meeting_date = request.POST.get("meeting_date")
+
+      if meeting_date:
+        meeting_date = datetime.strptime(meeting_date, "%Y-%m-%d").date()
+
+        if meeting:
+            meeting.meeting_date = meeting_date
+            meeting.save()
+        else:
+            meeting = MeetingSchedule.objects.create(
                 shgname=user_shg,
                 meeting_date=meeting_date
             )
-
-        return redirect("dashboard")
-
     members = Register.objects.filter(
         shgname__iexact=(user_shg or "").strip()
     ).order_by("-id")
@@ -232,6 +239,12 @@ def dashboard(request):
         shgname__iexact=(user_shg or "").strip(),
         month=current_month,
         year=current_year
+    )
+
+    all_loans = Loan.objects.filter(
+    shgname=user_shg,
+    created_at__month=current_month,
+    created_at__year=current_year   
     )
 
    
@@ -254,17 +267,17 @@ def dashboard(request):
         Sum('amount')
     )['amount__sum'] or 0
 
-    remaining_loans_amount = yearly_group_loans.aggregate(
+    remaining_loans_amount = all_loans .aggregate(
         Sum('remaining')
     )['remaining__sum'] or 0
 
     total_loans_count = yearly_group_loans.count()
 
-    paid_loans_count = yearly_group_loans.filter(
-        remaining=0
+    paid_loans_count = all_loans.filter(
+        remaining__gt=0
     ).count()
 
-    active_loans = yearly_group_loans.filter(
+    active_loans = all_loans.filter(
         remaining__gt=0
     ).count()
 
@@ -346,9 +359,7 @@ def dashboard(request):
     saving_percent = (total_saving / total_collection * 100) if total_collection else 0
     emi_percent = (total_group_emi / total_collection * 100) if total_collection else 0
 
-    meeting = MeetingSchedule.objects.filter(
-        shgname__iexact=(user_shg or "").strip()
-    ).order_by("-meeting_date").first()
+   
 
     context = {
         "user_role": user_role,
@@ -511,7 +522,7 @@ def add_loan(request, loan_id=None):
     loan = None
     selected_member = None
 
-   
+    # EDIT MODE
     if loan_id:
         loan = get_object_or_404(Loan, id=loan_id)
         selected_member = loan.member
@@ -520,7 +531,6 @@ def add_loan(request, loan_id=None):
 
         loan_type = request.POST.get("loan_type")
 
-        #
         amount = float(request.POST.get("amount") or 0)
         paid = float(request.POST.get("paid") or 0)
         duration = float(request.POST.get("duration") or 0)
@@ -537,15 +547,13 @@ def add_loan(request, loan_id=None):
                 return redirect("add_loan")
 
             selected_member = get_object_or_404(Register, id=member_id)
-        elif loan_type == "Group":
-            selected_member = None    
 
        
         if amount <= 0:
             messages.error(request, "Loan amount must be greater than 0")
             return redirect("add_loan")
 
-        
+       
         total_payable = amount + (
             amount * (interest_rate - subvention_rate) * duration
         ) / 100
@@ -565,7 +573,6 @@ def add_loan(request, loan_id=None):
             loan.total_payable = total_payable
 
             loan.save()
-
             messages.success(request, "Loan updated successfully")
 
         
@@ -592,6 +599,7 @@ def add_loan(request, loan_id=None):
         "loan": loan,
         "selected_member": selected_member
     })
+
 def logout_view(request):
     request.session.flush()   
     return redirect("login")
@@ -813,14 +821,19 @@ def edit_loan(request, loan_id):
     loan = get_object_or_404(Loan, id=loan_id)
 
     if request.method == "POST":
-        form = LoanForm(request.POST, instance=loan)
-        if form.is_valid():
-            form.save()
-            return redirect("loan_details", loan_id=loan.id)
-    else:
-        form = LoanForm(instance=loan)
+        loan.loan_type = request.POST.get("loan_type")
+        loan.amount = request.POST.get("amount")
+        loan.paid = request.POST.get("paid")
+        loan.remaining = request.POST.get("remaining")
+        loan.duration = request.POST.get("duration")
+        loan.interest_rate = request.POST.get("interest_rate")
+        loan.subvention_rate = request.POST.get("subvention_rate")
+        loan.total_payable = request.POST.get("total_payable")
+        loan.save()
 
-    return render(request, "edit_loan.html", {"form": form, "loan": loan})
+        return redirect("loan_details")
+
+    return render(request, "add_loan.html", {"loan": loan, "edit": True})
 
 def add_project(request, project_id=None):
     if request.session.get("user_role") != "President":
@@ -897,39 +910,3 @@ def about(request):
 def rti(request):
     return render(request, 'rti.html')
 
-def contact(request):
-    if request.method == "POST":
-        name = request.POST.get("name")
-        phone = request.POST.get("phone")
-        subject = request.POST.get("subject")
-        message = request.POST.get("message")
-
-        print(name, phone, subject, message)
-
-        messages.success(request, "Message sent successfully")
-
-    return render(request, "contact.html")
-
-
-def contact_view(request):
-    if request.method == "POST":
-        ContactMessage.objects.create(
-            name=request.POST.get('name'),
-            phone=request.POST.get('phone'),
-            email=request.POST.get('email'),
-            subject=request.POST.get('subject'),
-            message=request.POST.get('message'),
-            type=request.POST.get('type', 'Complaint')
-        )
-        messages.success(request, "Message sent successfully")
-        return redirect('contact')  
-   
-    phone = request.session.get("user_phone")
-    if phone:
-        submissions = ContactMessage.objects.filter(phone=phone).order_by('-created_at')
-    else:
-        submissions = ContactMessage.objects.all().order_by('-created_at')
-
-    return render(request, "contact.html", {
-        "submissions": submissions
-    })

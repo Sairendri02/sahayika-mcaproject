@@ -199,7 +199,7 @@
                 <div class="d-flex align-items-center gap-2">
 
     {% if loan.remaining == 0 %}
-        <span class="text-success fw-semibold">Cleared</span>
+        <span class="text-success fw-semibold">{% trans "Loan Cleared" %}</span>
 
     {% else %}
 
@@ -207,7 +207,7 @@
             <form method="POST" action="{% url 'clear_loan' loan.id %}" class="d-inline">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success btn-sm">
-                    Mark as Cleared
+                    {% trans "Mark as Cleared" %}
                 </button>
             </form>
         {% else %}
@@ -216,23 +216,26 @@
 
     {% endif %}
 
-    {% if user_role == "President" %}
+   {% if user_role == "President" %}
 
-        
+    {% if loan.remaining != 0 %}
         <a href="{% url 'edit_loan' loan.id %}" class="btn btn-warning btn-sm">
-            Edit
+           {% trans "Edit" %}
         </a>
-
-       
-        <form method="POST" action="{% url 'delete_loan' loan.id %}" class="d-inline"
-              onsubmit="return confirm('Are you sure you want to delete this loan?');">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm">
-                Delete
-            </button>
-        </form>
-
     {% endif %}
+
+    <form method="POST"
+          action="{% url 'delete_loan' loan.id %}"
+          class="d-inline"
+          onsubmit="return confirm('Are you sure you want to delete this loan?');">
+
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">
+            {% trans "Delete" %}
+        </button>
+    </form>
+
+{% endif %}
 
 </div>
             </div>

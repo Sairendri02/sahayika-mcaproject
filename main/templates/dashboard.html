@@ -202,13 +202,13 @@ animation:move 14s linear infinite;font-weight:bold;">
                 </div>
                 <div class="col-md-3 mb-2" >
                     <div class="card p-3 shadow stat-card">
-                        <h5>{% trans "Remaining Loans" %}</h5>
+                        <h5>{% trans "Remaining Loans(Group + Personal)" %}</h5>
                         <h3> ₹{{ remaining_loans_amount }}</h3>
                     </div>
                 </div>
                 <div class="col-md-3 mb-2">
                     <div class="card p-3 shadow stat-card">
-                        <h5>{% trans "Paid Loans" %}</h5>
+                        <h5>{% trans "Paid Loans(Group + Personal)" %}</h5>
                         <h3> {{ paid_loans_count }}</h3>
                     </div>
                 </div>    
@@ -224,8 +224,10 @@ animation:move 14s linear infinite;font-weight:bold;">
                 </div>
                 <div class="col-md-3 mb-2">
                    <div class="card p-3 shadow stat-card">
-                          <h5>{% trans "Active Loans" %}</h5>
-                           <h3>{{ active_loans }}</h3>
+                          <h5>{% trans "Active Loans (Group + Personal)" %}</h5>
+                           <h3 class="{% if active_loans > 0 %}text-danger{% else %}text-success{% endif %}">
+                               {{ active_loans }}
+                           </h3>
                     </div>
                 </div>
 
@@ -363,8 +365,8 @@ animation:move 14s linear infinite;font-weight:bold;">
                     </div>
 
                     <div class="progress-bar bg-warning"
-                        style="width: {{ remaining_loans }}%">
-                                {% trans "Loans" %} ₹{{ remaining_loans }}
+                        style="width: {{ remaining_loans_amount }}%">
+                                {% trans "Loans" %} ₹{{ remaining_loans_amount }}
                    </div>
 
                 </div>

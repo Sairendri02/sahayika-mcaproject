@@ -1,6 +1,5 @@
 from django.db import models
 from datetime import date
-from django import forms
 
 class District(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -94,21 +93,7 @@ class Loan(models.Model):
 
     def __str__(self):
         return f"{self.loan_type} - {self.amount}"
-    
 
-class LoanForm(forms.ModelForm):
-    class Meta:
-        model = Loan
-        fields = "__all__"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        disabled_fields = ["duration", "si_rate", "subvention_rate"]
-
-        for field in disabled_fields:
-            self.fields[field].disabled = True
-    
 class MeetingSchedule(models.Model):
     shgname = models.CharField(max_length=100)
     meeting_date = models.DateField()
@@ -160,32 +145,3 @@ class Project(models.Model):
     def __str__(self):
         return self.title
     
-class Contact(models.Model):
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=15)
-    subject = models.CharField(max_length=200)
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-    
-
-class ContactMessage(models.Model):
-    TYPE_CHOICES = (
-        ('Message', 'Message'),
-        ('Complaint', 'Complaint'),
-    )
-
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20)
-    email = models.EmailField(blank=True,null=True)
-    subject = models.CharField(max_length=200)
-    message = models.TextField()
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='Complaint')
-    reply = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=20, default='Pending')  # Pending / Resolved
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.subject} ({self.type})"

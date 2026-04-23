@@ -1,176 +1,237 @@
-{% load i18n%}
+{% load i18n %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>About Us</title>
-
+    <title>{% trans "Learn More" %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<style>
 
-    <style>
-
-/* 🔥 Blurred background */
-.bg-blur {
+    .bg-blur {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+
     background: url("{% static 'images/learn.jpg' %}") no-repeat center center;
     background-size: cover;
-    filter: blur(8px);
-    transform: scale(1.05);
+
+    filter: blur(4px);
+    transform: scale(1.05); /* prevents edges cut */
     z-index: -1;
 }
 
-/* Content box */
+/* Content layer */
 .overlay {
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     padding: 40px;
-    border-radius: 12px;
+    border-radius: 10px;
 }
 
-/* Text */
-p {
-    font-weight: 700;
-    color: black;
-    font-size: 17px;
+
+  
+   .card {
+        border-radius: 12px;
+        padding: 20px;
+        height: 100%;
+        overflow-wrap: break-word;
+        min-width: 280px;
+        transition:0.3s;
+    }
+
+   .card p {
+       white-space: normal;
+       width: 100%;
+        }
+
+   .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+   }
+
+   .progress {
+
+    height: 10px;
+    margin-top: 10px;
+   }
+
+   .btn.active {
+    background-color: black;
+    color: white;
+   }
+   .logo{
+height:50px;
+margin-right:10px;
 }
 
-span {
-    color: #0a0909;
-    font-size: 15px;
+.logo-texts{
+display: flex; 
+flex-direction: column; 
+gap:0;  
+font-weight:bold;
+font-size:25px;
+color: black;
 }
 
-h2, h4 {
-    color: black;
+.navbar.container{
+    padding-left: 0;
+    padding-right: 0;
+}
+.navbar {
+  height:70px; /* increase if needed */
+  align-items: center;
 }
 
-/* Cards */
-.card {
-    border-radius: 12px;
+/* Logo container */
+.logo-container {
+  display: flex;
+  
+  align-items: center;
+  gap: 2px;   /* small spacing between texts */
+  margin-left: 10px; /* distance from left edge */
+  text-decoration: none;
 }
 
-    /* Navbar background color */
-        .navbar-custom {
-            background-color: #536f8a; /* You can change to any color */
-        }
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-        }
-        .logo {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-        .brand-text {
-            display: flex;
-            flex-direction: column; /* Stack Odia above English */
-            line-height: 1;
-            color:black;
-        }
-        .brand-text span {
-            display: block;
-        }
-        .brand-text .odia {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .brand-text .english {
-            font-size: 1rem;
-        }
+
+
+/* Odia text */
+.logo-odia {
+  font-family: 'Noto Sans Odia', sans-serif;
+  font-size: 18px;
+  
+  color:black;
+  line-height: 1;
+}
+
+/* English text */
+.logo-english {
+  font-family: Arial, sans-serif; /* or your preferred English font */
+  font-size: 20px;
+  font-weight:bold ;
+  color: black;
+  line-height: 1;
+}
+
+/* Menu links */
+.navbar-links {
+  list-style: none;
+  gap: 20px;
+}
+
+.navbar-links li a {
+  color:black;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar-links li a:hover {
+  color:rgb(33, 33, 144);
+}
+
+   
     </style>
 </head>
 <body> 
+  
     
-    <nav class="navbar navbar-expand-lg navbar-custom text-white">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
-        <div class="brand-text">
-            <span class="odia">ସହାୟିକା</span>
-            <span class="english">Sahayika</span>
-        </div>
+    <nav class="navbar shadow-sm" style="background-color: #456382">
+  <div class="d-flex align-items-center w-100 px-3"> 
+
+   
+    <a class="d-flex  align-items-center logo-container" href="#">
+      <img src="{% static 'images/LOGO.png' %}" class="logo">
+      <div class="logo-texts d-flex flex-column ms-2">
+      <span class="logo-odia">ସହାୟିକା</span>
+      <span class="logo-english">Sahayika</span>
+      </div>
     </a>
-    <div class="d-flex ms-auto">   
-        <a href="{% url 'home' %}" class="btn btn-light btn-sm">{% trans "Back to Home" %}</a>
-    </div>
-</div>
+
+    
+    <ul class="d-flex ms-auto align-items-center mb-0 navbar-links">
+      <li><a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a></li>
+      <li><a class="nav-link" href="{% url 'about' %}">{% trans "About Us" %}</a></li>
+      <li><a class="nav-link" href="{% url 'rti' %}">{% trans "RTI" %}</a></li>
+      <li><a class="nav-link" href="">{% trans "Contact Us" %}</a></li>
+      <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+    
+        {% get_current_language as LANGUAGE_CODE %}
+    
+        {% if LANGUAGE_CODE == "en" %}
+            <input type="hidden" name="language" value="or">
+            <button type="submit" style ="border:none;background:none;">ଓଡ଼ିଆ</button>
+        {% else %}
+            <input type="hidden" name="language" value="en">
+            <button type="submit" style ="border:none;background:none;">English</button>
+        {% endif %}
+      </form>
+    </ul>
+
+  </div>
 </nav>
 
 <div class="bg-blur"></div>
-
 <div class="container mt-5">
+     
+    <h2 class="title text-center">{% trans "About Us" %}</h2>
 
+    <p class="fs-6 fw-bold">
+        {% trans "Sahayika is a smart digital solution designed to simplify and strengthen the working of Self Help Groups (SHGs)." %}
+    </p>
 
-<!-- TITLE -->
-<h2 class="mb-4"><b>{% trans "About Us" %}</b></h2>
+    
 
-        <p class="fs-6 fw-bold">
-            {% trans "Sahayika is a digital platform developed to simplify the management of Self Help Groups (SHGs). It replaces traditional manual record-keeping methods with a structured and efficient system." %}
-        </p>
+    
+    <h5 class="mt-4"><strong>{% trans "Our Story" %}</strong></h5>
+    <p class="fs-6 fw-bold">
+        {% trans "Managing SHG activities manually can be time-consuming and confusing. Sahayika was created to solve this problem by bringing all SHG operations into one easy-to-use digital platform." %}
+    </p>
 
-        <p class="fs-6 fw-bold">
-            {% trans "The platform helps in managing member details, tracking monthly savings, handling loan distribution, and monitoring repayments in a transparent and organized way." %}
-        </p>
+    <!-- Purpose Section -->
+    <h5 class="mt-4"><strong>{% trans "Why We Built This" %}</strong></h5>
+    <p class="fs-6 fw-bold">
+        {% trans "We noticed that many SHGs struggle with record keeping, loan tracking, and transparency. Our goal is to make these processes simple, accurate, and accessible for everyone." %}
+    </p>
 
-        <p class="fs-6 fw-bold">
-            {% trans "By using this system, SHGs can reduce errors, save time, and maintain accurate financial records, ensuring better decision-making and accountability." %}
-        </p>
+    <!-- Impact Section -->
+    <h5 class="mt-4"><strong>{% trans "Our Impact" %}</strong></h5>
+    <p class="fs-6 fw-bold">
+        {% trans "With Sahayika, SHGs can improve financial discipline, reduce errors, and make better decisions. It helps members stay informed and connected." %}
+    </p>
 
-        <!-- Mission -->
-        <h4 class="mt-4"><b>{% trans "Our Mission" %}</b></h4>
+    <!-- Features -->
+    <h5 class="mt-4"><strong>{% trans "What You Can Do" %}</strong></h5>
 
-        <p class="fs-6 fw-bold">
-            {% trans "To provide a simple and efficient digital solution that empowers Self Help Groups to manage their financial and operational activities effectively." %}
-        </p>
+    <ul>
+        <li class= "fw-bold">{% trans "Easily manage member details" %}</li>
+        <li class= "fw-bold">{% trans "Track loans and repayments" %}</li>
+        <li class= "fw-bold">{% trans "Monitor monthly collections" %}</li>
+        <li class= "fw-bold">{% trans "Manage group projects" %}</li>
+        <li class= "fw-bold">{% trans "Get meeting updates instantly" %}</li>
+    </ul>
 
-        <!-- Vision -->
-        <h4 class="mt-4"><b>{% trans "Our Vision" %}</b></h4>
+    <!-- Closing -->
+    <p class="fs-6 fw-bold">
+        <strong>{% trans "Empowering SHGs through technology" %}</strong>
+    </p>
 
-        <p class="fs-6 fw-bold">
-            {% trans "To build a transparent, reliable, and user-friendly system that supports the growth and sustainability of Self Help Groups." %}
-        </p>
+</div>
+    <div class="text-center mt-5">
 
-        <!-- Project Info -->
-        <h4 class="mt-4"><b>{% trans "Project Information" %}</b></h4>
-
-        <p class="fs-6 fw-bold">
-            {% trans "This project, Sahayika, was developed as part of an academic initiative to address real-world challenges faced by Self Help Groups." %}
-        </p>
-
-        <p class="fs-6 fw-bold">
-            {% trans "Developed by:" %} <b>Sahayinies</b>
-        </p>
-
-        <p class="fs-6 fw-bold">
-            {% trans "Institution:" %} <b>Indira Gandhi Institute of Technology,Sarang </b>
-        </p>
-
-        <p class="fs-6 fw-bold">
-            {% trans "Year of Development:" %} <b>2026</b>
-        </p>
-
-        <p class="fs-6 fw-bold">
-            {% trans "The system focuses on improving transparency, efficiency, and accessibility in managing SHG activities digitally." %}
-        </p>
-
-        <div class="text-center mt-5">
-
-       <a href="{% url 'register' %}" class="btn btn-success px-4 me-2">
+    <a href="{% url 'register' %}" class="btn btn-success px-4 me-2">
         {% trans "Register Now" %}
-       </a>
+    </a>
 
-      <p class="fs-6 fw-bold">
+    <p class=" fs-6 fw-bold">
         {% trans "To start using the system, please create an account. After registration, you will be able to access all features of the platform." %}
-      </p>
-
-    </div>
-
-    </div>
+    </p>
 
 </div>
 
-
+</div>
+</div>
 </body>
 </html>

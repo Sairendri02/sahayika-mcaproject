@@ -23,7 +23,6 @@ urlpatterns = [
     path('learn_more/', views.learn_more, name='learn_more'),
     path('about/', views.about, name='about'),
     path('rti/', views.rti, name='rti'),
-    path('contact/', views.contact_view, name='contact'),
     path('clear-loan/<int:loan_id>/', views.clear_loan, name='clear_loan'),
     path("loan/delete/<int:loan_id>/", views.delete_loan, name="delete_loan")
    

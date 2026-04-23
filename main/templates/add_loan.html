@@ -125,49 +125,89 @@
 <h3 class="title">{% trans "Add Loan" %}</h3>
 
 <form method="POST">
-
 {% csrf_token %}
 
-  
 <div class="mb-3">
     <label>{% trans "Loan Type" %}</label>
     <select name="loan_type" id="loan_type" class="form-control" onchange="toggleMember()">
-      <option value="Group">{% trans "Group Loan" %}</option>
-      <option value="Personal">{% trans "Personal Loan" %}</option>
-    </select>
-  </div>
 
-  <div class="mb-3" id="member_div" style="display:none;">
+        <option value="Group"
+            {% if loan and loan.loan_type == "Group" %}selected{% endif %}>
+            {% trans "Group Loan" %}
+        </option>
+
+        <option value="Personal"
+            {% if loan and loan.loan_type == "Personal" %}selected{% endif %}>
+            {% trans "Personal Loan" %}
+        </option>
+
+    </select>
+</div>
+
+<div class="mb-3" id="member_div" style="display:none;">
     <label>{% trans "Select Member" %}</label>
+
     <select name="member_id" id="member_id" class="form-control">
-      <option value="">-- Select Member --</option>
-      {% for m in members %}
-      <option value="{{ m.id }}">{{ m.fullname }}</option>
-      {% endfor %}
+
+        <option value="">{% trans "-- Select Member --" %}</option>
+
+        {% for m in members %}
+            <option value="{{ m.id }}"
+                {% if loan and loan.member and loan.member.id == m.id %}selected{% endif %}>
+                {{ m.fullname }}
+            </option>
+        {% endfor %}
+
     </select>
-  </div>
+</div>
 
-{% trans "Loan Amount" %}:<br>
-<input type="number" name="amount" id="amount" class="form-control mb-2"><br>
+<label>{% trans "Loan Amount" %}</label>
+<input type="number" name="amount" id="amount"
+       class="form-control mb-2"
+       value="{{ loan.amount|default:'' }}">
 
-{% trans "Paid Amount" %}:<br>
-<input type="number" name="paid" id="paid" class="form-control mb-2" value="0"><br>
+<label>{% trans "Paid Amount" %}</label>
+<input type="number" name="paid" id="paid"
+       class="form-control mb-2"
+       value="{{ loan.paid|default:0 }}">
 
-{% trans "Remaining Amount" %}:<br>
-<input type="number" name="remaining" id="remaining" class="form-control mb-2" readonly><br>
+<label>{% trans "Remaining Amount" %}</label>
+<input type="number" name="remaining" id="remaining"
+       class="form-control mb-2"
+       value="{{ loan.remaining|default:0 }}"
+       readonly>
 
-{% trans "Duration (Years)" %}:<br>
-<input type="number" name="duration" id="duration" class="form-control mb-2"><br>
+<label>{% trans "Duration (Years)" %}</label>
+<input type="number" name="duration" id="duration"
+       class="form-control mb-2"
+       value="{{ loan.duration|default:'' }}"
+       {% if loan %}readonly{% endif %}>
 
-{% trans "SI Rate (%)" %}:<br>
-<input type="number" name="interest_rate" id="interest_rate" class="form-control mb-2"><br>
+<label>{% trans "SI Rate (%)" %}</label>
+<input type="number" name="interest_rate" id="interest_rate"
+       class="form-control mb-2"
+       value="{{ loan.interest_rate|default:'' }}"
+       {% if loan %}readonly{% endif %}>
 
-{% trans "Subvention Rate (%)" %}:<br>
-<input type="number" name="subvention_rate" id="subvention_rate" class="form-control mb-2"><br>
+<label>{% trans "Subvention Rate (%)" %}</label>
+<input type="number" name="subvention_rate" id="subvention_rate"
+       class="form-control mb-2"
+       value="{{ loan.subvention_rate|default:'' }}"
+       {% if loan %}readonly{% endif %}>
 
-{% trans "Total Payable" %}:<br>
-<input type="number" name="total_payable" id="total_payable" class="form-control mb-2" readonly><br>
-<button class="btn btn-primary">{% trans "Add Loan" %}</button>
+<label>{% trans "Total Payable" %}</label>
+<input type="number" name="total_payable" id="total_payable"
+       class="form-control mb-2"
+       value="{{ loan.total_payable|default:'' }}"
+       readonly>
+
+<button class="btn btn-primary">
+    {% if loan %}
+        {% trans "Update Loan" %}
+    {% else %}
+        {% trans "Add Loan" %}
+    {% endif %}
+</button>
 
 </form>
 </div>
