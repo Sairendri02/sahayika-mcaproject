@@ -264,7 +264,9 @@ def login_view(request):
                         request.session.pop("login_otp", None)
                         request.session.pop("login_phone", None)
                         request.session.pop("login_otp_expiry", None)
-
+                    if reg.user is None:
+                        error = _("Account error.Please contact to your President")
+                    else:
                         login(request, reg.user)
                         request.session["user_id"] = reg.id
                         request.session["user_name"] = reg.fullname
@@ -909,7 +911,7 @@ def monthly_collection(request):
                 }
             )
 
-        return redirect(f"/monthly_collection/?month={selected_month}&year={selected_year}")
+        return redirect(f"/monthly_collection/?month={selected_month or ''}&year={selected_year or ''}")
 
    
     collections = MonthlyRecord.objects.filter(shgname=shg)
@@ -1062,8 +1064,8 @@ def clear_loan(request, loan_id):
 
     loan = Loan.objects.get(id=loan_id)
 
-    loan.remaining_amount = 0
-    loan.paid_amount = loan.loan_amount
+    loan.remaining = 0
+    loan.paid = loan.loan
     loan.save()
 
     return redirect("loan_details")
@@ -1081,13 +1083,13 @@ def edit_loan(request, loan_id):
 
     if request.method == "POST":
         loan.loan_type = request.POST.get("loan_type")
-        loan.amount = request.POST.get("amount")
-        loan.paid = request.POST.get("paid")
-        loan.remaining = request.POST.get("remaining")
-        loan.duration = request.POST.get("duration")
-        loan.interest_rate = request.POST.get("interest_rate")
-        loan.subvention_rate = request.POST.get("subvention_rate")
-        loan.total_payable = request.POST.get("total_payable")
+        loan.amount = float(request.POST.get("amount") or 0)
+        loan.paid = float(request.POST.get("paid") or 0)
+        loan.remaining = float(request.POST.get("remaining") or 0)
+        loan.duration = float(request.POST.get("duration") or 0)
+        loan.interest_rate =float(request.POST.get("interest_rate") or 0)
+        loan.subvention_rate =float(request.POST.get("subvention_rate") or 0)
+        loan.total_payable = float(request.POST.get("total_payable") or 0)
         loan.save()
 
         return redirect("loan_details")
@@ -1167,9 +1169,6 @@ def logout_view(request):
 
 def learn_more(request):
     return render(request, 'learn_more.html')
-
-def home(request):
-    return render(request, 'index.html')
 
 def about(request):
     return render(request, 'about.html')
