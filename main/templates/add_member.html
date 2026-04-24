@@ -122,9 +122,13 @@
 
 <h3 class="title">{% trans "Add Member" %}</h3>
 
-{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
-{% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
-
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 <form method="POST" enctype="multipart/form-data">
 {% csrf_token %}
 <input type="text" name="fullname" placeholder="Full Name" class="form-control mb-3">
