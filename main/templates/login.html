@@ -153,50 +153,96 @@ color: black;
 </nav>
 
 <div class="center-box">
-
 <div class="login-box">
 
     <div class="login-title">{% trans "Welcome" %}</div>
 
     {% if error %}
-    <div class="alert alert-danger text-center">
-        {{ error }}
-    </div>
+    <div class="alert alert-danger text-center">{{ error }}</div>
+    {% endif %}
+
+    {% if success %}
+    <div class="alert alert-success text-center">{{ success }}</div>
     {% endif %}
 
     <form method="POST">
         {% csrf_token %}
 
         {% trans "Phone Number" %}<br>
-        <input type="text" name="phone" value="{{phone}}" class="form-control mb-3" required>
+        <input type="text" name="phone" value="{{ phone }}" class="form-control mb-3" required>
 
-       {% trans "SHG Group Name" %}<br>
-        <input type="text" name="shgname" value="{{shgname}}" class="form-control mb-3" required>
+        {% trans "SHG Group Name" %}<br>
+        <input type="text" name="shgname" value="{{ shgname }}" class="form-control mb-3" required>
 
-        <select name="role" class="form-select mb-3" required>
+        <select name="role" id="roleSelect" class="form-select mb-3" required onchange="toggleLogin()">
             <option value="">{% trans "Select Role" %}</option>
-            <option value="President" {% if role == "President" %}selected{% endif %}>President</option>
-            <option value="Member" {% if role == "Member" %}selected{% endif %}>Member</option>
+            <option value="President" {% if role == "President" %}selected{% endif %}>{% trans "President" %}</option>
+            <option value="Member" {% if role == "Member" %}selected{% endif %}>{% trans "Member" %}</option>
         </select>
 
-        {% trans "Password" %}
-        <input type="password" name="password" class="form-control mb-3" required>
+        
+        <div id="passwordSection">
+            {% trans "Password" %}<br>
+            <input type="password" name="password" class="form-control mb-3">
+        </div>
 
-        <button type="submit" class="btn btn-login mb-3">{% trans "Login" %}</button>
+        <div id="otpSection" style="display:none;">
+            <button type="submit" name="send_otp" class="btn btn-secondary w-100 mb-3">
+                {% trans "Send OTP" %}
+            </button>
+            {% trans "Enter OTP" %}<br>
+            <input type="text" name="otp" placeholder="{% trans 'Enter OTP' %}"
+                   class="form-control mb-3" maxlength="4">
+        </div>
 
-        <div class="text-center">
+        <button type="submit" name="login" class="btn btn-login mb-3">{% trans "Login" %}</button>
+
+     
+        <div id="forgotSection" class="text-center">
             <a href="/forgot_password/">{% trans "Forgot password?" %}</a>
         </div>
+
+        
+        <div id="registerSection" class="text-center mt-3" style="display:none;">
+            {% trans "New President?" %}
+            <a href="{% url 'register' %}">{% trans "Register your SHG here" %}</a>
+        </div>
+
     </form>
 
-    <p class="text-center mt-3">
-        {% trans "Don't have an account?" %}
-        <a href="{% url 'register' %}">{% trans "Register here" %}</a>
-    </p>
-
+</div>
 </div>
 
-</div>
+<script>
+function toggleLogin() {
+    const role = document.getElementById("roleSelect").value;
+    const passwordSection = document.getElementById("passwordSection");
+    const otpSection = document.getElementById("otpSection");
+    const forgotSection = document.getElementById("forgotSection");
+    const registerSection = document.getElementById("registerSection");
+
+    if (role === "Member") {
+        passwordSection.style.display = "none";
+        otpSection.style.display = "block";
+        forgotSection.style.display = "none";
+        registerSection.style.display = "none";
+    } else if (role === "President") {
+        passwordSection.style.display = "block";
+        otpSection.style.display = "none";
+        forgotSection.style.display = "block";
+        registerSection.style.display = "block"; 
+    } else {
+        
+        passwordSection.style.display = "none";
+        otpSection.style.display = "none";
+        forgotSection.style.display = "none";
+        registerSection.style.display = "none";
+    }
+}
+
+window.onload = toggleLogin;
+</script>
 
 </body>
 </html>
+

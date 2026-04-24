@@ -10,7 +10,9 @@ from django.db.models import Sum
 from .models import  MonthlyRecord 
 from .models import Register, District , Village, Loan , Project
 from .forms import LoanForm
-from datetime import datetime, date
+from datetime import datetime, date ,timedelta
+from django.utils import timezone
+from .utils import send_otp_sms
 import random
 import re
 
@@ -28,13 +30,12 @@ def register(request):
     fullname = request.POST.get("fullname", "")
     shgname = request.POST.get("shgname", "")
     phone = request.POST.get("phone", "")
-    role = request.POST.get("role", "")
     district_id = request.POST.get("district", "")
     village_id = request.POST.get("village", "")
 
     if request.method == "POST":
 
-        # 🔹 SEND OTP
+        # ✅ SEND OTP
         if "send_otp" in request.POST:
             phone = request.POST.get("phone", "").strip()
 
@@ -43,64 +44,70 @@ def register(request):
             else:
                 otp = str(random.randint(1000, 9999))
                 request.session["otp"] = otp
-                print("OTP:", otp)
-                success = _("OTP sent successfully")
+                request.session["otp_expiry"] = (
+                    timezone.now() + timedelta(minutes=5)
+                ).isoformat()
+                send_otp_sms(phone, otp)  # ✅ Real SMS
+                success = _("OTP sent to your phone number")
 
-        # 🔹 REGISTER
+        # ✅ REGISTER
         elif "register" in request.POST:
-
             fullname = request.POST.get('fullname', '').strip()
             shgname = request.POST.get('shgname', '').strip()
             district_id = request.POST.get('district', '').strip()
             village_id = request.POST.get('village', '').strip()
-            role = request.POST.get('role','').strip()
-            phone = request.POST.get('phone','').strip()
-            dob = request.POST.get('dob','').strip()
-            password = request.POST.get('password','').strip()
-            otp_input = request.POST.get("otp",'').strip()
-            aadhaar_number = request.POST.get('aadhaar_number','').strip()
+            phone = request.POST.get('phone', '').strip()
+            dob = request.POST.get('dob', '').strip()
+            password = request.POST.get('password', '').strip()
+            otp_input = request.POST.get("otp", '').strip()
+            aadhaar_number = request.POST.get('aadhaar_number', '').strip()
             aadhaar_photo = request.FILES.get('aadhaar_photo')
             profile_photo = request.FILES.get('profile_photo')
 
-            # ✅ VALIDATION
-            if not all([fullname, shgname, district_id, village_id, role, phone, password, otp_input]):
+            # ✅ Role always President
+            role = "President"
+
+            # ✅ Check OTP expiry
+            otp_expiry = request.session.get("otp_expiry")
+            otp_expired = False
+            if otp_expiry:
+                from django.utils.dateparse import parse_datetime
+                expiry_time = parse_datetime(otp_expiry)
+                if timezone.now() > expiry_time:
+                    otp_expired = True
+
+            if not all([fullname, shgname, district_id, village_id, phone, password, otp_input]):
                 error = _("All fields including OTP are required")
+
+            elif otp_expired:
+                error = _("OTP expired. Please request a new one.")
 
             elif otp_input != request.session.get("otp"):
                 error = _("Invalid OTP")
 
             elif not re.fullmatch(r'\d{10}', phone):
-                error = _("Invalid phone")
+                error = _("Invalid phone number")
 
             elif User.objects.filter(username=phone).exists():
-                error = _("User already exists")
+                error = _("This phone number is already registered")
 
             else:
                 district = District.objects.get(id=district_id)
                 village = Village.objects.get(id=village_id)
 
-                group_members = Register.objects.filter(shgname=shgname, village=village)
+                if Register.objects.filter(shgname=shgname, village=village).exists():
+                    error = _("An SHG with this name already exists in this village")
 
-                if role == "President" and group_members.exists():
-                    error = _("Group already exists")
-
-                elif role == "Member" and not group_members.exists():
-                    error = _("Group does not exist")
-
-                elif group_members.count() >= 15:
-                    error = _("Max 15 members")
-
-                elif role.lower() == "president" and Register.objects.filter(shgname=shgname, role="president").exists():
-                    error = _("President already exists")
+                elif Register.objects.filter(shgname=shgname, role="President").exists():
+                    error = _("A President already exists for this SHG")
 
                 elif not all([aadhaar_number, aadhaar_photo, profile_photo]):
-                    error = _("All Aadhaar fields required")
+                    error = _("All Aadhaar fields are required")
 
                 elif not re.fullmatch(r'\d{12}', aadhaar_number):
-                    error = _("Invalid Aadhaar")
+                    error = _("Invalid Aadhaar number")
 
                 else:
-                    # ✅ CREATE USER
                     user = User.objects.create_user(
                         username=phone,
                         password=password
@@ -120,8 +127,9 @@ def register(request):
                         user=user
                     )
 
-                    success = _("Registered successfully!")
+                    success = _("Registered successfully! Please login.")
                     request.session.pop("otp", None)
+                    request.session.pop("otp_expiry", None)
 
     return render(request, "register.html", {
         "districts": districts,
@@ -130,10 +138,10 @@ def register(request):
         "fullname": fullname,
         "shgname": shgname,
         "phone": phone,
-        "role": role,
         "district_id": district_id,
         "village_id": village_id,
     })
+
 def load_villages(request):
     district_id = request.GET.get('district')
     villages = Village.objects.filter(district_id=district_id).values('id', 'name')
@@ -142,6 +150,7 @@ def load_villages(request):
 
 def login_view(request):
     error = ""
+    success = ""
     phone = ""
     shgname = ""
     role = ""
@@ -150,60 +159,244 @@ def login_view(request):
         phone = request.POST.get("phone", "").strip()
         shgname = request.POST.get("shgname", "").strip()
         role = request.POST.get("role", "").strip()
-        password = request.POST.get("password", "").strip()
 
-        user = authenticate(request, username=phone, password=password)
-
-        if user is None:
-            error = "Invalid phone or password"
-        else:
-            try:
-                reg = Register.objects.get(
-                    user=user,
-                    shgname=shgname,
-                    role__iexact=role
-                )
-            except Register.DoesNotExist:
-                error = "Invalid SHG name or role"
+        # ✅ SEND OTP (Member)
+        if "send_otp" in request.POST:
+            if not phone or not shgname:
+                error = _("Phone and SHG name are required.")
+            elif not Register.objects.filter(
+                phone=phone,
+                shgname=shgname,
+                role="Member"
+            ).exists():
+                error = _("No member found with this phone and SHG name.")
             else:
-                login(request, user)
+                otp = str(random.randint(1000, 9999))
+                request.session["login_otp"] = otp
+                request.session["login_phone"] = phone
+                request.session["login_otp_expiry"] = (
+                    timezone.now() + timedelta(minutes=5)
+                ).isoformat()
+                send_otp_sms(phone, otp)  # ✅ Real SMS
+                success = _("OTP sent to your phone number!")
 
-                request.session["user_id"] = reg.id
-                request.session["user_name"] = reg.fullname
-                request.session["user_shg"] = reg.shgname
-                request.session["user_role"] = reg.role
-                request.session["user_phone"] = reg.phone
+        # ✅ LOGIN
+        elif "login" in request.POST:
 
-                return redirect("dashboard")
+            if not role:
+                error = _("Please select a role.")
+
+            # --- PRESIDENT LOGIN (password) ---
+            elif role == "President":
+                password = request.POST.get("password", "").strip()
+
+                if not password:
+                    error = _("Please enter your password.")
+                else:
+                    user = authenticate(request, username=phone, password=password)
+
+                    if user is None:
+                        error = _("Invalid phone or password.")
+                    else:
+                        try:
+                            reg = Register.objects.get(
+                                user=user,
+                                shgname=shgname,
+                                role__iexact="President"
+                            )
+                        except Register.DoesNotExist:
+                            error = _("No President account found for this SHG.")
+                        else:
+                            login(request, user)
+                            request.session["user_id"] = reg.id
+                            request.session["user_name"] = reg.fullname
+                            request.session["user_shg"] = reg.shgname
+                            request.session["user_role"] = reg.role
+                            request.session["user_phone"] = reg.phone
+                            return redirect("dashboard")
+
+            # --- MEMBER LOGIN (OTP) ---
+            elif role == "Member":
+                otp_input = request.POST.get("otp", "").strip()
+                session_otp = request.session.get("login_otp")
+                session_phone = request.session.get("login_phone")
+                otp_expiry = request.session.get("login_otp_expiry")
+
+                # ✅ Check OTP expiry
+                otp_expired = False
+                if otp_expiry:
+                    from django.utils.dateparse import parse_datetime
+                    expiry_time = parse_datetime(otp_expiry)
+                    if timezone.now() > expiry_time:
+                        otp_expired = True
+
+                if not otp_input:
+                    error = _("Please enter the OTP.")
+
+                elif session_otp is None:
+                    error = _("Please request an OTP first.")
+
+                elif otp_expired:
+                    error = _("OTP expired. Please request a new one.")
+                    # Clear expired OTP
+                    request.session.pop("login_otp", None)
+                    request.session.pop("login_otp_expiry", None)
+
+                elif phone != session_phone:
+                    error = _("Phone number does not match OTP request.")
+
+                elif otp_input != session_otp:
+                    error = _("Invalid OTP. Please try again.")
+
+                else:
+                    try:
+                        reg = Register.objects.get(
+                            phone=phone,
+                            shgname=shgname,
+                            role__iexact="Member"
+                        )
+                    except Register.DoesNotExist:
+                        error = _("No member found with this phone and SHG name.")
+                    else:
+                        # ✅ Clear OTP from session
+                        request.session.pop("login_otp", None)
+                        request.session.pop("login_phone", None)
+                        request.session.pop("login_otp_expiry", None)
+
+                        login(request, reg.user)
+                        request.session["user_id"] = reg.id
+                        request.session["user_name"] = reg.fullname
+                        request.session["user_shg"] = reg.shgname
+                        request.session["user_role"] = reg.role
+                        request.session["user_phone"] = reg.phone
+                        return redirect("dashboard")
+
+            else:
+                error = _("Invalid role selected.")
 
     return render(request, "login.html", {
         "error": error,
+        "success": success,
         "phone": phone,
         "shgname": shgname,
-        "role": role
+        "role": role,
     })
+
 def forgot_password(request):
-    message = ""
+    error = ""
+    success = ""
+    phone = ""
+    shgname = ""
+    otp_sent = False
 
     if request.method == "POST":
-        phone = request.POST.get("phone")
-        shgname = request.POST.get("shgname")
-        new_password = request.POST.get("password")
 
-        try:
-            reg = Register.objects.get(phone=phone, shgname=shgname)
+        # ✅ STEP 1: Send OTP
+        if "send_otp" in request.POST:
+            phone = request.POST.get("phone", "").strip()
+            shgname = request.POST.get("shgname", "").strip()
 
-            user = reg.user   
+            if not phone or not shgname:
+                error = _("Phone and SHG name are required.")
+            else:
+                try:
+                    reg = Register.objects.get(
+                        phone=phone,
+                        shgname=shgname,
+                        role="President"
+                    )
+                    otp = str(random.randint(1000, 9999))
+                    request.session["fp_otp"] = otp
+                    request.session["fp_phone"] = phone
+                    request.session["fp_shgname"] = shgname
+                    request.session["fp_otp_expiry"] = (
+                        timezone.now() + timedelta(minutes=5)
+                    ).isoformat()
+                    send_otp_sms(phone, otp)  # ✅ Real SMS
+                    otp_sent = True
+                    success = _("OTP sent to your phone number!")
 
-            user.set_password(new_password) 
-            user.save()
+                except Register.DoesNotExist:
+                    error = _("No President account found with this phone and SHG name.")
 
-            message = "Password updated successfully"
+        # ✅ STEP 2: Verify OTP and Reset Password
+        elif "reset_password" in request.POST:
+            phone = request.POST.get("phone", "").strip()
+            shgname = request.POST.get("shgname", "").strip()
+            otp_input = request.POST.get("otp", "").strip()
+            new_password = request.POST.get("password", "").strip()
+            confirm_password = request.POST.get("confirm_password", "").strip()
 
-        except Register.DoesNotExist:
-            message = "User not found"
+            session_otp = request.session.get("fp_otp")
+            session_phone = request.session.get("fp_phone")
+            session_shgname = request.session.get("fp_shgname")
+            otp_expiry = request.session.get("fp_otp_expiry")
 
-    return render(request, "forgot_password.html", {"message": message})
+            # ✅ Check OTP expiry
+            otp_expired = False
+            if otp_expiry:
+                from django.utils.dateparse import parse_datetime
+                expiry_time = parse_datetime(otp_expiry)
+                if timezone.now() > expiry_time:
+                    otp_expired = True
+
+            if not otp_input:
+                error = _("Please enter the OTP.")
+                otp_sent = True
+
+            elif otp_expired:
+                error = _("OTP expired. Please request a new one.")
+
+            elif otp_input != session_otp:
+                error = _("Invalid OTP. Please try again.")
+                otp_sent = True
+
+            elif phone != session_phone or shgname != session_shgname:
+                error = _("Session mismatch. Please start over.")
+
+            elif not new_password:
+                error = _("Password cannot be empty.")
+                otp_sent = True
+
+            elif new_password != confirm_password:
+                error = _("Passwords do not match.")
+                otp_sent = True
+
+            else:
+                try:
+                    reg = Register.objects.get(
+                        phone=phone,
+                        shgname=shgname,
+                        role="President"
+                    )
+                    reg.user.set_password(new_password)
+                    reg.user.save()
+
+                    # ✅ Clear all OTP session data
+                    request.session.pop("fp_otp", None)
+                    request.session.pop("fp_phone", None)
+                    request.session.pop("fp_shgname", None)
+                    request.session.pop("fp_otp_expiry", None)
+
+                    success = _("Password reset successfully! Please login.")
+                    return render(request, "forgot_password.html", {
+                        "success": success,
+                        "otp_sent": False,
+                        "phone": "",
+                        "shgname": "",
+                    })
+
+                except Register.DoesNotExist:
+                    error = _("Account not found.")
+                    otp_sent = True
+
+    return render(request, "forgot_password.html", {
+        "error": error,
+        "success": success,
+        "phone": phone,
+        "shgname": shgname,
+        "otp_sent": otp_sent,
+    })
 
 @never_cache
 def dashboard(request):
@@ -426,7 +619,6 @@ def add_member(request):
         shgname = request.session.get("user_shg")
         aadhaar_number = request.POST.get("aadhaar_number", "").strip() or None
 
-        # ✅ All validation checks first
         if not phone:
             messages.error(request, "Phone number is required.")
             return redirect("add_member")
@@ -439,6 +631,13 @@ def add_member(request):
             messages.error(request, "This phone number already exists in your SHG.")
             return redirect("add_member")
 
+        if User.objects.filter(username=phone).exists():
+            # Check if orphan user (no Register linked)
+            existing_user = User.objects.get(username=phone)
+            if Register.objects.filter(user=existing_user).exists():
+                messages.error(request, "This phone number is already registered.")
+                return redirect("add_member")
+
         if aadhaar_number and Register.objects.filter(aadhaar_number=aadhaar_number).exists():
             messages.error(request, "This Aadhaar number already exists.")
             return redirect("add_member")
@@ -447,26 +646,22 @@ def add_member(request):
             messages.error(request, "Maximum 15 members allowed.")
             return redirect("add_member")
 
-        # ✅ Handle existing orphan User (from previous failed attempt)
-        user = None
         try:
-            existing_user = User.objects.get(username=phone)
-            # If no Register linked to this user, reuse it
-            if not Register.objects.filter(user=existing_user).exists():
-                user = existing_user
-            else:
-                messages.error(request, "This phone number is already registered.")
-                return redirect("add_member")
-        except User.DoesNotExist:
-            pass  # No existing user, will create fresh
+            # ✅ Reuse orphan user or create new one
+            user = None
+            try:
+                existing_user = User.objects.get(username=phone)
+                if not Register.objects.filter(user=existing_user).exists():
+                    user = existing_user
+            except User.DoesNotExist:
+                pass
 
-        try:
-            # Create user only if not reusing orphan
             if user is None:
-                user = User.objects.create_user(
-                    username=phone,
-                    password=phone
-                )
+                # ✅ Create user with unusable password
+                # Members login with OTP so they don't need a password
+                user = User.objects.create_user(username=phone)
+                user.set_unusable_password()
+                user.save()
 
             register = Register(
                 fullname=request.POST.get("fullname", "").strip(),
@@ -492,12 +687,12 @@ def add_member(request):
             return redirect("member_list")
 
         except Exception as e:
-            # Only delete user if we just created it
             if user and not Register.objects.filter(user=user).exists():
                 user.delete()
             print("ERROR adding member:", e)
             messages.error(request, f"Failed: {str(e)}")
             return redirect("add_member")
+        
         
 def delete_member(request, id):
    
