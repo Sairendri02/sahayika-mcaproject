@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
@@ -160,7 +162,7 @@ def login_view(request):
         shgname = request.POST.get("shgname", "").strip()
         role = request.POST.get("role", "").strip()
 
-        # ✅ SEND OTP (Member)
+      
         if "send_otp" in request.POST:
             if not phone or not shgname:
                 error = _("Phone and SHG name are required.")
@@ -180,13 +182,13 @@ def login_view(request):
                 send_otp_sms(phone, otp)  # ✅ Real SMS
                 success = _("OTP sent to your phone number!")
 
-        # ✅ LOGIN
+       
         elif "login" in request.POST:
 
             if not role:
                 error = _("Please select a role.")
 
-            # --- PRESIDENT LOGIN (password) ---
+          
             elif role == "President":
                 password = request.POST.get("password", "").strip()
 
@@ -215,14 +217,14 @@ def login_view(request):
                             request.session["user_phone"] = reg.phone
                             return redirect("dashboard")
 
-            # --- MEMBER LOGIN (OTP) ---
+            
             elif role == "Member":
                 otp_input = request.POST.get("otp", "").strip()
                 session_otp = request.session.get("login_otp")
                 session_phone = request.session.get("login_phone")
                 otp_expiry = request.session.get("login_otp_expiry")
 
-                # ✅ Check OTP expiry
+              
                 otp_expired = False
                 if otp_expiry:
                     from django.utils.dateparse import parse_datetime
@@ -238,7 +240,7 @@ def login_view(request):
 
                 elif otp_expired:
                     error = _("OTP expired. Please request a new one.")
-                    # Clear expired OTP
+                   
                     request.session.pop("login_otp", None)
                     request.session.pop("login_otp_expiry", None)
 
@@ -258,7 +260,7 @@ def login_view(request):
                     except Register.DoesNotExist:
                         error = _("No member found with this phone and SHG name.")
                     else:
-                        # ✅ Clear OTP from session
+                       
                         request.session.pop("login_otp", None)
                         request.session.pop("login_phone", None)
                         request.session.pop("login_otp_expiry", None)
@@ -291,7 +293,7 @@ def forgot_password(request):
 
     if request.method == "POST":
 
-        # ✅ STEP 1: Send OTP
+        
         if "send_otp" in request.POST:
             phone = request.POST.get("phone", "").strip()
             shgname = request.POST.get("shgname", "").strip()
@@ -312,14 +314,14 @@ def forgot_password(request):
                     request.session["fp_otp_expiry"] = (
                         timezone.now() + timedelta(minutes=5)
                     ).isoformat()
-                    send_otp_sms(phone, otp)  # ✅ Real SMS
+                    send_otp_sms(phone, otp)  
                     otp_sent = True
                     success = _("OTP sent to your phone number!")
 
                 except Register.DoesNotExist:
                     error = _("No President account found with this phone and SHG name.")
 
-        # ✅ STEP 2: Verify OTP and Reset Password
+      
         elif "reset_password" in request.POST:
             phone = request.POST.get("phone", "").strip()
             shgname = request.POST.get("shgname", "").strip()
@@ -332,7 +334,7 @@ def forgot_password(request):
             session_shgname = request.session.get("fp_shgname")
             otp_expiry = request.session.get("fp_otp_expiry")
 
-            # ✅ Check OTP expiry
+            
             otp_expired = False
             if otp_expiry:
                 from django.utils.dateparse import parse_datetime
@@ -372,7 +374,7 @@ def forgot_password(request):
                     reg.user.set_password(new_password)
                     reg.user.save()
 
-                    # ✅ Clear all OTP session data
+                
                     request.session.pop("fp_otp", None)
                     request.session.pop("fp_phone", None)
                     request.session.pop("fp_shgname", None)
@@ -397,7 +399,7 @@ def forgot_password(request):
         "shgname": shgname,
         "otp_sent": otp_sent,
     })
-
+@login_required(login_url='login')
 @never_cache
 def dashboard(request):
     user_role = request.session.get("user_role")
@@ -598,7 +600,7 @@ def dashboard(request):
 
     return render(request, "dashboard.html", context)
 
-
+@login_required(login_url='login')
 def add_member(request):
 
     if request.session.get("user_role") != "President":
@@ -693,7 +695,7 @@ def add_member(request):
             messages.error(request, f"Failed: {str(e)}")
             return redirect("add_member")
         
-        
+@login_required(login_url='login')
 def delete_member(request, id):
    
     if request.session.get("user_role") != "President":
@@ -712,7 +714,7 @@ def delete_member(request, id):
 
     return redirect("dashboard")
 
-
+@login_required(login_url='login')
 def member_list(request):
     user_shg = request.session.get("user_shg")
     user_role = request.session.get("user_role")
@@ -764,7 +766,7 @@ def member_list(request):
         "search": search,
         "search_results": search_results
     })
-
+@login_required(login_url='login')
 def add_loan(request, loan_id=None):
     if request.session.get("user_role") != "President":
         return redirect("dashboard")
@@ -856,10 +858,7 @@ def add_loan(request, loan_id=None):
         "selected_member": selected_member
     })
 
-def logout_view(request):
-    request.session.flush()   
-    return redirect("login")
-
+@login_required(login_url='login')
 def monthly_collection(request):
     shg = (request.session.get("user_shg") or "").strip()
     role = request.session.get("user_role")
@@ -980,6 +979,7 @@ def monthly_collection(request):
 
     return render(request, "monthly_collection.html", context)
 
+@login_required(login_url='login')
 def loan_details(request):
     shg = (request.session.get("user_shg") or "").strip()
 
@@ -1055,6 +1055,7 @@ def loan_details(request):
         "user_role": request.session.get("user_role"),
     })
 
+@login_required(login_url='login')
 def clear_loan(request, loan_id):
     if request.session.get("user_role") != "President":
         return redirect("loan_details")  
@@ -1067,12 +1068,14 @@ def clear_loan(request, loan_id):
 
     return redirect("loan_details")
 
+@login_required(login_url='login')
 def delete_loan(request, loan_id):
     loan = get_object_or_404(Loan, id=loan_id)
     if request.method == "POST":
         loan.delete()
     return redirect("loan_details")
 
+@login_required(login_url='login')
 def edit_loan(request, loan_id):
     loan = get_object_or_404(Loan, id=loan_id)
 
@@ -1091,6 +1094,7 @@ def edit_loan(request, loan_id):
 
     return render(request, "add_loan.html", {"loan": loan, "edit": True})
 
+@login_required(login_url='login')
 def add_project(request, project_id=None):
     if request.session.get("user_role") != "President":
         return redirect("project_list")
@@ -1135,7 +1139,7 @@ def add_project(request, project_id=None):
     })
 
 
-
+@login_required(login_url='login')
 def delete_project(request, id):
     if request.session.get("user_role") != "President":
         return redirect("project_list")
@@ -1144,6 +1148,8 @@ def delete_project(request, id):
     project.delete()
 
     return redirect("project_list")
+
+@login_required(login_url='login')
 def project_list(request):
     projects = Project.objects.filter(
         shgname=request.session.get("user_shg")
@@ -1153,6 +1159,11 @@ def project_list(request):
         "projects": projects,
         "user_role": request.session.get("user_role")
     })
+
+def logout_view(request):
+    auth_logout(request)
+    request.session.flush()
+    return redirect("home")
 
 def learn_more(request):
     return render(request, 'learn_more.html')
