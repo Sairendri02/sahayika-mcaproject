@@ -731,7 +731,7 @@ def add_member(request):
             register.save()
 
             messages.success(request, "Member added successfully!")
-            return redirect("member_list")
+            return redirect("add_member")
 
         except Exception as e:
             if user and not Register.objects.filter(user=user).exists():
@@ -929,7 +929,7 @@ def add_loan(request, loan_id=None):
 
             messages.success(request, f"{loan_type} loan added successfully")
 
-        return redirect("loan_details")
+        return redirect("add_loan")
 
     return render(request, "add_loan.html", {
         "members": members,
