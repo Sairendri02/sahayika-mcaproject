@@ -742,24 +742,35 @@ def add_member(request):
         
 @login_required(login_url='login')
 def delete_member(request, id):
-   
-   # Only President Allow
+
     if request.session.get("user_role") != "President":
         return redirect("dashboard")
 
     try:
         member = Register.objects.get(id=id)
 
-        # Ensure same shg
         if member.shgname != request.session.get("user_shg"):
             return redirect("dashboard")
 
-        member.delete()
+        #  Prevent deleting President
+        if member.role == "President":
+            messages.error(request, "Cannot delete the President.")
+            return redirect("member_list")
+
+        #  Delete linked user too
+        if member.user:
+            member.user.delete()
+        else:
+            member.delete()
+
+        messages.success(request, "Member deleted successfully!")
 
     except Register.DoesNotExist:
-        pass
+        messages.error(request, "Member not found.")
 
-    return redirect("dashboard")
+    return redirect("member_list")  #  Goes back to member list
+
+
 
 @login_required(login_url='login')
 def member_list(request):

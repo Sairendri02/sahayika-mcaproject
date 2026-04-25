@@ -324,26 +324,6 @@ animation:move 14s linear infinite;font-weight:bold;">
                                     <td>{{ member.role }}</td>
                                     <td>{{ member.phone }}</td>
                                     <td>{{member.aadhaar_number}}</td>
-                                    <td>{% if member.aadhaar_photo %}
-                                       <img src="{{ member.aadhaar_photo }}" alt="Aadhaar Photo" width="80">
-                                        {% else %}
-                                        <span class="text-danger">Not uploaded</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <td>{% if member.profile_photo %}
-                                        <img src="{{ member.profile_photo }}" alt="Profile Photo" width="80">
-                                        {% else %}
-                                        <span class="text-danger">Not uploaded</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if user_role == "President" %}
-                                         <a href="{% url 'delete_member' member.id %}" 
-                                          class="btn btn-danger btn-sm"
-                                          onclick="return confirm('Delete this member?');"> {% trans "Delete" %}</a>
-                                        {% endif %}
-                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
