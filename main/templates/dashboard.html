@@ -157,7 +157,7 @@ animation:move 14s linear infinite;font-weight:bold;">
         <div id="content" class=" col-md-12 p-4" >
             <h3>{% trans "Welcome" %} {{ request.session.user_role }} {{ request.session.user_name }}</h3>
             <p>{% trans "Managing SHG Group:" %} {{ request.session.user_shg }}</p>
-           
+           <!--Metting set section-->
             {% if request.session.user_role == "President" %}
 
                 <div class="card p-3 mb-3 shadow-sm">
@@ -186,7 +186,7 @@ animation:move 14s linear infinite;font-weight:bold;">
 
         {% endif %}
 
-           
+           <!--Summary Card-->
             <div class="row mt-4">
                 <div class="col-md-3 mb-2">
                     <div class="card p-3 shadow stat-card">
@@ -248,7 +248,7 @@ animation:move 14s linear infinite;font-weight:bold;">
             
             </div>
 
-            
+            <!--Status Bar-->
             <div class="row mt-4">
                 <div class="col-md-6">
                     <div class="card p-3 shadow">
@@ -300,7 +300,7 @@ animation:move 14s linear infinite;font-weight:bold;">
              </div>
             
             
-           
+           <!--Member Table-->
             <div class="card mt-5 shadow">
                 <div class="card-header"><h5>{% trans "Group Members" %}</h5></div>
                 <div class= card-body>
@@ -352,7 +352,7 @@ animation:move 14s linear infinite;font-weight:bold;">
                 </div>
             </div>
        
-    
+    <!--Group Financial Bar-->
     <div class="card p-3 shadow mt-4">
              <h5>{% trans "Group Financial Health" %}</h5>
 

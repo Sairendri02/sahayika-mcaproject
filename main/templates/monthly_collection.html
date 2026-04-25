@@ -102,7 +102,7 @@
 <h2 class="mb-4">{% trans "Monthly Collection" %} - {{selected_month}}/{{selected_year}}</h2>
 
 <form method="GET" class="row mb-4">
-
+<!--choose year for view/filter-->
 <div class="col-md-4">
 <label>{% trans "Month" %}</label>
 
@@ -140,7 +140,7 @@
 </div>
 
 </form>
-
+<!--Summary Cards-->
 <h4>{% trans "Summary Cards" %}</h4>
 
 <div class="row mb-4">
@@ -170,7 +170,7 @@
 </div>
 
 </div>
-
+<!--Input monthly_collection-->
 {% if role == "President" %}
 <div class="card mt-4 shadow mb-3">
     <div class="card-header">
@@ -224,7 +224,7 @@
     </div>
 </div>
 {% endif %}
-
+<!--Table-->
 <div class="card mt-5 shadow mb-3">
     <div class="card-header"> <h4>{% trans "Group Members Table" %}</h4></div>
     <div class= card-body>

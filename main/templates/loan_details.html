@@ -130,7 +130,7 @@
 
     <input type="hidden" name="type" value="{{ request.GET.type }}">
     <input type="hidden" name="member" value="{{ request.GET.member }}">
-
+ <!--Filter month/year choices-->
     <select name="month">
         <option value="">Select Month</option>
         {% for value, name in month_choices %}
@@ -148,14 +148,14 @@
 </form>
    
 
-    
+    <!--Select Loan-->
     <div class="mb-3">
         <a href="{% url 'loan_details' %}?type=Group" class="btn btn-dark">{% trans "Group Loan" %}</a>
 
         <a href="{% url 'loan_details' %}?type=Personal" class="btn btn-secondary">{% trans "Personal Loan" %}</a>
     </div>
 
-    
+    <!--choose  member-->
     <div class="mb-3"
        {% if request.GET.type != "Personal" %}style="display:none;"{% endif %}>
 
@@ -172,7 +172,7 @@
         </select>
   </div>
 
-    
+    <!--Loan detail of choosen member-->
     <div class="row" id="loanContainer">
 
         {% for loan in loans %}
@@ -202,7 +202,7 @@
         <span class="text-success fw-semibold">{% trans "Loan Cleared" %}</span>
 
     {% else %}
-
+<!--Clear loan option-->
         {% if user_role == "President" %}
             <form method="POST" action="{% url 'clear_loan' loan.id %}" class="d-inline">
                 {% csrf_token %}
@@ -215,7 +215,7 @@
         {% endif %}
 
     {% endif %}
-
+<!--Edit option-->
    {% if user_role == "President" %}
 
     {% if loan.remaining != 0 %}
@@ -223,7 +223,7 @@
            {% trans "Edit" %}
         </a>
     {% endif %}
-
+<!--Delete OPtion-->
     <form method="POST"
           action="{% url 'delete_loan' loan.id %}"
           class="d-inline"
