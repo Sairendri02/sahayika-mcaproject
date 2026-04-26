@@ -1,266 +1,237 @@
-{% load i18n%}
+{% load i18n %}
 {% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Register</title>
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <style>
-        .logo{
-height:50px;
-margin-right:10px;
-}
-
-.logo-texts{
-display: flex; 
-flex-direction: column; 
-gap:0;  
-font-weight:bold;
-font-size:25px;
-color: black;
-}
-
-.navbar.container{
-    padding-left: 0;
-    padding-right: 0;
-}
-.navbar {
-  height:70px; /* increase if needed */
-  align-items: center;
-}
-
-/* Logo container */
-.logo-container {
-  display: flex;
-  
-  align-items: center;
-  gap: 2px;   /* small spacing between texts */
-  margin-left: 10px; /* distance from left edge */
-  text-decoration: none;
-}
-
-
-
-/* Odia text */
-.logo-odia {
-  font-family: 'Noto Sans Odia', sans-serif;
-  font-size: 18px;
-  
-  color:black;
-  line-height: 1;
-}
-
-/* English text */
-.logo-english {
-  font-family: Arial, sans-serif; /* or your preferred English font */
-  font-size: 20px;
-  font-weight:bold ;
-  color: black;
-  line-height: 1;
-}
-
-/* Menu links */
-.navbar-links {
-  list-style: none;
-  gap: 20px;
-}
-
-.navbar-links li a {
-  color:black;
-  text-decoration: none;
-  font-size: 16px;
-}
-
-.navbar-links li a:hover {
-  color:rgb(33, 33, 144);
-}
-
-        
-        body {
-            background-color:hsl(240, 33%, 92%) ;
-        }
-
-        .register-box {
-            width: 700px;
-            margin: 60px auto;
-            background: #fffff0;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-        }
-
-        .register-title {
-            text-align: center;
-            font-size: 35px;
-            font-weight: bold;
-            color: #3b5b9a;
-            margin-bottom: 30px;
-        }
-
-        .btn-register {
-            width: 100%;
-            background: #3b5b9a;
-            color: #08183a;
-        }
-    </style>
+    .logo{
+        height:50px;
+        margin-right:10px;
+    }
+    .logo-texts{
+        display: flex;
+        flex-direction: column;
+        gap:0;
+        font-weight:bold;
+        font-size:25px;
+        color: black;
+    }
+    .navbar {
+        height:70px;
+        align-items: center;
+    }
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        margin-left: 10px;
+        text-decoration: none;
+    }
+    .logo-odia {
+        font-family: 'Noto Sans Odia', sans-serif;
+        font-size: 18px;
+        color:black;
+        line-height: 1;
+    }
+    .logo-english {
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        font-weight:bold;
+        color: black;
+        line-height: 1;
+    }
+    .navbar-links {
+        list-style: none;
+        gap: 20px;
+    }
+    .navbar-links li a {
+        color:black;
+        text-decoration: none;
+        font-size: 16px;
+    }
+    .navbar-links li a:hover {
+        color:rgb(33, 33, 144);
+    }
+    body {
+        background-color:hsl(240, 33%, 92%);
+    }
+    .register-box {
+        width: 700px;
+        margin: 60px auto;
+        background: #fffff0;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+    .register-title {
+        text-align: center;
+        font-size: 35px;
+        font-weight: bold;
+        color: #3b5b9a;
+        margin-bottom: 30px;
+    }
+    .btn-register {
+        width: 100%;
+        background: #3b5b9a;
+        color: #08183a;
+    }
+</style>
 </head>
 
 <body>
 <nav class="navbar shadow-sm" style="background-color: #456382">
-  <div class="d-flex align-items-center w-100 px-3"> 
-
-   
-    <a class="d-flex  align-items-center logo-container" href="#">
-      <img src="{% static 'images/LOGO.png' %}" class="logo">
-      <div class="logo-texts d-flex flex-column ms-2">
-      <span class="logo-odia">ସହାୟିକା</span>
-      <span class="logo-english">Sahayika</span>
-      </div>
-    </a>
-
-    
-    <ul class="d-flex ms-auto align-items-center mb-0 navbar-links">
-      <li><a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a></li>
-      <li><a class="nav-link" href="{% url 'about' %}">{% trans "About Us" %}</a></li>
-      <li><a class="nav-link" href="{% url 'rti' %}">{% trans "RTI" %}</a></li>
-      <li><a class="nav-link" href="">{% trans "Contact Us" %}</a></li>
-      <form action="{% url 'set_language' %}" method="post" style="display:inline;">
-        {% csrf_token %}
-    
-        {% get_current_language as LANGUAGE_CODE %}
-    
-        {% if LANGUAGE_CODE == "en" %}
-            <input type="hidden" name="language" value="or">
-            <button type="submit" style ="border:none;background:none;">ଓଡ଼ିଆ</button>
-        {% else %}
-            <input type="hidden" name="language" value="en">
-            <button type="submit" style ="border:none;background:none;">English</button>
-        {% endif %}
-      </form>
-    </ul>
-
-  </div>
+    <div class="d-flex align-items-center w-100 px-3">
+        <a class="d-flex align-items-center logo-container" href="#">
+            <img src="{% static 'images/LOGO.png' %}" class="logo">
+            <div class="logo-texts d-flex flex-column ms-2">
+                <span class="logo-odia">ସହାୟିକା</span>
+                <span class="logo-english">Sahayika</span>
+            </div>
+        </a>
+        <ul class="d-flex ms-auto align-items-center mb-0 navbar-links">
+            <li><a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a></li>
+            <li><a class="nav-link" href="{% url 'about' %}">{% trans "About Us" %}</a></li>
+            <li><a class="nav-link" href="{% url 'rti' %}">{% trans "RTI" %}</a></li>
+            <li><a class="nav-link" href="{% url 'home' %}#contact">{% trans "Contact Us" %}</a></li>
+            <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                {% get_current_language as LANGUAGE_CODE %}
+                {% if LANGUAGE_CODE == "en" %}
+                    <input type="hidden" name="language" value="or">
+                    <button type="submit" style="border:none;background:none;">ଓଡ଼ିଆ</button>
+                {% else %}
+                    <input type="hidden" name="language" value="en">
+                    <button type="submit" style="border:none;background:none;">English</button>
+                {% endif %}
+            </form>
+        </ul>
+    </div>
 </nav>
+
 <div class="register-box">
+    <div class="register-title">{% trans "Create Account" %}</div>
 
-<div class="register-title">{% trans "Create Account" %}</div>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
 
-{% if error %}<div class="alert alert-danger">
-    {{ error }}
+    {% if success %}
+    <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% trans "Full Name" %}<br>
+        <input type="text" name="fullname" value="{{ fullname }}"
+               class="form-control mb-3" placeholder="Full Name">
+
+        {% trans "SHG Name" %}
+        <input type="text" name="shgname" value="{{ shgname }}"
+               class="form-control mb-3" placeholder="SHG Name">
+
+        <input type="hidden" name="role" value="President">
+        <div class="mb-3">
+            <label>{% trans "Role" %}</label>
+            <input type="text" value="President" class="form-control" disabled>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>{% trans "District" %}</label>
+                <select name="district" id="district" class="form-select">
+                    <option value="">{% trans "Select District" %}</option>
+                    {% for d in districts %}
+                    <option value="{{ d.id }}"
+                        {% if d.id|stringformat:"s" == district_id %}selected{% endif %}>
+                        {{ d.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label>{% trans "Village" %}</label>
+                <!--  Village dropdown now keeps selection after page reload -->
+                <select name="village" id="village" class="form-select">
+                    <option value="">{% trans "Select Village" %}</option>
+                    {% for v in villages %}
+                    <option value="{{ v.id }}"
+                        {% if v.id|stringformat:"s" == village_id %}selected{% endif %}>
+                        {{ v.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>{% trans "Aadhaar Number" %}</label>
+            <!--  Fixed id from aadhaar_number to match JS -->
+            <input type="text" name="aadhaar_number" id="aadhaar_number"
+                   class="form-control" maxlength="12" required>
+            <small id="aadhaar_error" class="text-danger"></small>
+        </div>
+
+        <div class="mb-3">
+            <label>{% trans "Aadhaar Photo" %}</label>
+            <!--  Fixed id from aadhar_photo to aadhaar_photo -->
+            <input type="file" name="aadhaar_photo" id="aadhaar_photo"
+                   class="form-control" accept="image/*" required>
+            <img id="aadhaar_preview" src="#"
+                 style="display:none; max-width:200px; margin-top:10px;">
+        </div>
+
+        <div class="mb-3">
+            <label>{% trans "Profile Photo" %}</label>
+            <input type="file" name="profile_photo" id="profile_photo"
+                   class="form-control" accept="image/*" required>
+            <img id="profile_preview" src="#"
+                 style="display:none; max-width:200px; margin-top:10px;">
+        </div>
+
+        <div class="mb-2">
+            <label>{% trans "Date of Birth" %}</label>
+            <input type="date" name="dob" class="form-control" required>
+        </div>
+
+        {% trans "Phone number" %}:
+        <input type="text" name="phone" value="{{ phone }}"
+               class="form-control mb-3" placeholder="Phone Number">
+
+        <button type="submit" name="send_otp" class="btn btn-warning mb-3">
+            {% trans "Send OTP" %}
+        </button>
+
+        <input type="text" name="otp" class="form-control mb-3" placeholder="Enter OTP">
+
+        <input type="password" name="password" class="form-control mb-3" placeholder="Password">
+
+        <input type="password" name="confirm_password" class="form-control mb-3"
+               placeholder="Confirm Password">
+
+        <button type="submit" name="register" class="btn btn-register mb-3">
+            {% trans "Register" %}
+        </button>
+
+        <p class="text-center mt-3">
+            {% trans "Already have account?" %}
+            <a href="{% url 'login' %}">{% trans "Login" %}</a>
+        </p>
+
+    </form>
 </div>
-{% endif %}
 
-{% if success %}
-<div class="alert alert-success">
-    {{ success }}
-</div>
-{% endif %}
-
-
-
-<form method="POST" enctype="multipart/form-data">
-
-{% csrf_token %}
-{% trans "Full Name" %}<br>
-<input type="text" name="fullname" value="{{fullname}}"  class="form-control mb-3" placeholder="Full Name">
-{% trans "SHG Name" %}
-<input type="text" name="shgname" value="{{shgname}}"  class="form-control mb-3" placeholder="SHG Name">
-
-<input type="hidden" name="role" value="President">
-<div class="mb-3">
-    <label>{% trans "Role" %}</label>
-    <input type="text" value="President" class="form-control" disabled>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-md-6">
-
-<label>{% trans "District" %}</label>
-<select name="district" id="district" class="form-select">
-
-<option value="">{% trans "Select District" %}</option>
-
-{% for district in districts %}
-<option value="{{ district.id }}"{%if district.id|stringformat:"s" == district_id %}selected{% endif %}>{{ district.name }}</option>
-{% endfor %}
-
-</select>
-</div>
-
-<div class="col-md-6">
-
-<label>{% trans "Village" %}</label>
-<select name="village" id="village" class="form-select">
-
-<option value="">{% trans "Select Village" %}</option>
-
-</select>
-</div>
-</div>
-
-   
-  <div class="row mb-3">
-    <div class="mb-3">
-        <label>{% trans "Aadhaar Number" %}</label>
-        <input type="text" name="aadhaar_number" id="aadhaar_number" class="form-control" maxlength="12" required>
-        <small id="aadhar_error" class="text-danger"></small>
-    </div>
-</div>
-   
-    <div class="mb-3">
-        <label>{% trans "Aadhaar Photo" %}</label>
-        <input type="file" name="aadhaar_photo" id="aadhaar_photo" class="form-control" accept="image/*" required>
-        <img id="aadhar_preview" src="#" style="display:none; max-width:200px; margin-top:10px;">
-    </div>
-
-    <div class="mb-3">
-        <label>{% trans "Profile Photo" %}</label>
-        <input type="file" name="profile_photo" id="profile_photo" class="form-control" accept="image/*" required>
-        <img id="profile_preview" src="#" style="display:none; max-width:200px; margin-top:10px;">
-    </div>
-
-    <div class="mb-2">
-      <label>{% trans "Date of Birth" %}</label>
-       <input type="date" name="dob" class="form-control" required>
-   </div>
-
-
- {% trans "Phone number" %}:
-<input type="text" name="phone" value="{{phone}}"  class="form-control mb-3" placeholder="Phone Number">
-
-<button type="submit" name="send_otp" class="btn btn-warning mb-3">
-{% trans "Send OTP" %}
-</button>
-
-<input type="text" name="otp" class="form-control mb-3" placeholder="Enter OTP">
-
-<input type="password" name="password" class="form-control mb-3" placeholder="Password">
-
-<input type="password" name="confirm_password" class="form-control mb-3" placeholder="Confirm Password">
-
-<button type="submit" name="register" class="btn btn-register">{% trans "Register" %}</button>
-
-<p class="text-center mt-3">
-{% trans "Already have account?" %} <a href="{%url 'login'%}" >{% trans "Login" %}</a>
-</p>
-
-</form>
-
-</div>
-
-</div>
 <script>
+//  Load villages on district change
 document.addEventListener('DOMContentLoaded', function() {
     const districtSelect = document.getElementById('district');
     const villageSelect = document.getElementById('village');
 
-districtSelect.addEventListener('change', function() {
+    districtSelect.addEventListener('change', function() {
         const districtId = this.value;
-        // Use Django url template tag
         fetch("{% url 'ajax_load_villages' %}?district=" + districtId)
             .then(response => response.json())
             .then(data => {
@@ -269,44 +240,46 @@ districtSelect.addEventListener('change', function() {
                     const option = document.createElement('option');
                     option.value = v.id;
                     option.text = v.name;
- villageSelect.appendChild(option);
+                    villageSelect.appendChild(option);
                 });
             });
     });
-});
 
-const aadhaarInput = document.getElementById('aadhaar_number');
+    //  Fixed variable names from aadharInput to aadhaarInput
+    const aadhaarInput = document.getElementById('aadhaar_number');
     const aadhaarError = document.getElementById('aadhaar_error');
 
-    aadharInput.addEventListener('input', function() {
+    aadhaarInput.addEventListener('input', function() {
         const val = this.value;
         if(!/^\d{0,12}$/.test(val)) {
-            aadharError.textContent = "Only digits allowed (max 12)";
+            aadhaarError.textContent = "Only digits allowed (max 12)";
         } else {
-            aadharError.textContent = "";
+            aadhaarError.textContent = "";
         }
     });
 
-    // Image preview function
-    function previewImage(input, previewId) {
-        const preview = document.getElementById(previewId);
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    document.getElementById('aadhar_photo').addEventListener('change', function() {
-        previewImage(this, 'aadhar_preview');
+    //  Fixed id names for image preview
+    document.getElementById('aadhaar_photo').addEventListener('change', function() {
+        previewImage(this, 'aadhaar_preview');
     });
 
     document.getElementById('profile_photo').addEventListener('change', function() {
         previewImage(this, 'profile_preview');
     });
+});
+
+//  Image preview function
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 </script>
 
 </body>

@@ -47,22 +47,33 @@ def send_otp_sms(phone, otp):
 
 def register(request):
     districts = District.objects.all().order_by('name')
+    villages = []  #  Add this for village dropdown
+    
     # initialize msg
     error = ""
     success = ""
 
-    fullname = request.POST.get("fullname", "")
-    shgname = request.POST.get("shgname", "")
-    phone = request.POST.get("phone", "")
-    district_id = request.POST.get("district", "")
-    village_id = request.POST.get("village", "")
+    fullname = ""
+    shgname = ""
+    phone = ""
+    district_id = ""
+    village_id = ""
 
     if request.method == "POST":
 
-       # send otp
-        if "send_otp" in request.POST:
-            phone = request.POST.get("phone", "").strip()
+        #  Always fetch ALL fields at top of POST
+        fullname = request.POST.get("fullname", "").strip()
+        shgname = request.POST.get("shgname", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        district_id = request.POST.get("district", "").strip()
+        village_id = request.POST.get("village", "").strip()
 
+        #  Load villages for selected district so dropdown stays filled
+        if district_id:
+            villages = Village.objects.filter(district_id=district_id)
+
+        # send otp
+        if "send_otp" in request.POST:
             if not re.fullmatch(r'\d{10}', phone):
                 error = _("Enter valid phone number")
             else:
@@ -71,16 +82,11 @@ def register(request):
                 request.session["otp_expiry"] = (
                     timezone.now() + timedelta(minutes=5)
                 ).isoformat()
-                send_otp_sms(phone, otp)  
+                send_otp_sms(phone, otp)
                 success = _("OTP sent to your phone number")
 
-       # register user
+        # register user
         elif "register" in request.POST:
-            fullname = request.POST.get('fullname', '').strip()
-            shgname = request.POST.get('shgname', '').strip()
-            district_id = request.POST.get('district', '').strip()
-            village_id = request.POST.get('village', '').strip()
-            phone = request.POST.get('phone', '').strip()
             dob = request.POST.get('dob', '').strip()
             password = request.POST.get('password', '').strip()
             otp_input = request.POST.get("otp", '').strip()
@@ -91,7 +97,7 @@ def register(request):
             # Role always President
             role = "President"
 
-            #  Check OTP expiry
+            # Check OTP expiry
             otp_expiry = request.session.get("otp_expiry")
             otp_expired = False
             if otp_expiry:
@@ -156,8 +162,17 @@ def register(request):
                     request.session.pop("otp", None)
                     request.session.pop("otp_expiry", None)
 
+                    #  Clear fields after success
+                    fullname = ""
+                    shgname = ""
+                    phone = ""
+                    district_id = ""
+                    village_id = ""
+                    villages = []
+
     return render(request, "register.html", {
         "districts": districts,
+        "villages": villages,  #  Pass villages to template
         "error": error,
         "success": success,
         "fullname": fullname,
@@ -166,7 +181,6 @@ def register(request):
         "district_id": district_id,
         "village_id": village_id,
     })
-
 def load_villages(request):
     district_id = request.GET.get('district')
     villages = Village.objects.filter(district_id=district_id).values('id', 'name')
