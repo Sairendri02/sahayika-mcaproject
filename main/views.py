@@ -78,7 +78,7 @@ def register(request):
                 error = _("Enter valid phone number")
             else:
                 otp = str(random.randint(1000, 9999))
-                request.session["otp"] = otp
+                request.session["otp_phone"] = phone
                 request.session["otp_expiry"] = (
                     timezone.now() + timedelta(minutes=5)
                 ).isoformat()
@@ -288,22 +288,23 @@ def login_view(request):
                     error = _("Invalid OTP. Please try again.")
 
                 else:
-                    try:
-                        reg = Register.objects.get(
-                            phone=phone,
-                            shgname=shgname,
-                            role__iexact="Member"
-                        )
-                    except Register.DoesNotExist:
-                        error = _("No member found with this phone and SHG name.")
-                    else:
-                       
+                   try:
+                      reg = Register.objects.get(
+                      phone=phone,
+                      shgname=shgname,
+                      role__iexact="Member"
+                      )
+                   except Register.DoesNotExist:
+                      error = _("No member found with this phone and SHG name.")
+                   else:
+                      if reg.user is None:
+                        error = _("Account error. Please contact your President")
+                      else:
+            # clear session
                         request.session.pop("login_otp", None)
                         request.session.pop("login_phone", None)
                         request.session.pop("login_otp_expiry", None)
-                    if reg.user is None:
-                        error = _("Account error.Please contact to your President")
-                    else:
+
                         login(request, reg.user)
                         request.session["user_id"] = reg.id
                         request.session["user_name"] = reg.fullname
@@ -311,7 +312,6 @@ def login_view(request):
                         request.session["user_role"] = reg.role
                         request.session["user_phone"] = reg.phone
                         return redirect("dashboard")
-
             else:
                 error = _("Invalid role selected.")
 
