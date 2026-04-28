@@ -56,7 +56,6 @@ class Register(models.Model):
     class Meta:
          unique_together = ('phone','shgname')
     
-
 class Loan(models.Model):
     LOAN_TYPES = (
         ('Group', 'Group'),
@@ -65,31 +64,30 @@ class Loan(models.Model):
 
     shgname = models.CharField(max_length=100)
     loan_type = models.CharField(max_length=10, choices=LOAN_TYPES)
-
     member = models.ForeignKey(
         'Register',
         on_delete=models.CASCADE,
         null=True,
         blank=True
     )
-
     amount = models.FloatField(default=0)
     paid = models.FloatField(default=0)
     remaining = models.FloatField(default=0)
-
     duration = models.IntegerField(default=0)
     interest_rate = models.FloatField(default=0)
     subvention_rate = models.FloatField(default=0)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
     total_payable = models.FloatField(default=0)
+    emi = models.FloatField(default=0)  
 
     def save(self, *args, **kwargs):
         self.total_payable = self.amount + (
             self.amount * (self.interest_rate - self.subvention_rate) * self.duration
         ) / 100
-
         self.remaining = self.total_payable - self.paid
-
+        #  Auto calculate EMI in model save too
+        if self.duration > 0:
+            self.emi = round(self.total_payable / self.duration, 2)
         super().save(*args, **kwargs)
 
     def __str__(self):

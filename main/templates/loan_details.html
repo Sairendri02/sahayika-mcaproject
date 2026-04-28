@@ -1,4 +1,4 @@
-{% load i18n%}
+{% load i18n %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -8,7 +8,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-   .card {
+    .card {
         background: rgb(243, 247, 252);
         border-radius: 12px;
         padding: 20px;
@@ -17,95 +17,98 @@
         min-width: 280px;
         transition:0.3s;
     }
+    .card p {
+        white-space: normal;
+        width: 100%;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .progress {
+        height: 10px;
+        margin-top: 10px;
+    }
+    .btn.active {
+        background-color: black;
+        color: white;
+    }
+    .navbar-custom {
+        background-color: #536f8a;
+    }
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+    }
+    .logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+    }
+    .brand-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
+        color:black;
+    }
+    .brand-text span {
+        display: block;
+    }
+    .brand-text .odia {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    .brand-text .english {
+        font-size: 1rem;
+    }
+    .sidebar {
+        height: 100vh;
+        background: #0e2b48;
+        color: white;
+        padding-top: 20px;
+        position: sticky;
+        top:0;
+        transition:0.3s;
+    }
+    .sidebar a {
+        color: white;
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+    }
+    .sidebar a:hover { background: #0a2540; }
 
-   .card p {
-       white-space: normal;
-       width: 100%;
-        }
-
-   .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-   }
-
-   .progress {
-
-    height: 10px;
-    margin-top: 10px;
-   }
-
-   .btn.active {
-    background-color: black;
-    color: white;
-   }
-   /* Navbar background color */
-        .navbar-custom {
-            background-color: #536f8a; /* You can change to any color */
-        }
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-        }
-        .logo {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-        .brand-text {
-            display: flex;
-            flex-direction: column; /* Stack Odia above English */
-            line-height: 1;
-            color:black;
-        }
-        .brand-text span {
-            display: block;
-        }
-        .brand-text .odia {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .brand-text .english {
-            font-size: 1rem;
-        }
-        .sidebar { height: 100vh; background: #0e2b48; color: white; padding-top: 20px; position: sticky;top:0; transition:0.3s; }
-        .sidebar a { color: white; display: block; padding: 10px; text-decoration: none; }
-        .sidebar a:hover { background: #0a2540; }
-        .sidebar.active{
-            left:0;
-        }
-    </style>
-</head>
-<body> 
     
-    <nav class="navbar navbar-expand-lg navbar-custom text-white">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-        <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
-        <div class="brand-text">
-            <span class="odia">ସହାୟିକା</span>
-            <span class="english">Sahayika</span>
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom text-white">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/LOGO.png' %}" class="logo" alt="Logo">
+            <div class="brand-text">
+                <span class="odia">ସହାୟିକା</span>
+                <span class="english">Sahayika</span>
+            </div>
+        </a>
+        <div class="d-flex ms-auto">
+            <span class="text-white me-3">
+                {% trans "Hello," %} {{ request.session.user_name }}
+            </span>
         </div>
-    </a>
-    <div class="d-flex ms-auto">
-        <span class="text-white me-3">{% trans "Hello," %} {{ request.session.user_name }}</span>
     </div>
-  </div>
 </nav>
+
 <nav class="navbar navbar-light bg-light border-bottom">
-
-<div class="container-fluid">
-<button class="btn btn-light"onclick="toggleMenu()">☰</button>
-
-</div>
-
+    <div class="container-fluid">
+        <button class="btn btn-light" onclick="toggleMenu()">☰</button>
+    </div>
 </nav>
-
-
 
 <div class="container-fluid">
     <div class="row">
 
-       
         <div id="sidebar" class="col-md-2 sidebar d-none">
             <h4 class="text-center">{% trans "SHG Panel" %}</h4>
             <hr>
@@ -118,160 +121,229 @@
             <a href="{% url 'monthly_collection' %}">{% trans "Monthly Collection" %}</a>
             <a href="{% url 'loan_details' %}">{% trans "Loan Tracking" %}</a>
             <a href="{% url 'project_list' %}">{% trans "Project Management" %}</a>
-            <a href="{% url 'logout' %}"  onclick="return confirmLogout()" class="logout-btn text-danger"><i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}</a>
+            <a href="{% url 'logout' %}" onclick="return confirmLogout()"
+               class="logout-btn text-danger">
+                <i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}
+            </a>
         </div>
 
-     
+        <div id="content" class="col-md-12 mt-4">
+        <div class="container-fluid mt-5 px-5">
 
-    <div id="content" class="col-md-12 mt-4">
-    <div class="container-fluid mt-5 px-5">
-   
-     <form method="get">
+            <!-- Filter Form -->
+            <form method="get" class="mb-3 d-flex gap-2 align-items-center">
+                <input type="hidden" name="type" value="{{ request.GET.type }}">
+                <input type="hidden" name="member" value="{{ request.GET.member }}">
 
-    <input type="hidden" name="type" value="{{ request.GET.type }}">
-    <input type="hidden" name="member" value="{{ request.GET.member }}">
- <!--Filter month/year choices-->
-    <select name="month">
-        <option value="">Select Month</option>
-        {% for value, name in month_choices %}
-            <option value="{{ value }}"
-                {% if selected_month == value %}selected{% endif %}>
-                {{ name }}
-            </option>
-        {% endfor %}
-    </select>
+                <select name="month" class="form-select" style="width:150px;">
+                    <option value="">{% trans "Select Month" %}</option>
+                    {% for value, name in month_choices %}
+                        <option value="{{ value }}"
+                            {% if selected_month == value %}selected{% endif %}>
+                            {{ name }}
+                        </option>
+                    {% endfor %}
+                </select>
 
-    <input type="number" name="year" value="{{ selected_year }}">
+                <input type="number" name="year" value="{{ selected_year }}"
+                       class="form-control" style="width:100px;" placeholder="Year">
 
-    <button type="submit">Apply</button>
-
-</form>
-   
-
-    <!--Select Loan-->
-    <div class="mb-3">
-        <a href="{% url 'loan_details' %}?type=Group" class="btn btn-dark">{% trans "Group Loan" %}</a>
-
-        <a href="{% url 'loan_details' %}?type=Personal" class="btn btn-secondary">{% trans "Personal Loan" %}</a>
-    </div>
-
-    <!--choose  member-->
-    <div class="mb-3"
-       {% if request.GET.type != "Personal" %}style="display:none;"{% endif %}>
-
-        <select onchange="location = this.value" class="form-control">
-          <option value="">{% trans "Select Member" %}</option>
-
-          {% for m in members %}
-          <option value="{% url 'loan_details' %}?type=Personal&member={{ m.id }}"
-          {% if request.GET.member == m.id|stringformat:"s" %}selected{% endif %}>
-            {{ m.fullname }}
-          </option>
-          {% endfor %}
-
-        </select>
-  </div>
-
-    <!--Loan detail of choosen member-->
-    <div class="row" id="loanContainer">
-
-        {% for loan in loans %}
-        <div class="col-12 col-lg-6 mb-4">
-        <div class="card shadow h-100">
-
-            {% if loan.loan_type == "Personal" %}
-             <p><strong>{% trans "Member" %}:</strong> {{ loan.member.fullname }}</p>
-            {% else %}
-             <p><strong>{% trans "Loan Type" %}:</strong> {% trans "Group Loan" %}</p>
-            {% endif %}
-
-            <div class="row">
-                <div class="col-6">
-                    <p><b>{% trans "Amount" %}:</b><br> ₹ {{ loan.amount }}</p>
-                    <p><b>{% trans "Amount to be paid" %}:</b><br> ₹ {{ loan.total_payable }}</p>
-                    <p><b>{% trans "Remaining" %}:</b><br> ₹ {{ loan.remaining }}</p>
-                </div>
-                <div class="col-6">
-                    <p><b>{% trans "SI Rate" %}:</b><br>  {{ loan.interest_rate }}</p>
-                    <p><b>{% trans "Subvention Rate" %}:</b><br>  {{ loan.subvention_rate }}</p>
-                    <p><b>{% trans "Duration (year)" %}:</b><br> {{ loan.duration }}</p>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-
-    {% if loan.remaining == 0 %}
-        <span class="text-success fw-semibold">{% trans "Loan Cleared" %}</span>
-
-    {% else %}
-<!--Clear loan option-->
-        {% if user_role == "President" %}
-            <form method="POST" action="{% url 'clear_loan' loan.id %}" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success btn-sm">
-                    {% trans "Mark as Cleared" %}
+                <button type="submit" class="btn btn-primary">
+                    {% trans "Apply" %}
                 </button>
             </form>
-        {% else %}
-            <span class="text-muted">Pending</span>
-        {% endif %}
 
-    {% endif %}
-<!--Edit option-->
-   {% if user_role == "President" %}
-
-    {% if loan.remaining != 0 %}
-        <a href="{% url 'edit_loan' loan.id %}" class="btn btn-warning btn-sm">
-           {% trans "Edit" %}
-        </a>
-    {% endif %}
-<!--Delete OPtion-->
-    <form method="POST"
-          action="{% url 'delete_loan' loan.id %}"
-          class="d-inline"
-          onsubmit="return confirm('Are you sure you want to delete this loan?');">
-
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger btn-sm">
-            {% trans "Delete" %}
-        </button>
-    </form>
-
-{% endif %}
-
-</div>
+            <!-- Loan Type Buttons -->
+            <div class="mb-3">
+                <a href="{% url 'loan_details' %}?type=Group"
+                   class="btn btn-dark {% if selected_type == 'Group' %}active{% endif %}">
+                    {% trans "Group Loan" %}
+                </a>
+                <a href="{% url 'loan_details' %}?type=Personal"
+                   class="btn btn-secondary {% if selected_type == 'Personal' %}active{% endif %}">
+                    {% trans "Personal Loan" %}
+                </a>
             </div>
 
-        
-        </div>
-        </div>
-        {% empty %}
-        <p>{% trans "No loans found" %}</p>
-        {% endfor %}
+            <!-- Member Filter (Personal only) -->
+            <div class="mb-3"
+                {% if request.GET.type != "Personal" %}style="display:none;"{% endif %}>
+                <select onchange="location = this.value" class="form-control">
+                    <option value="">{% trans "Select Member" %}</option>
+                    {% for m in members %}
+                    <option value="{% url 'loan_details' %}?type=Personal&member={{ m.id }}"
+                        {% if request.GET.member == m.id|stringformat:"s" %}selected{% endif %}>
+                        {{ m.fullname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
 
+            <!-- Loan Cards -->
+            <div class="row" id="loanContainer">
+
+                {% for loan in loans %}
+                <div class="col-12 col-lg-6 mb-4">
+                <div class="card shadow h-100">
+
+                    <!-- Loan Header -->
+                    {% if loan.loan_type == "Personal" %}
+                        <h5 class="text-primary-dark mb-3">
+                            <i class="bi bi-person"></i>
+                            {{ loan.member.fullname }}
+                        </h5>
+                    {% else %}
+                        <h5 class="text-primary-dark mb-3">
+                            <i class="bi bi-people"></i>
+                            {% trans "Group Loan" %}
+                        </h5>
+                    {% endif %}
+
+                    <!--  Loan Amount Details -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="mb-1"><b>{% trans "Loan Amount" %}</b></p>
+                            <h6>₹ {{ loan.amount }}</h6>
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1"><b>{% trans "Total Payable" %}</b></p>
+                            <h6>₹ {{ loan.total_payable }}</h6>
+                        </div>
+                    </div>
+
+                    <!--  EMI and Paid Amount -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="mb-1"><b>{% trans "Monthly EMI" %}</b></p>
+                               <h6>  ₹ {{ loan.emi|default:"0" }} </h6>
+                            
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1"><b>{% trans "Paid Amount" %}</b></p>
+                            <h6> ₹ {{ loan.paid }}</h6>
+                            
+                        </div>
+                    </div>
+
+                    <!--  Remaining Amount -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="mb-1"><b>{% trans "Remaining" %}</b></p>
+                          
+                               <h6> ₹ {{ loan.remaining }}</h6>
+                            
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1"><b>{% trans "Duration" %}</b></p>
+                            <h6>{{ loan.duration }} {% trans "months" %}</h6>
+                        </div>
+                    </div>
+                    <!-- Interest Details -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="mb-1"><b>{% trans "SI Rate" %}</b></p>
+                            <h6>{{ loan.interest_rate }}%</h6>
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1"><b>{% trans "Subvention Rate" %}</b></p>
+                            <h6>{{ loan.subvention_rate }}%</h6>
+                        </div>
+                    </div>
+
+                    <!-- Date -->
+                    <p class="text-muted small mb-3">
+                        <i class="bi bi-calendar"></i>
+                        {% trans "Added on" %}: {{ loan.created_at }}
+                    </p>
+
+                    <!-- Actions -->
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                        {% if loan.remaining == 0 %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i>
+                                {% trans "Loan Cleared" %}
+                            </span>
+
+                        {% else %}
+                            {% if user_role == "President" %}
+                                <!-- Clear Loan -->
+                                <form method="POST"
+                                      action="{% url 'clear_loan' loan.id %}"
+                                      class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-check"></i>
+                                        {% trans "Mark as Cleared" %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">
+                                    {% trans "Pending" %}
+                                </span>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if user_role == "President" %}
+                            <!-- Edit -->
+                            {% if loan.remaining != 0 %}
+                            <a href="{% url 'edit_loan' loan.id %}"
+                               class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i>
+                                {% trans "Edit" %}
+                            </a>
+                            {% endif %}
+
+                            <!-- Delete -->
+                            <form method="POST"
+                                  action="{% url 'delete_loan' loan.id %}"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Are you sure you want to delete this loan?')">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                    {% trans "Delete" %}
+                                </button>
+                            </form>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="bi bi-info-circle"></i>
+                        {% trans "No loans found" %}
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        </div>
     </div>
-</div>
-</div>
 </div>
 
 <script>
-function toggleMenu(){
-
-var sidebar = document.getElementById("sidebar");
-var content = document.getElementById("content");
-
-sidebar.classList.toggle("d-none");
-
-if(sidebar.classList.contains("d-none")){
-content.classList.remove("col-md-10");
-content.classList.add("col-md-12");
-}else{
-content.classList.remove("col-md-12");
-content.classList.add("col-md-10");
+function toggleMenu() {
+    var sidebar = document.getElementById("sidebar");
+    var content = document.getElementById("content");
+    sidebar.classList.toggle("d-none");
+    if(sidebar.classList.contains("d-none")) {
+        content.classList.remove("col-md-10");
+        content.classList.add("col-md-12");
+    } else {
+        content.classList.remove("col-md-12");
+        content.classList.add("col-md-10");
+    }
 }
-}
+
 function confirmLogout() {
     return confirm("Are you sure you want to logout?");
 }
 </script>
 
- </body>
+</body>
 </html>

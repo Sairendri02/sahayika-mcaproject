@@ -132,7 +132,7 @@ color: black;
     <ul class="d-flex ms-auto align-items-center mb-0 navbar-links">
       <li><a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a></li>
       <li><a class="nav-link" href="{% url 'about' %}">{% trans "About Us" %}</a></li>
-      <li><a class="nav-link" href="{% url 'rti' %}">{% trans "RTI" %}</a></li>
+      <li><a class="nav-link active" href="https://rtiodisha.gov.in/Departments/36" target="_blank">{% trans "RTI" %}</a></li>
       <li><a class="nav-link" href="">{% trans "Contact Us" %}</a></li>
       <form action="{% url 'set_language' %}" method="post" style="display:inline;">
         {% csrf_token %}

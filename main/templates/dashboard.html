@@ -69,7 +69,7 @@
         }
         .card{
              border-radius:12px;
-             background:rgb(241, 242, 243);
+             background:rgb(246, 248, 251);
              border:none;
              box-shadow:0 4px 15px rgba(0,0,0,0.1);
              }
@@ -188,41 +188,35 @@ animation:move 14s linear infinite;font-weight:bold;">
 
            <!--Summary Card-->
             <div class="row mt-4">
-                <div class="col-md-3 mb-2">
+                <div class="col-md-4 mb-2">
                     <div class="card p-3 shadow stat-card">
-                        <h5>{% trans "Total Members" %}</h5>
-                        <h3>{{ total_members }}</h3>
+                        <h5>{% trans "Samiti Total Savings" %}</h5>
+                        <h3> ₹{{ total_saving_with_profit }}</h3>
                     </div>
                 </div>
-                <div class="col-md-3 mb-2">
+                <div class="col-md-4 mb-2" >
                     <div class="card p-3 shadow stat-card">
-                        <h5>{% trans "Total Savings" %}</h5>
-                        <h3> ₹{{ total_saving_all }}</h3>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-2" >
-                    <div class="card p-3 shadow stat-card">
-                        <h5>{% trans "Remaining Loans(Group + Personal)" %}</h5>
+                        <h5>{% trans "Remaining Loans(Group)" %}</h5>
                         <h3> ₹{{ remaining_loans_amount }}</h3>
                     </div>
                 </div>
-                <div class="col-md-3 mb-2">
-                    <div class="card p-3 shadow stat-card">
-                        <h5>{% trans "Paid Loans(Group + Personal)" %}</h5>
-                        <h3> {{ paid_loans_count }}</h3>
-                    </div>
-                </div>    
+                <div class="col-md-4 mb-2">
+                  <div class="card p-3 shadow stat-card">
+                    <h5>{% trans "Samiti Monthly Collection" %}</h5>
+                        <h3>₹ {{ total_saving }}</h3>
+                   </div>
+               </div>
             </div>            
 
               <div class="row mt-4">
 
-                <div class="col-md-3 mb-2">
+                <div class="col-md-4 mb-2">
                     <div class="card p-3 shadow stat-card">
                         <h5>{% trans "Total Group Loan (year)" %}</h5>
                         <h3>{{  total_loans_amount }}</h3>
                     </div>
                 </div>
-                <div class="col-md-3 mb-2">
+                <div class="col-md-4 mb-2">
                    <div class="card p-3 shadow stat-card">
                           <h5>{% trans "Active Loans (Group + Personal)" %}</h5>
                            <h3 class="{% if active_loans > 0 %}text-danger{% else %}text-success{% endif %}">
@@ -231,14 +225,7 @@ animation:move 14s linear infinite;font-weight:bold;">
                     </div>
                 </div>
 
-             <div class="col-md-3 mb-2">
-                  <div class="card p-3 shadow stat-card">
-                    <h5>{% trans "Current Monthly Collection" %}</h5>
-                        <h3>₹ {{ total_saving }}</h3>
-                   </div>
-             </div>
-
-             <div class="col-md-3 mb-2">
+             <div class="col-md-4 mb-2">
                    <div class="card p-3 shadow stat-card">
                        <h5>{% trans "Total Personal loan (year)" %}</h5>
                           <h3>{{ total_personal_loan_year }}</h3>
@@ -336,8 +323,8 @@ animation:move 14s linear infinite;font-weight:bold;">
                   <div class="progress">
 
                     <div class="progress-bar bg-success"
-                         style="width: {{ total_saving }}%">
-                                  {% trans "Savings" %} ₹{{ total_saving }}
+                         style="width: {{ total_saving_with_profit }}%">
+                                  {% trans "Savings" %} ₹{{ total_saving_with_profit }}
 
                     </div>
 

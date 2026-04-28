@@ -93,7 +93,7 @@
         <ul class="d-flex ms-auto align-items-center mb-0 navbar-links">
             <li><a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a></li>
             <li><a class="nav-link" href="{% url 'about' %}">{% trans "About Us" %}</a></li>
-            <li><a class="nav-link" href="{% url 'rti' %}">{% trans "RTI" %}</a></li>
+            <li><a class="nav-link active" href="https://rtiodisha.gov.in/Departments/36" target="_blank">{% trans "RTI" %}</a></li>
             <li><a class="nav-link" href="{% url 'home' %}#contact">{% trans "Contact Us" %}</a></li>
             <form action="{% url 'set_language' %}" method="post" style="display:inline;">
                 {% csrf_token %}
@@ -167,6 +167,16 @@
             </div>
         </div>
 
+        {% trans "Phone number" %}:
+        <input type="text" name="phone" value="{{ phone }}"
+               class="form-control mb-3" placeholder="Phone Number">
+
+        <button type="submit" name="send_otp" class="btn btn-warning mb-3">
+            {% trans "Send OTP" %}
+        </button>
+
+        <input type="text" name="otp" class="form-control mb-3" placeholder="Enter OTP">
+
         <div class="mb-3">
             <label>{% trans "Aadhaar Number" %}</label>
             <!--  Fixed id from aadhaar_number to match JS -->
@@ -197,17 +207,7 @@
             <input type="date" name="dob" class="form-control" required>
         </div>
 
-        {% trans "Phone number" %}:
-        <input type="text" name="phone" value="{{ phone }}"
-               class="form-control mb-3" placeholder="Phone Number">
-
-        <button type="submit" name="send_otp" class="btn btn-warning mb-3">
-            {% trans "Send OTP" %}
-        </button>
-
-        <input type="text" name="otp" class="form-control mb-3" placeholder="Enter OTP">
-
-        <input type="password" name="password" class="form-control mb-3" placeholder="Password">
+        <input type="password" name="password" class="form-control mb-3" placeholder=" Create Password">
 
         <input type="password" name="confirm_password" class="form-control mb-3"
                placeholder="Confirm Password">

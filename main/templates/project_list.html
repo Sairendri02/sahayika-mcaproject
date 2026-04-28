@@ -119,8 +119,8 @@
                 <div class="card-body text-center">
                     <h5>{{ p.title }}</h5>
 
-                    <p>{% trans "Investment:" %} ₹{{ p.investment }}</p>
-                    <p>{% trans "Profit:" %} ₹{{ p.profit }}</p>
+                    <p>{% trans "Investment" %}: ₹{{ p.investment }}</p>
+                    <p>{% trans "Profit" %}: ₹{{ p.profit }}</p>
 
                     {% if user_role == "President" %}
                     <a href="{% url 'edit_project' p.id %}" class="btn btn-primary btn-sm">{% trans "Edit" %}</a>
