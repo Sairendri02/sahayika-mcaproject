@@ -10,9 +10,9 @@ from django.views.decorators.cache import never_cache
 from .models import MeetingSchedule
 from django.db.models import Sum 
 from .models import  MonthlyRecord 
-from .models import Register, District , Village, Loan , Project
-from .forms import LoanForm
+from main.models import Register, District , Village, Loan , Project, SHG
 from datetime import datetime, date ,timedelta
+from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 import random
 import os
@@ -47,11 +47,11 @@ def send_otp_sms(phone, otp):
 
 def register(request):
     districts = District.objects.all().order_by('name')
-    villages = [] # village dropdown
-    
-    # initialize msg
+    villages = []
+
     error = ""
     success = ""
+    otp_verified = False
 
     fullname = ""
     shgname = ""
@@ -61,92 +61,132 @@ def register(request):
 
     if request.method == "POST":
 
-        #  Always fetch ALL fields at top of POST
         fullname = request.POST.get("fullname", "").strip()
         shgname = request.POST.get("shgname", "").strip()
         phone = request.POST.get("phone", "").strip()
         district_id = request.POST.get("district", "").strip()
         village_id = request.POST.get("village", "").strip()
 
-        #  Load villages for selected district so dropdown stays filled
         if district_id:
             villages = Village.objects.filter(district_id=district_id)
 
-        # send otp
+        #  SEND OTP
         if "send_otp" in request.POST:
-            if not re.fullmatch(r'\d{10}', phone):
+            #  Clear previous OTP verification
+            request.session.pop("otp_verified", None)
+            request.session.pop("otp_verified_phone", None)
+
+            if not all([fullname, shgname, phone, district_id, village_id]):
+                error = _("Fill all basic details first")
+            elif not re.fullmatch(r'\d{10}', phone):
                 error = _("Enter valid phone number")
             else:
                 otp = str(random.randint(1000, 9999))
+                request.session["otp"] = otp
                 request.session["otp_phone"] = phone
                 request.session["otp_expiry"] = (
                     timezone.now() + timedelta(minutes=5)
-                ).isoformat()
+                ).timestamp()
                 send_otp_sms(phone, otp)
                 success = _("OTP sent to your phone number")
 
-        # register user
-        elif "register" in request.POST:
-            dob = request.POST.get('dob', '').strip()
-            password = request.POST.get('password', '').strip()
-            otp_input = request.POST.get("otp", '').strip()
-            aadhaar_number = request.POST.get('aadhaar_number', '').strip()
-            aadhaar_photo = request.FILES.get('aadhaar_photo')
-            profile_photo = request.FILES.get('profile_photo')
+        #  VERIFY OTP
+        elif "verify_otp" in request.POST:
+            otp_input = request.POST.get("otp", "").strip()
+            session_otp = request.session.get("otp")
+            otp_expiry = request.session.get("otp_expiry")
+            session_phone = request.session.get("otp_phone")
 
-            # Role always President
+            otp_expired = False
+            if otp_expiry and timezone.now().timestamp() > float(otp_expiry):
+                otp_expired = True
+
+            if not otp_input:
+                error = _("Please enter the OTP")
+            elif otp_expired:
+                error = _("OTP expired. Please request a new one.")
+                request.session.pop("otp", None)
+                request.session.pop("otp_expiry", None)
+            elif phone != session_phone:
+                error = _("Phone number does not match OTP request.")
+            elif otp_input != session_otp:
+                error = _("Invalid OTP. Please try again.")
+            else:
+                request.session["otp_verified"] = True
+                request.session["otp_verified_phone"] = phone
+                otp_verified = True
+                success = _("OTP verified successfully! Please complete registration.")
+
+        #  REGISTER
+        elif "register" in request.POST:
+            aadhaar_number = request.POST.get("aadhaar_number", "").strip()
+            dob = request.POST.get("dob", "").strip()
+            password = request.POST.get("password", "").strip()
+            confirm_password = request.POST.get("confirm_password", "").strip()
+            aadhaar_photo = request.FILES.get("aadhaar_photo")
+            profile_photo = request.FILES.get("profile_photo")
+            otp_input = request.POST.get("otp", "").strip()
+
             role = "President"
 
-            # Check OTP expiry
+            otp_verified_session = request.session.get("otp_verified", False)
+            otp_verified_phone = request.session.get("otp_verified_phone", "")
+
             otp_expiry = request.session.get("otp_expiry")
             otp_expired = False
-            if otp_expiry:
-                from django.utils.dateparse import parse_datetime
-                expiry_time = parse_datetime(otp_expiry)
-                if timezone.now() > expiry_time:
-                    otp_expired = True
+            if otp_expiry and timezone.now().timestamp() > float(otp_expiry):
+                otp_expired = True
 
-            if not all([fullname, shgname, district_id, village_id, phone, password, otp_input]):
-                error = _("All fields including OTP are required")
+            if not all([fullname, shgname, district_id, village_id, phone, password]):
+                error = _("All fields are required")
+
+            elif not otp_verified_session or otp_verified_phone != phone:
+                error = _("Please verify your OTP first.")
 
             elif otp_expired:
                 error = _("OTP expired. Please request a new one.")
 
-            elif otp_input != request.session.get("otp"):
-                error = _("Invalid OTP")
-
             elif not re.fullmatch(r'\d{10}', phone):
                 error = _("Invalid phone number")
 
+            elif password != confirm_password:
+                error = _("Passwords do not match")
+
             elif User.objects.filter(username=phone).exists():
                 error = _("This phone number is already registered")
+
+            elif not all([aadhaar_number, dob, aadhaar_photo, profile_photo]):
+                error = _("Fill all required details")
+
+            elif not re.fullmatch(r'\d{12}', aadhaar_number):
+                error = _("Invalid Aadhaar number")
 
             else:
                 district = District.objects.get(id=district_id)
                 village = Village.objects.get(id=village_id)
 
-                if Register.objects.filter(shgname=shgname, village=village).exists():
+                # Create or get SHG
+                shg_obj, created = SHG.objects.get_or_create(
+                    name=shgname,
+                    village=village
+                )
+
+                if not created:
                     error = _("An SHG with this name already exists in this village")
 
-                elif Register.objects.filter(shgname=shgname, role="President").exists():
+                elif Register.objects.filter(shg=shg_obj, role="President").exists():
                     error = _("A President already exists for this SHG")
 
-                elif not all([aadhaar_number, aadhaar_photo, profile_photo]):
-                    error = _("All Aadhaar fields are required")
-
-                elif not re.fullmatch(r'\d{12}', aadhaar_number):
-                    error = _("Invalid Aadhaar number")
-
                 else:
-                    # Create Django user
                     user = User.objects.create_user(
                         username=phone,
                         password=password
                     )
-                    # Save register model
+
+                    #  Use shg ForeignKey
                     Register.objects.create(
                         fullname=fullname,
-                        shgname=shgname,
+                        shg=shg_obj,
                         district=district,
                         village=village,
                         role=role,
@@ -159,10 +199,13 @@ def register(request):
                     )
 
                     success = _("Registered successfully! Please login.")
-                    request.session.pop("otp", None)
-                    request.session.pop("otp_expiry", None)
 
-                    #  Clear fields after success
+                    request.session.pop("otp", None)
+                    request.session.pop("otp_phone", None)
+                    request.session.pop("otp_expiry", None)
+                    request.session.pop("otp_verified", None)
+                    request.session.pop("otp_verified_phone", None)
+
                     fullname = ""
                     shgname = ""
                     phone = ""
@@ -172,7 +215,7 @@ def register(request):
 
     return render(request, "register.html", {
         "districts": districts,
-        "villages": villages,  #  Pass villages to template
+        "villages": villages,
         "error": error,
         "success": success,
         "fullname": fullname,
@@ -180,7 +223,12 @@ def register(request):
         "phone": phone,
         "district_id": district_id,
         "village_id": village_id,
+        "otp_verified": otp_verified or request.session.get("otp_verified", False),
     })
+
+
+
+
 def load_villages(request):
     district_id = request.GET.get('district')
     villages = Village.objects.filter(district_id=district_id).values('id', 'name')
@@ -205,7 +253,7 @@ def login_view(request):
                 error = _("Phone and SHG name are required.")
             elif not Register.objects.filter(
                 phone=phone,
-                shgname=shgname,
+                shg__name__iexact=shgname,
                 role="Member"
             ).exists():
                 error = _("No member found with this phone and SHG name.")
@@ -216,16 +264,15 @@ def login_view(request):
                 request.session["login_otp_expiry"] = (
                     timezone.now() + timedelta(minutes=5)
                 ).isoformat()
-                send_otp_sms(phone, otp)  # Real SMS
+                send_otp_sms(phone, otp)
                 success = _("OTP sent to your phone number!")
 
-        # login logic
         elif "login" in request.POST:
 
             if not role:
                 error = _("Please select a role.")
 
-            # president login(password)
+            #  President login
             elif role == "President":
                 password = request.POST.get("password", "").strip()
 
@@ -240,8 +287,9 @@ def login_view(request):
                         try:
                             reg = Register.objects.get(
                                 user=user,
-                                shgname=shgname,
-                                role__iexact="President"
+                                role__iexact="President",
+                                phone=phone,
+                                shg__name__iexact=shgname  #  Fixed
                             )
                         except Register.DoesNotExist:
                             error = _("No President account found for this SHG.")
@@ -249,19 +297,19 @@ def login_view(request):
                             login(request, user)
                             request.session["user_id"] = reg.id
                             request.session["user_name"] = reg.fullname
-                            request.session["user_shg"] = reg.shgname
+                            request.session["user_shg"] = reg.shg.name  #  SHG name
+                            request.session["user_shg_id"] = reg.shg.id  #  SHG id
                             request.session["user_role"] = reg.role
                             request.session["user_phone"] = reg.phone
                             return redirect("dashboard")
 
-            # member login (otp)
+            #  Member login
             elif role == "Member":
                 otp_input = request.POST.get("otp", "").strip()
                 session_otp = request.session.get("login_otp")
                 session_phone = request.session.get("login_phone")
                 otp_expiry = request.session.get("login_otp_expiry")
 
-              
                 otp_expired = False
                 if otp_expiry:
                     from django.utils.dateparse import parse_datetime
@@ -271,47 +319,41 @@ def login_view(request):
 
                 if not otp_input:
                     error = _("Please enter the OTP.")
-
                 elif session_otp is None:
                     error = _("Please request an OTP first.")
-
                 elif otp_expired:
                     error = _("OTP expired. Please request a new one.")
-                   
                     request.session.pop("login_otp", None)
                     request.session.pop("login_otp_expiry", None)
-
                 elif phone != session_phone:
                     error = _("Phone number does not match OTP request.")
-
                 elif otp_input != session_otp:
                     error = _("Invalid OTP. Please try again.")
-
                 else:
-                   try:
-                      reg = Register.objects.get(
-                      phone=phone,
-                      shgname=shgname,
-                      role__iexact="Member"
-                      )
-                   except Register.DoesNotExist:
-                      error = _("No member found with this phone and SHG name.")
-                   else:
-                      if reg.user is None:
-                        error = _("Account error. Please contact your President")
-                      else:
-            # clear session
-                        request.session.pop("login_otp", None)
-                        request.session.pop("login_phone", None)
-                        request.session.pop("login_otp_expiry", None)
+                    try:
+                        reg = Register.objects.get(
+                            phone=phone,
+                            shg__name__iexact=shgname,
+                            role__iexact="Member"
+                        )
+                    except Register.DoesNotExist:
+                        error = _("No member found with this phone and SHG name.")
+                    else:
+                        if reg.user is None:
+                            error = _("Account error. Please contact your President.")
+                        else:
+                            request.session.pop("login_otp", None)
+                            request.session.pop("login_phone", None)
+                            request.session.pop("login_otp_expiry", None)
 
-                        login(request, reg.user)
-                        request.session["user_id"] = reg.id
-                        request.session["user_name"] = reg.fullname
-                        request.session["user_shg"] = reg.shgname
-                        request.session["user_role"] = reg.role
-                        request.session["user_phone"] = reg.phone
-                        return redirect("dashboard")
+                            login(request, reg.user)
+                            request.session["user_id"] = reg.id
+                            request.session["user_name"] = reg.fullname
+                            request.session["user_shg"] = reg.shg.name  #  SHG name
+                            request.session["user_shg_id"] = reg.shg.id  #  SHG id
+                            request.session["user_role"] = reg.role
+                            request.session["user_phone"] = reg.phone
+                            return redirect("dashboard")
             else:
                 error = _("Invalid role selected.")
 
@@ -343,7 +385,7 @@ def forgot_password(request):
                 try:
                     reg = Register.objects.get(
                         phone=phone,
-                        shgname=shgname,
+                        shg__name__iexact=shgname,
                         role="President"
                     )
                     otp = str(random.randint(1000, 9999))
@@ -376,7 +418,6 @@ def forgot_password(request):
             
             otp_expired = False
             if otp_expiry:
-                from django.utils.dateparse import parse_datetime
                 expiry_time = parse_datetime(otp_expiry)
                 if timezone.now() > expiry_time:
                     otp_expired = True
@@ -407,7 +448,7 @@ def forgot_password(request):
                 try:
                     reg = Register.objects.get(
                         phone=phone,
-                        shgname=shgname,
+                        shg__name__iexact=shgname,
                         role="President"
                     )
                     reg.user.set_password(new_password)
@@ -439,17 +480,23 @@ def forgot_password(request):
         "otp_sent": otp_sent,
     })
 # DASHBOARD
+ 
 @login_required(login_url='login')
 @never_cache
 def dashboard(request):
-    # Get user session details
     user_role = request.session.get("user_role")
-    user_shg = request.session.get("user_shg")
+    user_shg_id = request.session.get("user_shg_id")  
     user_name = request.session.get("user_name")
+
+    #  Get SHG object
+    try:
+        shg = SHG.objects.get(id=user_shg_id)
+    except SHG.DoesNotExist:
+        return redirect("login")
 
     # get latest meeting
     meeting = MeetingSchedule.objects.filter(
-        shgname__iexact=(user_shg or "").strip()
+        shg=shg
     ).order_by("-id").first()
 
     # save/update meeting date
@@ -462,109 +509,104 @@ def dashboard(request):
                 meeting.save()
             else:
                 meeting = MeetingSchedule.objects.create(
-                    shgname=user_shg,
+                    shg=shg,
                     meeting_date=meeting_date
                 )
 
     # Get members of SHG
     members = Register.objects.filter(
-        shgname__iexact=(user_shg or "").strip()
+        shg=shg, status="Active"
     ).order_by("-id")
 
     total_members = members.count()
 
-    # Current month/year filtration
     now = datetime.now()
     current_month = int(request.GET.get("month") or now.month)
     current_year = int(request.GET.get("year") or now.year)
 
-    # monthly record
     records = MonthlyRecord.objects.filter(
-        shgname__iexact=(user_shg or "").strip(),
+        shg=shg,
         month=current_month,
         year=current_year
     )
 
-    # loan queries
     all_loans = Loan.objects.filter(
-        shgname=user_shg,
+        shg=shg,
         created_at__month=current_month,
         created_at__year=current_year
     )
 
     personal_loans = Loan.objects.filter(
-        shgname__iexact=(user_shg or "").strip(),
+        shg=shg,
         loan_type="Personal",
         created_at__month=current_month,
         created_at__year=current_year
     )
 
-    all_personal_loans = Loan.objects.filter(
-    shgname__iexact=(user_shg or "").strip(),
-    loan_type="Personal"
-    )
-
     yearly_group_loans = Loan.objects.filter(
-        shgname__iexact=(user_shg or "").strip(),
+        shg=shg,
         loan_type="Group",
         created_at__month=current_month,
         created_at__year=current_year
     )
 
-    # Loan Calculation
     total_loans_amount = yearly_group_loans.aggregate(
-        Sum('amount')
-    )['amount__sum'] or 0
+        Sum('amount'))['amount__sum'] or 0
 
     remaining_loans_amount = yearly_group_loans.aggregate(
-        Sum('remaining')
-    )['remaining__sum'] or 0
+        Sum('remaining'))['remaining__sum'] or 0
 
-    active_loans = all_loans.filter(
-        remaining__gt=0
-    ).count()
+    active_loans = all_loans.filter(remaining__gt=0).count()
 
-    # Saving & EMI Totals
     total_saving = records.aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
     total_group_emi = records.aggregate(Sum('group_emi'))['group_emi__sum'] or 0
 
     total_saving_all = MonthlyRecord.objects.filter(
-        shgname__iexact=(user_shg or "").strip()
+        shg=shg
     ).aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
 
     total_personal_loan_year = personal_loans.aggregate(
-        Sum('amount')
-    )['amount__sum'] or 0
+        Sum('amount'))['amount__sum'] or 0
 
-    total_personal_emi = all_personal_loans.aggregate(
-       Sum('paid')
-    )['paid__sum'] or 0
-    #  Project profit calculation
+    #  Project profit
     total_project_profit = Project.objects.filter(
-        shgname__iexact=(user_shg or "").strip()
+        shg=shg
     ).aggregate(Sum('profit'))['profit__sum'] or 0
 
-    #  Total saving including project profit
-    total_saving_with_profit = (total_saving_all + total_project_profit + total_personal_emi - total_personal_loan_year)
+    #  Personal EMI collected
+    total_personal_emi_collected = MonthlyRecord.objects.filter(
+        shg=shg
+    ).aggregate(Sum('personal_emi'))['personal_emi__sum'] or 0
 
-    # Per member calculation
+    #  Total personal loan taken
+    total_personal_loan_taken = Loan.objects.filter(
+        shg=shg,
+        loan_type="Personal"
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    #  Total saving with profit
+    total_saving_with_profit = (
+        total_saving_all +
+        total_project_profit -
+        total_personal_loan_taken +
+        total_personal_emi_collected
+    )
+
     member_data = []
-
     for m in members:
         member_meetings = MonthlyRecord.objects.filter(
-            shgname__iexact=(user_shg or "").strip(),
+            shg=shg,
             member=m,
             month=current_month,
             year=current_year
         )
 
-        member_total_saving = member_meetings.aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
-        member_total_emi = member_meetings.aggregate(Sum('group_emi'))['group_emi__sum'] or 0
+        member_total_saving = member_meetings.aggregate(
+            Sum('saving_paid'))['saving_paid__sum'] or 0
+        member_total_emi = member_meetings.aggregate(
+            Sum('group_emi'))['group_emi__sum'] or 0
 
-        member_loans = Loan.objects.filter(
-            shgname__iexact=(user_shg or "").strip(),
-            member=m
-        )
+        member_loans = Loan.objects.filter(shg=shg, member=m)
 
         loan_taken = member_loans.aggregate(Sum('amount'))['amount__sum'] or 0
         loan_remaining = member_loans.aggregate(Sum('remaining'))['remaining__sum'] or 0
@@ -583,9 +625,8 @@ def dashboard(request):
             "loan_status": "Cleared" if loan_remaining == 0 else "Pending",
         })
 
-    # Saving stats
     saving_paid_members = MonthlyRecord.objects.filter(
-        shgname__iexact=(user_shg or "").strip(),
+        shg=shg,
         month=current_month,
         year=current_year,
         saving_paid__gt=0
@@ -597,9 +638,8 @@ def dashboard(request):
     saving_paid_percent = (saving_paid_count / total_members * 100) if total_members else 0
     saving_pending_percent = (saving_pending_count / total_members * 100) if total_members else 0
 
-    # EMI stats
     group_emi_paid_members = MonthlyRecord.objects.filter(
-        shgname__iexact=(user_shg or "").strip(),
+        shg=shg,
         month=current_month,
         year=current_year,
         group_emi__gt=0
@@ -611,53 +651,44 @@ def dashboard(request):
     group_emi_paid_percent = (group_emi_paid_count / total_members * 100) if total_members else 0
     group_emi_pending_percent = (group_emi_pending_count / total_members * 100) if total_members else 0
 
-    # Collection ratio
     total_collection = total_saving + total_group_emi
     saving_percent = (total_saving / total_collection * 100) if total_collection else 0
     emi_percent = (total_group_emi / total_collection * 100) if total_collection else 0
 
-    # Final Context
     context = {
         "user_role": user_role,
         "user_name": user_name,
-        "user_shg": user_shg,
+        "user_shg": shg.name,
         "members": members,
         "member_data": member_data,
         "total_members": total_members,
-
         "total_saving": total_saving,
         "total_group_emi": total_group_emi,
         "total_saving_all": total_saving_all,
-
-        #  New project profit context
         "total_project_profit": total_project_profit,
+        "total_personal_emi_collected": total_personal_emi_collected,
+        "total_personal_loan_taken": total_personal_loan_taken,
         "total_saving_with_profit": total_saving_with_profit,
-
         "total_loans_amount": total_loans_amount,
         "remaining_loans_amount": remaining_loans_amount,
         "active_loans": active_loans,
-
         "saving_paid_count": saving_paid_count,
         "saving_pending_count": saving_pending_count,
         "saving_paid_percent": saving_paid_percent,
         "saving_pending_percent": saving_pending_percent,
-
         "group_emi_paid_count": group_emi_paid_count,
         "group_emi_pending_count": group_emi_pending_count,
         "group_emi_paid_percent": group_emi_paid_percent,
         "group_emi_pending_percent": group_emi_pending_percent,
-
         "saving_percent": saving_percent,
         "emi_percent": emi_percent,
         "total_personal_loan_year": total_personal_loan_year,
-        "total_personal_emi":total_personal_emi,
         "meeting": meeting,
         "current_month": current_month,
         "current_year": current_year,
     }
 
-    return render(request, "dashboard.html", context)
-
+    return render(request, "dashboard.html",context)
 @login_required(login_url='login')
 def add_member(request):
 
@@ -666,11 +697,12 @@ def add_member(request):
         return redirect("dashboard")
 
     president_id = request.session.get("user_id")
-
+    shg_id = request.session.get("user_shg_id") 
     # get president record
     try:
         president = Register.objects.get(id=president_id)
-    except Register.DoesNotExist:
+        shg = SHG.objects.get(id=shg_id)
+    except (Register.DoesNotExist, SHG.DoesNotExist):
         messages.error(request, "Session error. Please login again.")
         return redirect("login")
 
@@ -679,7 +711,6 @@ def add_member(request):
 
     if request.method == "POST":
         phone = request.POST.get("phone", "").strip()
-        shgname = request.session.get("user_shg")
         aadhaar_number = request.POST.get("aadhaar_number", "").strip() 
 
         # Basic validations
@@ -687,11 +718,7 @@ def add_member(request):
             messages.error(request, "Phone number is required.")
             return redirect("add_member")
 
-        if not shgname:
-            messages.error(request, "Session expired. Please login again.")
-            return redirect("login")
-
-        if Register.objects.filter(phone=phone, shgname=shgname).exists():
+        if Register.objects.filter(phone=phone, shg=shg).exists():
             messages.error(request, "This phone number already exists in your SHG.")
             return redirect("add_member")
 
@@ -706,7 +733,7 @@ def add_member(request):
             messages.error(request, "This Aadhaar number already exists.")
             return redirect("add_member")
 
-        if Register.objects.filter(shgname=shgname).count() >= 15:
+        if Register.objects.filter(shg=shg).count() >= 15:
             messages.error(request, "Maximum 15 members allowed.")
             return redirect("add_member")
 
@@ -733,7 +760,7 @@ def add_member(request):
                 aadhaar_number=aadhaar_number,
                 dob=request.POST.get("dob") or None,
                 role=request.POST.get("role", "Member"),
-                shgname=shgname,
+                shg=shg,
                 user=user,
                 district=president.district,
                 village=president.village,
@@ -762,11 +789,11 @@ def delete_member(request, id):
 
     if request.session.get("user_role") != "President":
         return redirect("dashboard")
-
+    shg_id = request.session.get("user_shg_id") 
     try:
         member = Register.objects.get(id=id)
 
-        if member.shgname != request.session.get("user_shg"):
+        if member.shg.id != shg_id:
             return redirect("dashboard")
 
         #  Prevent deleting President
@@ -793,7 +820,7 @@ def delete_member(request, id):
 def member_list(request):
 
     # get session data
-    user_shg = request.session.get("user_shg")
+    shg_id = request.session.get("user_shg_id")
     user_role = request.session.get("user_role")
 
     # Only president allowed
@@ -802,9 +829,12 @@ def member_list(request):
 
     search = request.GET.get("search", "").strip()
     member_id = request.GET.get("member_id")
-
+    try:
+        shg = SHG.objects.get(id=shg_id)
+    except SHG.DoesNotExist:
+        return redirect("login")
     # get all members
-    members = Register.objects.filter(shgname=user_shg)
+    members = Register.objects.filter(shg=shg)
     search_results = members
 
     # select member for view/edit
@@ -825,6 +855,9 @@ def member_list(request):
         except Register.DoesNotExist:
             messages.error(request, "Member not found.")
             return redirect("member_list")
+        
+        if member.shg != shg:
+            return redirect("dashboard")
 
         if action == "edit":
             old_phone = member.phone
@@ -874,33 +907,30 @@ def add_loan(request, loan_id=None):
     if request.session.get("user_role") != "President":
         return redirect("dashboard")
 
-    shgname = request.session.get("user_shg")
+    shg_id = request.session.get("user_shg_id")
 
-    # Get members
-    members = Register.objects.filter(
-        shgname__iexact=(shgname or "").strip()
-    )
+    try:
+        shg = SHG.objects.get(id=shg_id)
+    except SHG.DoesNotExist:
+        return redirect("login")
+
+    members = Register.objects.filter(shg=shg)
 
     loan = None
     selected_member = None
 
-    # EDIT MODE
     if loan_id:
         loan = get_object_or_404(Loan, id=loan_id)
         selected_member = loan.member
 
     if request.method == "POST":
-
         loan_type = request.POST.get("loan_type")
-
-        # convert inputs
         amount = float(request.POST.get("amount") or 0)
         paid = float(request.POST.get("paid") or 0)
-        duration = int(request.POST.get("duration") or 0)  #  int not float
+        duration = int(request.POST.get("duration") or 0)
         interest_rate = float(request.POST.get("interest_rate") or 0)
         subvention_rate = float(request.POST.get("subvention_rate") or 0)
 
-        # member required only for personal loan
         selected_member = None
         if loan_type == "Personal":
             member_id = request.POST.get("member_id")
@@ -909,7 +939,6 @@ def add_loan(request, loan_id=None):
                 return redirect("add_loan")
             selected_member = get_object_or_404(Register, id=member_id)
 
-        # Validation
         if amount <= 0:
             messages.error(request, "Loan amount must be greater than 0")
             return redirect("add_loan")
@@ -918,28 +947,21 @@ def add_loan(request, loan_id=None):
             messages.error(request, "Duration must be greater than 0")
             return redirect("add_loan")
 
-        #  Paid validation
         if paid < 0:
             messages.error(request, "Paid amount cannot be negative")
             return redirect("add_loan")
 
-        # Calculate total payable
         total_payable = amount + (
             amount * (interest_rate - subvention_rate) * duration
         ) / 100
 
-        #  Paid validation against total
         if paid > total_payable:
             messages.error(request, "Paid amount cannot exceed total payable")
             return redirect("add_loan")
 
         remaining = total_payable - paid
-
-        #  EMI calculated automatically
-        # EMI = total_payable / duration (in months)
         emi = round(total_payable / duration, 2) if duration > 0 else 0
 
-        # update existing loan
         if loan:
             loan.member = selected_member
             loan.amount = amount
@@ -950,14 +972,12 @@ def add_loan(request, loan_id=None):
             loan.interest_rate = interest_rate
             loan.subvention_rate = subvention_rate
             loan.total_payable = total_payable
-            loan.emi = emi  #  Save EMI
+            loan.emi = emi
             loan.save()
             messages.success(request, "Loan updated successfully")
-
-        # Create new loan
         else:
             Loan.objects.create(
-                shgname=shgname,
+                shg=shg,
                 member=selected_member,
                 amount=amount,
                 paid=paid,
@@ -967,32 +987,36 @@ def add_loan(request, loan_id=None):
                 interest_rate=interest_rate,
                 subvention_rate=subvention_rate,
                 total_payable=total_payable,
-                emi=emi  #  Save EMI
+                emi=emi
             )
             messages.success(request, f"{loan_type} loan added successfully")
 
-        return redirect("loan_details")
+        return redirect("add_loan")
 
     return render(request, "add_loan.html", {
         "members": members,
         "loan": loan,
         "selected_member": selected_member
     })
+
+
 @login_required(login_url='login')
 def monthly_collection(request):
-    # session data
-    shg = (request.session.get("user_shg") or "").strip()
     role = request.session.get("user_role")
+    shg_id = request.session.get("user_shg_id")
 
-    members = Register.objects.filter(shgname__iexact=shg)
+    try:
+        shg = SHG.objects.get(id=shg_id)
+    except SHG.DoesNotExist:
+        return redirect("login")
 
-    # Get filters
+    members = Register.objects.filter(shg=shg, status="Active")
+
     month = request.GET.get("month")
     year = request.GET.get("year")
 
     today = date.today()
 
-    # Default current month/year
     if not month and not year:
         selected_month = today.month
         selected_year = today.year
@@ -1001,56 +1025,61 @@ def monthly_collection(request):
             selected_month = int(month) if month else None
         except:
             selected_month = None
-
         try:
             selected_year = int(year) if year else None
         except:
             selected_year = None
 
-    # save/update collection(President only)
     if request.method == "POST" and role == "President":
         member_id = request.POST.get("member_id")
-
-        saving = float(request.POST.get("saving") or 0)
-        group_emi = float(request.POST.get("group_emi") or 0)
-        personal_emi = float(request.POST.get("personal_emi") or 0)
 
         if member_id:
             member = Register.objects.get(id=member_id)
 
-            MonthlyRecord.objects.update_or_create(
-                shgname=shg,
+            #  Get existing record or create new one
+            record, created = MonthlyRecord.objects.get_or_create(
+                shg=shg,
                 member=member,
                 month=selected_month,
                 year=selected_year,
                 defaults={
-                    "saving_paid": saving,
-                    "group_emi": group_emi,
-                    "personal_emi": personal_emi,
+                    "saving_paid": 0,
+                    "group_emi": 0,
+                    "personal_emi": 0,
                 }
             )
 
+            #  Only update fields that were actually filled
+            saving = request.POST.get("saving", "").strip()
+            group_emi = request.POST.get("group_emi", "").strip()
+            personal_emi = request.POST.get("personal_emi", "").strip()
+
+            if saving != "":
+                record.saving_paid = float(saving)
+
+            if group_emi != "":
+                record.group_emi = float(group_emi)
+
+            if personal_emi != "":
+                record.personal_emi = float(personal_emi)
+
+            record.save()
+
         return redirect(f"/monthly_collection/?month={selected_month or ''}&year={selected_year or ''}")
 
-    # Filter records
-    collections = MonthlyRecord.objects.filter(shgname=shg)
+    collections = MonthlyRecord.objects.filter(shg=shg)
 
-    
     if selected_month and selected_year:
         collections = collections.filter(month=selected_month, year=selected_year)
-
     elif selected_year:
         collections = collections.filter(year=selected_year)
-
     elif selected_month:
         collections = collections.filter(month=selected_month)
 
-    # Aggregations
     total_savings_collection = collections.aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
     total_group_emi = collections.aggregate(Sum('group_emi'))['group_emi__sum'] or 0
     total_personal_emi = collections.aggregate(Sum('personal_emi'))['personal_emi__sum'] or 0
 
-  
     saving_paid_members = collections.filter(
         saving_paid__gt=0
     ).values('member_id').distinct().count()
@@ -1059,17 +1088,16 @@ def monthly_collection(request):
         group_emi__gt=0
     ).values('member_id').distinct().count()
 
-    # member-wise data
+    #  Pass member id for JavaScript prefill
     member_data = []
-
     for m in members:
         member_records = collections.filter(member_id=m.id)
-
         total_saving = member_records.aggregate(Sum('saving_paid'))['saving_paid__sum'] or 0
         total_group = member_records.aggregate(Sum('group_emi'))['group_emi__sum'] or 0
         total_personal = member_records.aggregate(Sum('personal_emi'))['personal_emi__sum'] or 0
 
         member_data.append({
+            "id": m.id,  #  Add id for JavaScript
             "fullname": m.fullname,
             "phone": m.phone,
             "total_saving": total_saving,
@@ -1083,17 +1111,12 @@ def monthly_collection(request):
         "members": members,
         "role": role,
         "collections": collections,
-
         "total_savings_collection": total_savings_collection,
         "total_group_emi": total_group_emi,
         "total_personal_emi": total_personal_emi,
-
         "saving_paid_members": saving_paid_members,
         "group_emi_paid_members": group_emi_paid_members,
-
         "member_data": member_data,
-
-        
         "selected_month": selected_month if selected_month else "",
         "selected_year": selected_year if selected_year else "",
     }
@@ -1102,8 +1125,11 @@ def monthly_collection(request):
 
 @login_required(login_url='login')
 def loan_details(request):
-
-    shg = (request.session.get("user_shg") or "").strip()
+    shg_id = request.session.get("user_shg_id")
+    try:
+        shg = SHG.objects.get(id=shg_id)
+    except SHG.DoesNotExist:
+        return redirect("login")
 
     loan_type = request.GET.get("type")
     member = request.GET.get("member")
@@ -1125,7 +1151,7 @@ def loan_details(request):
         except:
             year = None
 
-    loans = Loan.objects.filter(shgname__iexact=shg)
+    loans = Loan.objects.filter(shg=shg)
 
     if loan_type == "Group":
         loans = loans.filter(loan_type__iexact="Group")
@@ -1153,7 +1179,7 @@ def loan_details(request):
 
     return render(request, "loan_details.html", {
         "loans": loans,
-        "members": Register.objects.filter(shgname__iexact=shg),
+        "members": Register.objects.filter(shg=shg , status="Active"),
         "selected_month": month if month else "",
         "selected_year": year if year else "",
         "selected_type": loan_type,
@@ -1162,19 +1188,18 @@ def loan_details(request):
         "user_role": request.session.get("user_role"),
     })
 
+
 @login_required(login_url='login')
 def clear_loan(request, loan_id):
-    # Only president allowed
     if request.session.get("user_role") != "President":
-        return redirect("loan_details")  
+        return redirect("loan_details")
 
-    loan = Loan.objects.get(id=loan_id)
-    # Clear loan
+    loan = get_object_or_404(Loan, id=loan_id)
     loan.remaining = 0
-    loan.paid = loan.loan
+    loan.paid = loan.total_payable
     loan.save()
-
     return redirect("loan_details")
+
 
 @login_required(login_url='login')
 def delete_loan(request, loan_id):
@@ -1183,72 +1208,77 @@ def delete_loan(request, loan_id):
         loan.delete()
     return redirect("loan_details")
 
+
 @login_required(login_url='login')
 def edit_loan(request, loan_id):
     loan = get_object_or_404(Loan, id=loan_id)
 
     if request.method == "POST":
-        # Update loan fields
         loan.loan_type = request.POST.get("loan_type")
         loan.amount = float(request.POST.get("amount") or 0)
         loan.paid = float(request.POST.get("paid") or 0)
-        loan.remaining = float(request.POST.get("remaining") or 0)
-        loan.duration = float(request.POST.get("duration") or 0)
-        loan.interest_rate =float(request.POST.get("interest_rate") or 0)
-        loan.subvention_rate =float(request.POST.get("subvention_rate") or 0)
+        loan.duration = int(request.POST.get("duration") or 0)   
+        loan.interest_rate = float(request.POST.get("interest_rate") or 0)
+        loan.subvention_rate = float(request.POST.get("subvention_rate") or 0)
         loan.total_payable = float(request.POST.get("total_payable") or 0)
+        #  Recalculate remaining and EMI
+        loan.remaining = loan.total_payable - loan.paid
+        loan.emi = round(loan.total_payable / loan.duration, 2) if loan.duration > 0 else 0
         loan.save()
-
         return redirect("loan_details")
 
     return render(request, "add_loan.html", {"loan": loan, "edit": True})
 
+
 @login_required(login_url='login')
 def add_project(request, project_id=None):
-
-    # Only President allowed
     if request.session.get("user_role") != "President":
         return redirect("project_list")
 
-    shgname = request.session.get("user_shg")
+    shg_id = request.session.get("user_shg_id")
 
+    try:
+        shg = SHG.objects.get(id=shg_id)
+    except SHG.DoesNotExist:
+        return redirect("login")
+
+    #  Get project from URL parameter
     project = None
-    # Edit mode
     if project_id:
-        project = get_object_or_404(Project, id=project_id, shgname=shgname)
+        project = get_object_or_404(Project, id=project_id, shg=shg)
 
     if request.method == "POST":
         title = request.POST.get("title")
-        investment = request.POST.get("investment")
-        profit = request.POST.get("profit")
+        investment = float(request.POST.get("investment") or 0)
+        profit = float(request.POST.get("profit") or 0)
         photo = request.FILES.get("photo")
 
-        if request.POST.get("project_id"):   # UPDATE
-            project = get_object_or_404(Project, id=request.POST.get("project_id"), shgname=shgname)
-
+        # If project exists = EDIT, else = CREATE
+        if project:
             project.title = title
             project.investment = investment
             project.profit = profit
-
-            if photo:
+            if photo:  #  Only update photo if new one uploaded
                 project.photo = photo
-
             project.save()
-        # Create new project
-        else: 
+            messages.success(request, "Project updated successfully!")
+        else:
+            if not photo:
+                messages.error(request, "Photo is required.")
+                return render(request, "add_project.html", {"project": project})
+
             Project.objects.create(
                 title=title,
                 investment=investment,
                 profit=profit,
                 photo=photo,
-                shgname=shgname
+                shg=shg
             )
+            messages.success(request, "Project added successfully!")
 
-        return redirect("project_list")
+        return redirect("add_project")
 
-    return render(request, "add_project.html", {
-        "project": project
-    })
+    return render(request, "add_project.html", {"project": project})
 
 
 @login_required(login_url='login')
@@ -1258,32 +1288,36 @@ def delete_project(request, id):
 
     project = get_object_or_404(Project, id=id)
     project.delete()
-
     return redirect("project_list")
+
 
 @login_required(login_url='login')
 def project_list(request):
-    # get project ogf current shg
-    projects = Project.objects.filter(
-        shgname=request.session.get("user_shg")
-    )
+    shg_id = request.session.get("user_shg_id")
+
+    #  Fixed - use shg ForeignKey not shgname
+    try:
+        shg = SHG.objects.get(id=shg_id)
+    except SHG.DoesNotExist:
+        return redirect("login")
+
+    projects = Project.objects.filter(shg=shg)  #  Fixed
 
     return render(request, "project_list.html", {
         "projects": projects,
         "user_role": request.session.get("user_role")
     })
 
+
 def logout_view(request):
-    # logout user and clear session
     auth_logout(request)
     request.session.flush()
     return redirect("home")
 
+
 def learn_more(request):
     return render(request, 'learn_more.html')
 
+
 def about(request):
     return render(request, 'about.html')
-
-
-

@@ -1215,3 +1215,18 @@ msgstr "ବୈଠକ ତାରିଖ ନିର୍ଦ୍ଧାରଣ କରନ୍
 
 msgid "Set date"
 msgstr "ତାରିଖ ନିର୍ଦ୍ଧାରଣ କରନ୍ତୁ"
+
+msgid "OTP Verified Successfully!"
+msgstr "OTP ସଫଳତାର ସହିତ ସତ୍ୟାପିତ ହେଲା!"
+
+msgid "Please verify your OTP before registering."
+msgstr "ରେଜିଷ୍ଟ୍ରେସନ୍ ପୂର୍ବରୁ OTP ସତ୍ୟାପନ କରନ୍ତୁ।"
+
+msgid "Basic Details"
+msgstr "ମୂଳ ବିବରଣୀ"
+
+msgid "OTP Verification"
+msgstr "OTP ସତ୍ୟାପନ"
+
+msgid "Personal Details"
+msgstr "ବ୍ୟକ୍ତିଗତ ବିବରଣୀ"

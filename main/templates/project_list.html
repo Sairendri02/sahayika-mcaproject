@@ -114,7 +114,14 @@
         <div class="col-md-4">
             <div class="card shadow">
 
-                <img src="{{ p.photo.url }}" class="card-img-top" height="200">
+               {% if p.photo %}
+                 <img src="{{ p.photo.url }}" class="card-img-top" height="200">
+               {% else %}
+                 <div class="d-flex align-items-center justify-content-center bg-light"
+                     style="height:200px;">
+                  <i class="bi bi-image text-muted" style="font-size:3rem;"></i>
+                 </div>
+               {% endif %}
 
                 <div class="card-body text-center">
                     <h5>{{ p.title }}</h5>
@@ -123,8 +130,15 @@
                     <p>{% trans "Profit" %}: ₹{{ p.profit }}</p>
 
                     {% if user_role == "President" %}
-                    <a href="{% url 'edit_project' p.id %}" class="btn btn-primary btn-sm">{% trans "Edit" %}</a>
-                    <a href="{% url 'delete_project' p.id %}" class="btn btn-danger btn-sm">{% trans "Delete" %}</a>
+                    <a href="{% url 'edit_project' p.id %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i>{% trans "Edit" %}</a>
+                    <form method="POST" action="{% url 'delete_project' p.id %}" 
+                         style="display:inline;"
+                         onsubmit="return confirm('Are you sure you want to delete {{ p.title }}?')">
+                       {% csrf_token %}
+                       <button type="submit" class="btn btn-danger btn-sm">
+                           <i class="bi bi-trash"></i> {% trans "Delete" %}
+                       </button>
+                    </form>
                     {% endif %}
 
                 </div>

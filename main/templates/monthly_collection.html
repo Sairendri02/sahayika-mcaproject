@@ -171,59 +171,58 @@
 
 </div>
 <!--Input monthly_collection-->
+<!-- Input form -->
 {% if role == "President" %}
 <div class="card mt-4 shadow mb-3">
     <div class="card-header">
         <h5>{% trans "Add Monthly Collection" %}</h5>
     </div>
-
     <div class="card-body">
         <form method="POST">
-    {% csrf_token %}
+            {% csrf_token %}
+            <div class="row">
 
-    <div class="row">
+                <div class="col-md-3 mb-2">
+                    <label>{% trans "Select Member" %}</label>
+                    <select name="member_id" class="form-control" required
+                            onchange="loadMemberData(this.value)">
+                        <option value="">Choose Member</option>
+                        {% for m in members %}
+                            <option value="{{ m.id }}">{{ m.fullname }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-        
-        <div class="col-md-3 mb-2">
-            <label>{% trans "Select Member" %}</label>
-            <select name="member_id" class="form-control" required>
-                <option value="">Choose Member</option>
-                {% for m in members %}
-                    <option value="{{ m.id }}">{{ m.fullname }}</option>
-                {% endfor %}
-            </select>
-        </div>
+                <div class="col-md-3 mb-2">
+                    <label>{% trans "Savings" %}</label>
+                    <input type="number" name="saving" id="saving"
+                           class="form-control" placeholder="Leave empty to keep existing">
+                </div>
 
-     
-        <div class="col-md-3 mb-2">
-            <label>{% trans "Savings" %}</label>
-            <input type="number" name="saving" class="form-control" placeholder="Enter savings">
-        </div>
+                <div class="col-md-3 mb-2">
+                    <label>{% trans "Group EMI" %}</label>
+                    <input type="number" name="group_emi" id="group_emi"
+                           class="form-control" placeholder="Leave empty to keep existing">
+                </div>
 
-        <div class="col-md-3 mb-2">
-            <label>{% trans "Group EMI" %}</label>
-            <input type="number" name="group_emi" class="form-control" placeholder="Enter group EMI">
-        </div>
+                <div class="col-md-3 mb-2">
+                    <label>{% trans "Personal EMI" %}</label>
+                    <input type="number" name="personal_emi" id="personal_emi"
+                           class="form-control" placeholder="Leave empty to keep existing">
+                </div>
 
-      
-        <div class="col-md-3 mb-2">
-            <label>{% trans "Personal EMI" %}</label>
-            <input type="number" name="personal_emi" class="form-control" placeholder="Enter personal EMI">
-        </div>
+            </div>
 
-    </div>
-
-   
-    <div class="text-center mt-3">
-        <button type="submit" class="btn btn-primary px-5">
-            {% trans "Add" %}
-        </button>
-    </div>
-
-</form>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary px-5">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 {% endif %}
+
 <!--Table-->
 <div class="card mt-5 shadow mb-3">
     <div class="card-header"> <h4>{% trans "Group Members Table" %}</h4></div>
@@ -307,22 +306,53 @@
 </div>
 </div>
 <script>
-function toggleMenu(){
+// Member data from Django
+const memberData = {
+    {% for m in member_data %}
+    "{{ m.id }}": {
+        "saving": {{ m.total_saving }},
+        "group_emi": {{ m.total_group_emi }},
+        "personal_emi": {{ m.total_personal_emi }}
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+};
 
-var sidebar = document.getElementById("sidebar");
-var content = document.getElementById("content");
+//  Load existing values when member is selected
+function loadMemberData(memberId) {
+    if (!memberId) {
+        document.getElementById('saving').value = '';
+        document.getElementById('group_emi').value = '';
+        document.getElementById('personal_emi').value = '';
+        return;
+    }
 
-sidebar.classList.toggle("d-none");
+    const data = memberData[memberId];
 
-if(sidebar.classList.contains("d-none")){
-content.classList.remove("col-md-10");
-content.classList.add("col-md-12");
-}else{
-content.classList.remove("col-md-12");
-content.classList.add("col-md-10");
+    if (data) {
+        //  Pre-fill with existing values
+        document.getElementById('saving').value = data.saving > 0 ? data.saving : '';
+        document.getElementById('group_emi').value = data.group_emi > 0 ? data.group_emi : '';
+        document.getElementById('personal_emi').value = data.personal_emi > 0 ? data.personal_emi : '';
+    } else {
+        document.getElementById('saving').value = '';
+        document.getElementById('group_emi').value = '';
+        document.getElementById('personal_emi').value = '';
+    }
 }
 
+function toggleMenu() {
+    var sidebar = document.getElementById("sidebar");
+    var content = document.getElementById("content");
+    sidebar.classList.toggle("d-none");
+    if(sidebar.classList.contains("d-none")) {
+        content.classList.remove("col-md-10");
+        content.classList.add("col-md-12");
+    } else {
+        content.classList.remove("col-md-12");
+        content.classList.add("col-md-10");
+    }
 }
+
 function confirmLogout() {
     return confirm("Are you sure you want to logout?");
 }

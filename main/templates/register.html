@@ -5,6 +5,7 @@
 <head>
 <title>Register</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <style>
     .logo{
         height:50px;
@@ -77,6 +78,44 @@
         background: #3b5b9a;
         color: #08183a;
     }
+    .otp-verified-box {
+        background: #e8f5e9;
+        border: 2px solid #4caf50;
+        border-radius: 8px;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        color: #2e7d32;
+        font-weight: bold;
+    }
+    .otp-pending-box {
+        background: #fff3e0;
+        border: 2px solid #ff9800;
+        border-radius: 8px;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        color: #e65100;
+        font-weight: bold;
+    }
+    /*  Step indicator */
+    .step-badge {
+        background: #3b5b9a;
+        color: white;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+    .step-title {
+        font-weight: bold;
+        font-size: 16px;
+        color: #3b5b9a;
+        margin-bottom: 15px;
+        margin-top: 20px;
+    }
 </style>
 </head>
 
@@ -93,7 +132,8 @@
         <ul class="d-flex ms-auto align-items-center mb-0 navbar-links">
             <li><a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a></li>
             <li><a class="nav-link" href="{% url 'about' %}">{% trans "About Us" %}</a></li>
-            <li><a class="nav-link active" href="https://rtiodisha.gov.in/Departments/36" target="_blank">{% trans "RTI" %}</a></li>
+            <li><a class="nav-link active" href="https://rtiodisha.gov.in/Departments/36"
+                   target="_blank">{% trans "RTI" %}</a></li>
             <li><a class="nav-link" href="{% url 'home' %}#contact">{% trans "Contact Us" %}</a></li>
             <form action="{% url 'set_language' %}" method="post" style="display:inline;">
                 {% csrf_token %}
@@ -114,23 +154,33 @@
     <div class="register-title">{% trans "Create Account" %}</div>
 
     {% if error %}
-    <div class="alert alert-danger">{{ error }}</div>
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-circle"></i> {{ error }}
+    </div>
     {% endif %}
 
     {% if success %}
-    <div class="alert alert-success">{{ success }}</div>
+    <div class="alert alert-success">
+        <i class="bi bi-check-circle"></i> {{ success }}
+    </div>
     {% endif %}
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
+        <!--  STEP 1: Basic Details -->
+        <div class="step-title">
+            <span class="step-badge">1</span>
+            {% trans "Basic Details" %}
+        </div>
+
         {% trans "Full Name" %}<br>
         <input type="text" name="fullname" value="{{ fullname }}"
-               class="form-control mb-3" placeholder="Full Name">
+               class="form-control mb-3" placeholder="Full Name" required>
 
         {% trans "SHG Name" %}
         <input type="text" name="shgname" value="{{ shgname }}"
-               class="form-control mb-3" placeholder="SHG Name">
+               class="form-control mb-3" placeholder="SHG Name" required>
 
         <input type="hidden" name="role" value="President">
         <div class="mb-3">
@@ -141,7 +191,7 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <label>{% trans "District" %}</label>
-                <select name="district" id="district" class="form-select">
+                <select name="district" id="district" class="form-select" required>
                     <option value="">{% trans "Select District" %}</option>
                     {% for d in districts %}
                     <option value="{{ d.id }}"
@@ -151,11 +201,9 @@
                     {% endfor %}
                 </select>
             </div>
-
             <div class="col-md-6">
                 <label>{% trans "Village" %}</label>
-                <!--  Village dropdown now keeps selection after page reload -->
-                <select name="village" id="village" class="form-select">
+                <select name="village" id="village" class="form-select" required>
                     <option value="">{% trans "Select Village" %}</option>
                     {% for v in villages %}
                     <option value="{{ v.id }}"
@@ -169,17 +217,53 @@
 
         {% trans "Phone number" %}:
         <input type="text" name="phone" value="{{ phone }}"
-               class="form-control mb-3" placeholder="Phone Number">
+               class="form-control mb-3" placeholder="Phone Number" required>
 
-        <button type="submit" name="send_otp" class="btn btn-warning mb-3">
-            {% trans "Send OTP" %}
+        <!--  Send OTP Button -->
+        <button type="submit" name="send_otp"
+                class="btn btn-warning w-100 mb-3"
+                formnovalidate="false">
+            <i class="bi bi-phone"></i> {% trans "Send OTP" %}
         </button>
 
-        <input type="text" name="otp" class="form-control mb-3" placeholder="Enter OTP">
+        <!--  STEP 2: OTP Verification -->
+        <div class="step-title">
+            <span class="step-badge">2</span>
+            {% trans "OTP Verification" %}
+        </div>
+
+        <input type="text" name="otp" class="form-control mb-2"
+               placeholder="{% trans 'Enter OTP' %}" maxlength="4">
+
+        <!-- Verify OTP Button - no required validation -->
+        <button type="submit" name="verify_otp"
+                class="btn btn-info w-100 mb-3"
+                formnovalidate>
+            <i class="bi bi-shield-check"></i> {% trans "Verify OTP" %}
+        </button>
+
+        <!--  OTP Status -->
+        {% if otp_verified %}
+        <div class="otp-verified-box">
+            <i class="bi bi-check-circle-fill"></i>
+            {% trans "OTP Verified Successfully!" %} ✅
+        </div>
+        {% else %}
+        <div class="otp-pending-box">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            {% trans "Please verify your OTP before registering." %} ⚠️
+        </div>
+        {% endif %}
+
+        <!--  STEP 3: Personal Details - only shown after OTP verified -->
+        {% if otp_verified %}
+        <div class="step-title">
+            <span class="step-badge">3</span>
+            {% trans "Personal Details" %}
+        </div>
 
         <div class="mb-3">
             <label>{% trans "Aadhaar Number" %}</label>
-            <!--  Fixed id from aadhaar_number to match JS -->
             <input type="text" name="aadhaar_number" id="aadhaar_number"
                    class="form-control" maxlength="12" required>
             <small id="aadhaar_error" class="text-danger"></small>
@@ -187,7 +271,6 @@
 
         <div class="mb-3">
             <label>{% trans "Aadhaar Photo" %}</label>
-            <!--  Fixed id from aadhar_photo to aadhaar_photo -->
             <input type="file" name="aadhaar_photo" id="aadhaar_photo"
                    class="form-control" accept="image/*" required>
             <img id="aadhaar_preview" src="#"
@@ -202,19 +285,23 @@
                  style="display:none; max-width:200px; margin-top:10px;">
         </div>
 
-        <div class="mb-2">
+        <div class="mb-3">
             <label>{% trans "Date of Birth" %}</label>
             <input type="date" name="dob" class="form-control" required>
         </div>
 
-        <input type="password" name="password" class="form-control mb-3" placeholder=" Create Password">
+        <input type="password" name="password" class="form-control mb-3"
+               placeholder="{% trans 'Create Password' %}" required>
 
         <input type="password" name="confirm_password" class="form-control mb-3"
-               placeholder="Confirm Password">
+               placeholder="{% trans 'Confirm Password' %}" required>
 
+        <!--  Register Button -->
         <button type="submit" name="register" class="btn btn-register mb-3">
-            {% trans "Register" %}
+            <i class="bi bi-person-check"></i> {% trans "Register" %}
         </button>
+
+        {% endif %}
 
         <p class="text-center mt-3">
             {% trans "Already have account?" %}
@@ -225,8 +312,9 @@
 </div>
 
 <script>
-//  Load villages on district change
 document.addEventListener('DOMContentLoaded', function() {
+
+    // Load villages on district change
     const districtSelect = document.getElementById('district');
     const villageSelect = document.getElementById('village');
 
@@ -245,30 +333,36 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
-    //  Fixed variable names from aadharInput to aadhaarInput
+    //  Aadhaar validation (only if field exists)
     const aadhaarInput = document.getElementById('aadhaar_number');
-    const aadhaarError = document.getElementById('aadhaar_error');
+    if(aadhaarInput) {
+        const aadhaarError = document.getElementById('aadhaar_error');
+        aadhaarInput.addEventListener('input', function() {
+            const val = this.value;
+            if(!/^\d{0,12}$/.test(val)) {
+                aadhaarError.textContent = "Only digits allowed (max 12)";
+            } else {
+                aadhaarError.textContent = "";
+            }
+        });
+    }
 
-    aadhaarInput.addEventListener('input', function() {
-        const val = this.value;
-        if(!/^\d{0,12}$/.test(val)) {
-            aadhaarError.textContent = "Only digits allowed (max 12)";
-        } else {
-            aadhaarError.textContent = "";
-        }
-    });
+    //  Image preview (only if fields exist)
+    const aadhaarPhoto = document.getElementById('aadhaar_photo');
+    if(aadhaarPhoto) {
+        aadhaarPhoto.addEventListener('change', function() {
+            previewImage(this, 'aadhaar_preview');
+        });
+    }
 
-    //  Fixed id names for image preview
-    document.getElementById('aadhaar_photo').addEventListener('change', function() {
-        previewImage(this, 'aadhaar_preview');
-    });
-
-    document.getElementById('profile_photo').addEventListener('change', function() {
-        previewImage(this, 'profile_preview');
-    });
+    const profilePhoto = document.getElementById('profile_photo');
+    if(profilePhoto) {
+        profilePhoto.addEventListener('change', function() {
+            previewImage(this, 'profile_preview');
+        });
+    }
 });
 
-//  Image preview function
 function previewImage(input, previewId) {
     const preview = document.getElementById(previewId);
     if (input.files && input.files[0]) {

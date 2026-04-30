@@ -15,6 +15,16 @@ class Village(models.Model):
 
     def __str__(self):
         return self.name
+    
+class SHG(models.Model):
+    name = models.CharField(max_length=200)
+    village = models.ForeignKey(Village, on_delete=models.CASCADE)
+
+    class Meta:
+         unique_together = ('name','village')
+    
+    def __str__(self):
+        return self.name
 
 
 class Register(models.Model):
@@ -29,7 +39,7 @@ class Register(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     fullname = models.CharField(max_length=100)
-    shgname = models.CharField(max_length=100)
+    shg = models.ForeignKey(SHG, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True)
     village = models.ForeignKey(Village, on_delete=models.SET_NULL, null=True)
     role = models.CharField(max_length=20)
@@ -53,16 +63,13 @@ class Register(models.Model):
     def __str__(self):
         return self.fullname
     
-    class Meta:
-         unique_together = ('phone','shgname')
-    
 class Loan(models.Model):
     LOAN_TYPES = (
         ('Group', 'Group'),
         ('Personal', 'Personal'),
     )
 
-    shgname = models.CharField(max_length=100)
+    shg = models.ForeignKey(SHG, on_delete=models.CASCADE)
     loan_type = models.CharField(max_length=10, choices=LOAN_TYPES)
     member = models.ForeignKey(
         'Register',
@@ -94,14 +101,14 @@ class Loan(models.Model):
         return f"{self.loan_type} - {self.amount}"
 
 class MeetingSchedule(models.Model):
-    shgname = models.CharField(max_length=100)
+    shg = models.ForeignKey(SHG, on_delete=models.CASCADE)
     meeting_date = models.DateField()
 
     def __str__(self):
         return f"{self.shgname} - {self.meeting_date}"
 
 class MonthlyRecord(models.Model):
-    shgname = models.CharField(max_length=100)
+    shg = models.ForeignKey(SHG, on_delete=models.CASCADE)
     member = models.ForeignKey('Register', on_delete=models.CASCADE)
     year = models.IntegerField()
     month = models.IntegerField()  # 1-12
@@ -131,8 +138,7 @@ class MonthlyRecord(models.Model):
 
 
 class Project(models.Model):
-    shgname = models.CharField(max_length=100)
-
+    shg = models.ForeignKey(SHG, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     photo = models.ImageField(upload_to='project_photos/')
 
