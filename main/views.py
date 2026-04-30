@@ -1216,7 +1216,8 @@ def edit_loan(request, loan_id):
     if request.method == "POST":
         loan.loan_type = request.POST.get("loan_type")
         loan.amount = float(request.POST.get("amount") or 0)
-        loan.paid = float(request.POST.get("paid") or 0)
+        new_paid = float(request.POST.get("paid") or 0)
+        loan.paid = ( loan.paid or 0) + new_paid
         loan.duration = int(request.POST.get("duration") or 0)   
         loan.interest_rate = float(request.POST.get("interest_rate") or 0)
         loan.subvention_rate = float(request.POST.get("subvention_rate") or 0)
@@ -1295,13 +1296,13 @@ def delete_project(request, id):
 def project_list(request):
     shg_id = request.session.get("user_shg_id")
 
-    #  Fixed - use shg ForeignKey not shgname
+    
     try:
         shg = SHG.objects.get(id=shg_id)
     except SHG.DoesNotExist:
         return redirect("login")
 
-    projects = Project.objects.filter(shg=shg)  #  Fixed
+    projects = Project.objects.filter(shg=shg)  
 
     return render(request, "project_list.html", {
         "projects": projects,
