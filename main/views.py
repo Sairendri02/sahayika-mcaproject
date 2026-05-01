@@ -531,23 +531,17 @@ def dashboard(request):
     )
 
     all_loans = Loan.objects.filter(
-        shg=shg,
-        created_at__month=current_month,
-        created_at__year=current_year
+        shg=shg,    
     )
 
     personal_loans = Loan.objects.filter(
         shg=shg,
-        loan_type="Personal",
-        created_at__month=current_month,
-        created_at__year=current_year
+        loan_type="Personal",     
     )
 
     yearly_group_loans = Loan.objects.filter(
         shg=shg,
-        loan_type="Group",
-        created_at__month=current_month,
-        created_at__year=current_year
+        loan_type="Group"     
     )
 
     total_loans_amount = yearly_group_loans.aggregate(
