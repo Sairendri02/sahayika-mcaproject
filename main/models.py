@@ -105,7 +105,7 @@ class MeetingSchedule(models.Model):
     meeting_date = models.DateField()
 
     def __str__(self):
-        return f"{self.shgname} - {self.meeting_date}"
+        return f"{self.shg.name} - {self.meeting_date}"
 
 class MonthlyRecord(models.Model):
     shg = models.ForeignKey(SHG, on_delete=models.CASCADE)
